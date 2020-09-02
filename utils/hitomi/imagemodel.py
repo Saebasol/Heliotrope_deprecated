@@ -1,4 +1,4 @@
-class ImageModel:
+class HitomiImageModel:
     def __init__(self, width: int, hash_: str, haswebp: int, name: str, height: int):
         self.width = int(width)
         self.hash_ = str(hash_)
