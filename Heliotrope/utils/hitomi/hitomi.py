@@ -27,4 +27,3 @@ async def images(number: int):
         image_url_from_image(number, img_model, False)
         for img_model in image_model_generator(galleryinfomodel.files)
     ]
-
