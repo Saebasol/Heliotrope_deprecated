@@ -9,13 +9,14 @@ async def fetch_index(opts: dict) -> list:  # thx to seia-soto
 
     async with aiohttp.ClientSession() as cs:
         async with cs.get(
-            f'https://ltn.{opts["domain"]}/{opts["index_file"]}',
-            headers={
-                "User-Agent": opts["user_agent"],
-                "Range": f"byte={byte_start}-{byte_end}",
-                "referer": f"https://{opts['domain']}/index-all-${opts['page']}.html",
-                "origin": f"http://{opts['domain']}",
-            },
+                f'https://ltn.{opts["domain"]}/{opts["index_file"]}',
+                headers={
+                    "User-Agent": opts["user_agent"],
+                    "Range": f"byte={byte_start}-{byte_end}",
+                    "referer":
+                    f"https://{opts['domain']}/index-all-${opts['page']}.html",
+                    "origin": f"http://{opts['domain']}",
+                },
         ) as r:
             buffer = await r.read()
 
