@@ -23,7 +23,8 @@ async def get_galleryinfo(index: int):
 
 
 async def get_gallery(galleryinfomodel: HitomiGalleryInfoModel):
-    url = f"https://hitomi.la/{galleryinfomodel.type_}/{galleryinfomodel.title.replace(' ', '-')}-{galleryinfomodel.language_localname}-{galleryinfomodel.galleryid}.html".lower()
+    url = f"https://hitomi.la/{galleryinfomodel.type_}/{galleryinfomodel.title.replace(' ', '-')}-{galleryinfomodel.language_localname}-{galleryinfomodel.galleryid}.html".lower(
+    )
     async with aiohttp.ClientSession() as cs:
         async with cs.get(url, headers=headers) as r:
             if r.status != 200:

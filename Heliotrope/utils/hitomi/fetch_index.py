@@ -1,6 +1,7 @@
 import struct
 import aiohttp
 
+
 async def fetch_index(opts: dict) -> list:  # thx to seia-soto
     byte_start = (opts["page"] - 1) * opts["item"] * 4
     byte_end = byte_start + opts["item"] * 4 - 1
