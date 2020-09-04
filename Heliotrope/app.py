@@ -36,3 +36,9 @@ async def galleryinfo(request, index: int):
 async def inte_info(request, index: int):
     json_ = await hitomi.integrated_info(index)
     return json(json_)
+
+
+@app.route("/api/hitomi/list/<num>")
+async def list_(request, num: int):
+    hitomi_info_list = await hitomi.list_(int(num) - 1)
+    return json(hitomi_info_list)

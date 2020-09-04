@@ -1,3 +1,6 @@
+import asyncio
+
+from Heliotrope.utils.hitomi.fetch_index import fetch_index
 from .common import image_model_generator, image_url_from_image
 from .hitomi_requester import get_gallery, get_galleryinfo
 
@@ -89,7 +92,27 @@ async def integrated_info(index: int):
             "tags": tags.tags,
         }
 
-    data = {"data": [{"galleryinfo": gi, "tags": ts,}]}
+    data = {
+        "data": [
+            {
+                "galleryinfo": gi,
+                "tags": ts,
+            }
+        ]
+    }
+
+    return data
+
+
+async def list_(num: int):
+    index_list = await fetch_index(config)
+    split_index_list = [
+        index_list[i * 15 : (i + 1) * 15]
+        for i in range((len(index_list) + 15 - 1) // 15)
+    ]
+    done, _ = await asyncio.wait([info(index) for index in split_index_list[num]])
+    info_list = [d.result() for d in done]
+    data = {"list": info_list}
 
     return data
 
