@@ -1,5 +1,3 @@
-from importlib.metadata import files
-
 from .common import *
 from .fetch_index import *
 from .galleryinfomodel import *
