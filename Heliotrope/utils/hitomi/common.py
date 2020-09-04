@@ -59,7 +59,7 @@ def full_path_from_hash(hash_: str) -> str:
     if len(hash_) < 3:
         return hash_
 
-    result = hash_[len(hash_) - 3:]
+    result = hash_[len(hash_) - 3 :]
     a = result[0:2]
     b = result[-1]
     return f"{b}/{a}/" + hash_
