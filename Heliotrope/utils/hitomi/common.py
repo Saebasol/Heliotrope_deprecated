@@ -1,5 +1,24 @@
 import re
-from utils.hitomi.imagemodel import HitomiImageModel
+
+
+class HitomiImageModel:
+    def __init__(self, width: int, hash_: str, haswebp: int, name: str, height: int):
+        self.width = int(width)
+        self.hash_ = str(hash_)
+        self.haswebp = bool(haswebp)
+        self.name = str(name)
+        self.height = int(height)
+
+
+def image_model_generator(files: list):
+    for file_ in files:
+        yield HitomiImageModel(
+            file_["width"],
+            file_["hash"],
+            file_["haswebp"],
+            file_["name"],
+            file_["height"],
+        )
 
 
 def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
