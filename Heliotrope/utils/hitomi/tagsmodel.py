@@ -3,15 +3,15 @@ from bs4 import BeautifulSoup
 
 class HitomiTagsModel:
     def __init__(
-            self,
-            title: str,
-            artist: list,
-            group: list,
-            type_: str,
-            language: str,
-            series: list,
-            characters: list,
-            tags: list,
+        self,
+        title: str,
+        artist: list,
+        group: list,
+        type_: str,
+        language: str,
+        series: list,
+        characters: list,
+        tags: list,
     ):
         self.title = title
         self.artist = artist
@@ -37,9 +37,9 @@ def parse_tags(html: str, type_: str):
     else:
         return None
 
-    soup = BeautifulSoup(html,
-                         "lxml").find("div",
-                                      class_=f"gallery {soup_type}-gallery")
+    soup = BeautifulSoup(html, "lxml").find(
+        "div", class_=f"gallery {soup_type}-gallery"
+    )
 
     if not soup:
         return None
@@ -74,10 +74,9 @@ def check_element(elements):
         if not elements:
             return []
         else:
-            return [{
-                "value": element.text,
-                "url": element["href"]
-            } for element in elements]
+            return [
+                {"value": element.text, "url": element["href"]} for element in elements
+            ]
     else:
         if not elements:
             return None

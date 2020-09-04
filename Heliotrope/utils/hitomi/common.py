@@ -2,8 +2,7 @@ import re
 
 
 class HitomiImageModel:
-    def __init__(self, width: int, hash_: str, haswebp: int, name: str,
-                 height: int):
+    def __init__(self, width: int, hash_: str, haswebp: int, name: str, height: int):
         self.width = int(width)
         self.hash_ = str(hash_)
         self.haswebp = bool(haswebp)
@@ -60,16 +59,15 @@ def full_path_from_hash(hash_: str) -> str:
     if len(hash_) < 3:
         return hash_
 
-    result = hash_[len(hash_) - 3:]
+    result = hash_[len(hash_) - 3 :]
     a = result[0:2]
     b = result[-1]
     return f"{b}/{a}/" + hash_
 
 
-def url_from_hash(galleryid: int,
-                  image: HitomiImageModel,
-                  dir_: str = None,
-                  ext: str = None) -> str:
+def url_from_hash(
+    galleryid: int, image: HitomiImageModel, dir_: str = None, ext: str = None
+) -> str:
     e = image.name.split(".")[-1]
     if ext:
         e = ext
@@ -85,17 +83,15 @@ def url_from_hash(galleryid: int,
     return "https://a.hitomi.la/" + d + "/" + r + "." + e
 
 
-def url_from_url_from_hash(galleryid: int,
-                           image: HitomiImageModel,
-                           dir_: str = None,
-                           ext: str = None) -> str:
+def url_from_url_from_hash(
+    galleryid: int, image: HitomiImageModel, dir_: str = None, ext: str = None
+) -> str:
     a = url_from_hash(galleryid, image, dir_, ext)
     b = url_from_url(a)
     return b
 
 
-def image_url_from_image(galleryid: int, image: HitomiImageModel,
-                         no_webp: bool) -> str:
+def image_url_from_image(galleryid: int, image: HitomiImageModel, no_webp: bool) -> str:
     webp = None
     if image.hash_ and image.haswebp and not no_webp:
         webp = "webp"
