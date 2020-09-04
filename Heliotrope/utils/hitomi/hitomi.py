@@ -1,6 +1,7 @@
 import asyncio
 
 from Heliotrope.utils.hitomi.fetch_index import fetch_index
+
 from .common import image_model_generator, image_url_from_image
 from .hitomi_requester import get_gallery, get_galleryinfo
 
@@ -92,14 +93,7 @@ async def integrated_info(index: int):
             "tags": tags.tags,
         }
 
-    data = {
-        "data": [
-            {
-                "galleryinfo": gi,
-                "tags": ts,
-            }
-        ]
-    }
+    data = {"data": [{"galleryinfo": gi, "tags": ts,}]}
 
     return data
 
