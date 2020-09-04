@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from bs4 import element
 
 
 class HitomiTagsModel:
@@ -24,8 +23,26 @@ class HitomiTagsModel:
         self.tags = tags
 
 
-def parse_tags(html: str):
-    soup = BeautifulSoup(html, "lxml").find("div", class_="gallery dj-gallery")
+def parse_tags(html: str, type_: str):
+    if type_ == "manga":
+        soup_type = "manga"
+    elif type_ == "doujinshi":
+        soup_type = "dj"
+    elif type_ == "artistcg":
+        soup_type = "ac"
+    elif type_ == "gamecg":
+        soup_type = "cg"
+    elif type_ == "anime":
+        soup_type = "anime"
+    else:
+        return None
+
+    soup = BeautifulSoup(html, "lxml").find(
+        "div", class_=f"gallery {soup_type}-gallery"
+    )
+
+    if not soup:
+        return None
 
     galleryinfo = soup.find("div", class_="gallery-info")
     infos = galleryinfo.find_all("tr")
@@ -34,8 +51,8 @@ def parse_tags(html: str):
 
     artist_elements = soup.find("h2").find_all("a")
     group_elements = infos[0].find_all("a")
-    type_elements = infos[1].find("a")
-    language_elements = infos[2].find("a")
+    type_element = infos[1].find("a")
+    language_element = infos[2].find("a")
     series_elements = infos[3].find_all("a")
     characters_elements = infos[4].find_all("a")
     tags_elements = infos[5].find_all("a")
@@ -44,8 +61,8 @@ def parse_tags(html: str):
         title,
         check_element(artist_elements),
         check_element(group_elements),
-        check_element(type_elements),
-        check_element(language_elements),
+        check_element(type_element),
+        check_element(language_element),
         check_element(series_elements),
         check_element(characters_elements),
         check_element(tags_elements),
@@ -53,15 +70,18 @@ def parse_tags(html: str):
 
 
 def check_element(elements):
-    if isinstance(element, list):
-        if not element:
+    if isinstance(elements, list):
+        if not elements:
             return []
         else:
             return [
                 {"value": element.text, "url": element["href"]} for element in elements
             ]
     else:
-        if not element:
+        if not elements:
             return None
         else:
-            return {"value": element.text, "url": element["href"]}
+            return {
+                "value": elements.text.replace(" ", "").replace("\n", ""),
+                "url": elements["href"],
+            }

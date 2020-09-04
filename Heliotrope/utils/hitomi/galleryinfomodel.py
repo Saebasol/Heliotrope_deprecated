@@ -23,18 +23,21 @@ class HitomiGalleryInfoModel:
 
 
 def parse_galleryinfo(galleryinfo_json: dict) -> HitomiGalleryInfoModel:
-    parsed_tags = []
-    for tag in galleryinfo_json["tags"]:
-        if not tag.get("male") and tag.get("female"):
-            parsed_tags.append({"value": f"female:{tag['tag']}", "url": tag["url"]})
-        elif tag.get("male") and not tag.get("female"):
-            parsed_tags.append({"value": f"male:{tag['tag']}", "url": tag["url"]})
-        elif not tag.get("male") and not tag.get("female"):
-            parsed_tags.append({"value": f"tag:{tag['tag']}", "url": tag["url"]})
-        elif tag.get("male") and tag.get("female"):
-            pass  # 특별한 케이스
-        else:
-            raise Exception
+    if not galleryinfo_json["tags"]:
+        parsed_tags = []
+    else:
+        parsed_tags = []
+        for tag in galleryinfo_json["tags"]:
+            if not tag.get("male") and tag.get("female"):
+                parsed_tags.append({"value": f"female:{tag['tag']}", "url": tag["url"]})
+            elif tag.get("male") and not tag.get("female"):
+                parsed_tags.append({"value": f"male:{tag['tag']}", "url": tag["url"]})
+            elif not tag.get("male") and not tag.get("female"):
+                parsed_tags.append({"value": f"tag:{tag['tag']}", "url": tag["url"]})
+            elif tag.get("male") and tag.get("female"):
+                pass  # 특별한 케이스
+            else:
+                raise Exception
 
     return HitomiGalleryInfoModel(
         galleryinfo_json.get("language_localname"),
