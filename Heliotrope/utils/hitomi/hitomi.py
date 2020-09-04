@@ -1,6 +1,7 @@
 import asyncio
 
 from Heliotrope.utils.hitomi.fetch_index import fetch_index
+
 from .common import image_model_generator, image_url_from_image
 from .hitomi_requester import get_gallery, get_galleryinfo
 
