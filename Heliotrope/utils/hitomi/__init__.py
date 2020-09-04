@@ -1,1 +1,3 @@
-from .hitomi import *
+from . import hitomi
+
+__all__ = ["hitomi"]

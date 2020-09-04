@@ -1,8 +1,5 @@
-from .common import *
-from .fetch_index import *
-from .galleryinfomodel import *
-from .hitomi_requester import *
-from .tagsmodel import *
+from .common import image_model_generator, image_url_from_image
+from .hitomi_requester import get_gallery, get_galleryinfo
 
 config = {
     "domain": "hitomi.la",
@@ -92,7 +89,14 @@ async def integrated_info(index: int):
             "tags": tags.tags,
         }
 
-    data = {"data": [{"galleryinfo": gi, "tags": ts,}]}
+    data = {
+        "data": [
+            {
+                "galleryinfo": gi,
+                "tags": ts,
+            }
+        ]
+    }
 
     return data
 
@@ -103,7 +107,3 @@ async def images(index: int):
         image_url_from_image(index, img_model, False)
         for img_model in image_model_generator(galleryinfomodel.files)
     ]
-
-
-async def index(config):
-    return await fetch_index(config)
