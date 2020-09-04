@@ -16,6 +16,6 @@ def test_integrated_info_response():
     assert response.status == 200
 
 
-def test_list_reponse():
+def test_list_response():
     request, response = app.test_client.get("/api/hitomi/list/1")
     assert response.status == 200
