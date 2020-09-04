@@ -1,6 +1,8 @@
-from email import header
 import json
+from email import header
+
 import aiohttp
+
 from .galleryinfomodel import HitomiGalleryInfoModel, parse_galleryinfo
 from .tagsmodel import parse_tags
 
