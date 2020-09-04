@@ -3,8 +3,7 @@ from email import header
 
 import aiohttp
 
-from .galleryinfomodel import HitomiGalleryInfoModel
-from .galleryinfomodel import parse_galleryinfo
+from .galleryinfomodel import HitomiGalleryInfoModel, parse_galleryinfo
 from .tagsmodel import parse_tags
 
 headers = {
