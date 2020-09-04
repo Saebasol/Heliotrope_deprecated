@@ -1,6 +1,4 @@
 import json
-from email import header
-
 import aiohttp
 
 from .galleryinfomodel import HitomiGalleryInfoModel, parse_galleryinfo
