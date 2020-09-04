@@ -33,7 +33,7 @@ async def galleryinfo(request, index: int):
 
 
 @app.route("/api/hitomi/integrated/<index>")
-async def inte_info(request, index: int):
+async def integrated_info(request, index: int):
     json_ = await hitomi.integrated_info(index)
     return json(json_)
 
