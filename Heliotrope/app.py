@@ -1,4 +1,5 @@
 import os
+
 import sentry_sdk
 from sanic import Sanic
 from sanic.exceptions import abort
