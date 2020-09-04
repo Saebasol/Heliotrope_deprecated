@@ -1,8 +1,16 @@
+import sentry_sdk
+from sentry_sdk.integrations.sanic import SanicIntegration
+
 from sanic import Sanic
 from sanic.exceptions import abort
 from sanic.response import json
 
 from Heliotrope.utils.hitomi import hitomi
+
+sentry_sdk.init(
+    dsn="https://examplePublicKey@o0.ingest.sentry.io/0",
+    integrations=[SanicIntegration()],
+)
 
 app = Sanic(__name__)
 
