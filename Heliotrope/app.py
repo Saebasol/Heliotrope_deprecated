@@ -1,9 +1,8 @@
 import sentry_sdk
-from sentry_sdk.integrations.sanic import SanicIntegration
-
 from sanic import Sanic
 from sanic.exceptions import abort
 from sanic.response import json
+from sentry_sdk.integrations.sanic import SanicIntegration
 
 from Heliotrope.utils.hitomi import hitomi
 
