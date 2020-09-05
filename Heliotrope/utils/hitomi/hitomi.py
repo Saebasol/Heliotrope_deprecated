@@ -111,6 +111,10 @@ async def list_(num: int):
         index_list[i * 15 : (i + 1) * 15]
         for i in range((len(index_list) + 15 - 1) // 15)
     ]
+
+    if len(split_index_list) < num + 1:
+        return None
+
     done, _ = await asyncio.wait([info(index) for index in split_index_list[num]])
     info_list = [d.result() for d in done]
     data = {"list": info_list}
