@@ -27,7 +27,7 @@ labels: []
 ignore_labels:
   - restyled-ignore
 
-restylers_version: " ... "
+restylers_version: stable
 
 restylers:
   - black
