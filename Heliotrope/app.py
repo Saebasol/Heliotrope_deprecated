@@ -42,4 +42,7 @@ async def integrated_info(request, index: int):
 @app.route("/api/hitomi/list/<num>")
 async def list_(request, num: int):
     hitomi_info_list = await hitomi.list_(int(num) - 1)
-    return json(hitomi_info_list)
+    if not hitomi_info_list:
+        return abort(404)
+    else:
+        return json(hitomi_info_list)
