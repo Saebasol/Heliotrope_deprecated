@@ -9,7 +9,8 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from Heliotrope.utils.hitomi import hitomi
 
 sentry_sdk.init(
-    dsn=os.environ["sentry"], integrations=[SanicIntegration()],
+    dsn=os.environ["sentry"],
+    integrations=[SanicIntegration()],
 )
 
 app = Sanic(__name__)
