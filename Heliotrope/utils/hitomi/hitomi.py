@@ -1,20 +1,9 @@
 import asyncio
 
 from Heliotrope.utils.hitomi.fetch_index import fetch_index
-
-from .common import image_model_generator, image_url_from_image
-from .hitomi_requester import get_gallery, get_galleryinfo
-
-config = {
-    "domain": "hitomi.la",
-    "mode": "index",
-    "index_file": "index-korean.nozomi",
-    "page": 1,
-    "item": 25,
-    "language": "en",
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36",
-    "proxy": "",
-}
+from Heliotrope.utils.hitomi.hitomi_requester import (get_gallery,
+                                                      get_galleryinfo)
+from Heliotrope.utils.option import config
 
 
 async def info(index: int):
@@ -120,11 +109,3 @@ async def list_(num: int):
     data = {"list": info_list}
 
     return data
-
-
-async def images(index: int):
-    galleryinfomodel = await get_galleryinfo(index)
-    return [
-        image_url_from_image(index, img_model, False)
-        for img_model in image_model_generator(galleryinfomodel.files)
-    ]
