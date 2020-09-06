@@ -1,14 +1,14 @@
 import json
 
 import aiohttp
+from Heliotrope.utils.hitomi.galleryinfomodel import (
+    HitomiGalleryInfoModel,
+    parse_galleryinfo,
+)
+from Heliotrope.utils.hitomi.tagsmodel import parse_tags
+from Heliotrope.utils.option import config
 
-from .galleryinfomodel import HitomiGalleryInfoModel, parse_galleryinfo
-from .tagsmodel import parse_tags
-
-headers = {
-    "referer": "https://hitomi.la",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36",
-}
+headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
 
 async def get_galleryinfo(index: int):
