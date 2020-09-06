@@ -1,10 +1,9 @@
 import json
 
 import aiohttp
-from Heliotrope.utils.hitomi.galleryinfomodel import (
-    HitomiGalleryInfoModel,
-    parse_galleryinfo,
-)
+
+from Heliotrope.utils.hitomi.galleryinfomodel import (HitomiGalleryInfoModel,
+                                                      parse_galleryinfo)
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
 from Heliotrope.utils.option import config
 

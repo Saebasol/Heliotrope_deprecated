@@ -1,7 +1,7 @@
 from sanic import Blueprint
 
-from .info import info
 from .galleryinfo import galleryinfo
+from .info import info
 from .integrated import integrated
 from .list import list_
 
