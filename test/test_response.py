@@ -1,8 +1,8 @@
 from Heliotrope.app import app
 
 
-def test_index_response():
-    request, response = app.test_client.get("/api/hitomi/1496588")
+def test_info_response():
+    request, response = app.test_client.get("/api/hitomi/info/1496588")
     assert response.status == 200
 
 
