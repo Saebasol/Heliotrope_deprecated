@@ -1,7 +1,8 @@
 from sanic import Blueprint
-from Heliotrope.utils.hitomi import hitomi
 from sanic.exceptions import abort
 from sanic.response import json
+
+from Heliotrope.utils.hitomi import hitomi
 
 galleryinfo = Blueprint("hitomi_galleryinfo", url_prefix="/galleryinfo")
 
