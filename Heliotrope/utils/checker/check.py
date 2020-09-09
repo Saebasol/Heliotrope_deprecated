@@ -3,8 +3,8 @@ from sanic.response import json
 
 
 def check_request_for_authorization_status(request):
-    token = request.headers.get("headers")
-    if not token["Authorization"] or token["Authorization"] not in "SaidBySolo:)":
+    token = request.headers.get("Authorization")
+    if not token or token not in "SaidBySolo:)":
         return False
     else:
         return True
