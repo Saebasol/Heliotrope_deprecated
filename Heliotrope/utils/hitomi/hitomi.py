@@ -1,3 +1,4 @@
+from Heliotrope.utils.hitomi.common import image_model_generator, image_url_from_image
 import asyncio
 
 from Heliotrope.utils.hitomi.fetch_index import fetch_index
@@ -108,3 +109,12 @@ async def list_(num: int):
     data = {"list": info_list}
 
     return data
+
+
+async def images(index: int):
+    galleryinfomodel = await get_galleryinfo(index)
+    images = [
+        image_url_from_image(index, img, True)
+        for img in image_model_generator(galleryinfomodel.files)
+    ]  # 추후에 파일 이름 변경예정
+    return images
