@@ -1,10 +1,11 @@
 from functools import wraps
+import os
 from sanic.response import json
 
 
 def check_request_for_authorization_status(request):
     token = request.headers.get("Authorization")
-    if not token or token not in "SaidBySolo:)":
+    if not token or token not in os.environ["Authorization"]:
         return False
     else:
         return True
