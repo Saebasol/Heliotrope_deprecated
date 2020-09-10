@@ -32,11 +32,7 @@ def test_download_response():
     request, response = app.test_client.post(
         "/api/download", headers=headers, json={"download": False, "index": 1}
     )
-    assert (
-        response.status == 200
-        and response.json["status"] == "pending"
-        and response.json["total"] == 2
-    )
+    assert response.status == 200 and response.json["status"] == "pending"
 
 
 def test_download_response_already():
