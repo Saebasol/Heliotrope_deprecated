@@ -4,7 +4,7 @@ python:
 # command to install dependencies
 install:
   - pip install --upgrade pip
-  - pip install pytest-cov
+  - pip install pytest-cov pytest-sanic
   - pip install -r requirements.txt
 # command to run tests
 script:
