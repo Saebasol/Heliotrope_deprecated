@@ -26,3 +26,47 @@ def test_integrated_info_response():
 def test_list_response():
     request, response = app.test_client.get("/api/hitomi/list/1", headers=headers)
     assert response.status == 200
+
+
+def test_download_response():
+    request, response = app.test_client.post(
+        "/api/download", headers=headers, json={"download": False, "index": 1}
+    )
+    assert (
+        response.status == 200
+        and response.json["status"] == "pending"
+        and response.json["total"] == "2"
+    )
+
+
+def test_download_response_already():
+    request, response = app.test_client.post(
+        "/api/download", headers=headers, json={"download": False, "index": 1}
+    )
+    assert (
+        response.status == 200
+        and response.json["status"] == "already"
+        and response.json["total"] == "2"
+    )
+
+
+def test_download_zip_response():
+    request, response = app.test_client.post(
+        "/api/download", headers=headers, json={"download": True, "index": 1}
+    )
+    assert (
+        response.status == 200
+        and response.json["status"] == "successfully"
+        and response.json["link"] == "https://doujinshiman.ga/download/1/1.zip"
+    )
+
+
+def test_download_zip_response_already():
+    request, response = app.test_client.post(
+        "/api/download", headers=headers, json={"download": True, "index": 1}
+    )
+    assert (
+        response.status == 200
+        and response.json["status"] == "already"
+        and response.json["link"] == "https://doujinshiman.ga/download/1/1.zip"
+    )
