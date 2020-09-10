@@ -113,6 +113,8 @@ async def list_(num: int):
 
 async def images(index: int):
     galleryinfomodel = await get_galleryinfo(index)
+    if not galleryinfomodel:
+        return None
     images = [
         image_url_from_image(index, img, True)
         for img in image_model_generator(galleryinfomodel.files)
