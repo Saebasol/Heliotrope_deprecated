@@ -31,7 +31,7 @@ async def check_folder_or_download(index, download_bool):
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
-                return json({"status": "already", "total": str(total)}, 200)
+                return json({"status": "already", "total": total}, 200)
             else:
                 await aios.mkdir(f"{base_directory}/image/{index}")
                 total = await compression_or_download(index, img_links)
