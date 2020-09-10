@@ -29,6 +29,9 @@ ignore_labels:
 
 restylers_version: stable
 
+commit_template: |
+  style(${restyler.name}): apply code style
+
 restylers:
   - black
   - isort
