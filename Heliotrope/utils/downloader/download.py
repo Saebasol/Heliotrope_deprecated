@@ -26,7 +26,7 @@ async def create_folder():
 
 async def check_folder_or_download(index, download_bool):
     await create_folder()
-    img_links = check_vaild(index)
+    img_links = await check_vaild(index)
     if img_links:
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
