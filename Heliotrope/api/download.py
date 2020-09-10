@@ -15,7 +15,7 @@ download = Blueprint("image_download", url_prefix="/download")
 async def downloader(request):
     index = request.json.get("index")
     download_bool = request.json.get("download")
-    if not download_bool or not index:
+    if download_bool is not None or not index:
         return json({"status": "bad_request"}, 400)
 
     result = await check_folder_or_download(index, download_bool)
