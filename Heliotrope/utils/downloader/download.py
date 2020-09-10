@@ -13,7 +13,7 @@ from Heliotrope.utils.option import config
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
-base_directory = "/var/www"
+base_directory = os.environ["directory"]
 
 
 async def create_folder():
