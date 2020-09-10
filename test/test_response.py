@@ -1,5 +1,6 @@
 import os
 from Heliotrope.app import app
+import time
 
 headers = {"Authorization": os.environ["Authorization"]}
 
@@ -32,7 +33,14 @@ def test_download_response():
     request, response = app.test_client.post(
         "/api/download", headers=headers, json={"download": False, "index": 1}
     )
-    assert response.status == 200 and response.json["status"] == "pending"
+    assert (
+        response.status == 200
+        and response.json["status"] == "pending"
+        and response.json["total"] == 2
+    )
+
+
+time.sleep(5)
 
 
 def test_download_response_already():
