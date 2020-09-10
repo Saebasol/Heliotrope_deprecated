@@ -1,7 +1,8 @@
 from sanic import Blueprint
 from sanic.response import json
-from Heliotrope.utils.hitomi import hitomi
+
 from Heliotrope.utils.checker.check import authorized
+from Heliotrope.utils.hitomi import hitomi
 
 integrated = Blueprint("hitomi_integrated", url_prefix="/integrated")
 

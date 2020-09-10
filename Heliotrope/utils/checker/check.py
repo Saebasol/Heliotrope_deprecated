@@ -1,5 +1,6 @@
-from functools import wraps
 import os
+from functools import wraps
+
 from sanic.response import json
 
 
