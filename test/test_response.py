@@ -35,7 +35,7 @@ def test_download_response():
     assert (
         response.status == 200
         and response.json["status"] == "pending"
-        and response.json["total"] == "2"
+        and response.json["total"] == 2
     )
 
 
@@ -46,7 +46,7 @@ def test_download_response_already():
     assert (
         response.status == 200
         and response.json["status"] == "already"
-        and response.json["total"] == "2"
+        and response.json["total"] == 2
     )
 
 
