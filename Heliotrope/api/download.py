@@ -18,6 +18,6 @@ async def downloader(request):
     if not download_bool or not index:
         return json({"status": "bad_request"}, 400)
 
-    result = check_folder_or_download(index, download_bool)
+    result = await check_folder_or_download(index, download_bool)
 
     return result
