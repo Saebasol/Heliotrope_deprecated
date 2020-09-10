@@ -56,7 +56,7 @@ def test_download_zip_response():
     )
     assert (
         response.status == 200
-        and response.json["status"] == "successfully"
+        and response.json["status"] == "use_cached"
         and response.json["link"] == "https://doujinshiman.ga/download/1/1.zip"
     )
 

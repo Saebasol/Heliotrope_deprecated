@@ -30,11 +30,10 @@ async def check_folder_or_download(index, download_bool):
     if img_links:
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
-                await aios.mkdir(f"{base_directory}/image/{index}")
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
                 return json({"status": "already", "total": str(total)}, 200)
             else:
-                await aios.mkdir(f"{base_directory}/download/{index}")
+                await aios.mkdir(f"{base_directory}/image/{index}")
                 total = await compression_or_download(index, img_links)
                 return json({"status": "pending", "total": total}, 200)
 
@@ -47,7 +46,21 @@ async def check_folder_or_download(index, download_bool):
                     },
                     200,
                 )
+            elif os.path.exists(f"{base_directory}/image/{index}/"):
+                shutil.make_archive(
+                    f"{base_directory}/download/{index}/{index}",
+                    "zip",
+                    f"{base_directory}/image/{index}/",
+                )
+                return json(
+                    {
+                        "status": "use_cached",
+                        "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
+                    },
+                    200,
+                )
             else:
+                await aios.mkdir(f"{base_directory}/download/{index}")
                 link = await compression_or_download(index, img_links, True)
                 return json({"status": "successfully", "link": link}, 200)
 
