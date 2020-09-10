@@ -40,10 +40,8 @@ def test_download_response():
     )
 
 
-time.sleep(5)
-
-
 def test_download_response_already():
+    time.sleep(10)
     request, response = app.test_client.post(
         "/api/download", headers=headers, json={"download": False, "index": 1}
     )
