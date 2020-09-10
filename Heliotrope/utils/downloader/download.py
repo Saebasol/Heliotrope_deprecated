@@ -80,8 +80,6 @@ async def download_tasks(index: int, img_links: list):
 
 
 async def compression_or_download(index: int, img_links: list, compression=False):
-    await create_folder(index)
-
     if compression:
         done, _ = await asyncio.wait(
             [task async for task in download_tasks(index, img_links)]
