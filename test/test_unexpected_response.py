@@ -1,6 +1,5 @@
 import os
 
-
 headers = {"Authorization": os.environ["Authorization"]}
 
 
