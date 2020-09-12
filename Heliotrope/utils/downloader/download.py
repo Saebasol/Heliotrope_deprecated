@@ -9,11 +9,11 @@ from sanic.response import json
 
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
+from Heliotrope.utils.database import User
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
 base_directory = os.environ["directory"]
-
 
 async def create_folder():
     if not os.path.exists(f"{base_directory}/image"):
