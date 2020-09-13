@@ -4,7 +4,7 @@ python:
 addons:
   mariadb: '10.5'
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
   # command to install dependencies
 install:
   - pip install --upgrade pip
