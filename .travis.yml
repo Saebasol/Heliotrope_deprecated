@@ -1,7 +1,12 @@
 language: python
 python:
   - "3.8"
-# command to install dependencies
+addons:
+  mariadb: '10.5'
+before_install:
+  - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - sudo mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('test')"
+  # command to install dependencies
 install:
   - pip install --upgrade pip
   - pip install pytest-cov pytest-sanic
@@ -9,5 +14,5 @@ install:
 # command to run tests
 script:
   - pytest --cov=./
-after_success:
+after_success:  
   - bash <(curl -s https://codecov.io/bash)
