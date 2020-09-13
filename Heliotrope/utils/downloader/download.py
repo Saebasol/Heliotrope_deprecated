@@ -9,7 +9,7 @@ from sanic.response import json
 
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
-from Heliotrope.utils.database import check_user
+from Heliotrope.utils.database.models.user import User
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
@@ -28,7 +28,18 @@ async def check_folder_or_download(index, user_id, download_bool):
     await create_folder()
     img_links = await check_vaild(index)
     if img_links:
-        await check_user(user_id)
+
+        user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
+        if not user_data:
+            return json({"status": "need_register"}, 403)
+        else:
+            count = user_data.download_count
+            if count >= 5:
+                return json({"status": "Too_many_requests"}, 429)
+            else:
+                user_data.download_count = count + 1
+                await user_data.save()
+
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
