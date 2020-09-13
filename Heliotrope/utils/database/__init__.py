@@ -1,4 +1,4 @@
 from .models import User
-from .user_management import check_user, user_register
+from .user_management import user_register
 
-__all__ = ["User", "check_user", "user_register"]
+__all__ = ["User", "user_register"]
