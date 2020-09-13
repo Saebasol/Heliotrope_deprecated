@@ -24,9 +24,25 @@ async def test_list_response(test_cli):
     assert response.status == 200
 
 
+async def test_register_response(test_cli):
+    response = await test_cli.post(
+        "/api/register", headers=headers, json={"user_id": 123456789101112131}
+    )
+    assert response.status == 201
+
+
+async def test_register_response_already(test_cli):
+    response = await test_cli.post(
+        "/api/register", headers=headers, json={"user_id": 123456789101112131}
+    )
+    assert response.status == 200
+
+
 async def test_download_response(test_cli):
     response = await test_cli.post(
-        "/api/download", headers=headers, json={"download": False, "index": 1}
+        "/api/download",
+        headers=headers,
+        json={"download": False, "index": 1, "user_id": 123456789101112131},
     )
     await asyncio.sleep(5)
     assert response.status == 200
@@ -36,7 +52,9 @@ async def test_download_response(test_cli):
 
 async def test_download_response_already(test_cli):
     response = await test_cli.post(
-        "/api/download", headers=headers, json={"download": False, "index": 1}
+        "/api/download",
+        headers=headers,
+        json={"download": False, "index": 1, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
@@ -45,7 +63,9 @@ async def test_download_response_already(test_cli):
 
 async def test_download_zip_response(test_cli):
     response = await test_cli.post(
-        "/api/download", headers=headers, json={"download": True, "index": 1}
+        "/api/download",
+        headers=headers,
+        json={"download": True, "index": 1, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
@@ -57,7 +77,9 @@ async def test_download_zip_response(test_cli):
 
 async def test_download_zip_response_already(test_cli):
     response = await test_cli.post(
-        "/api/download", headers=headers, json={"download": True, "index": 1}
+        "/api/download",
+        headers=headers,
+        json={"download": True, "index": 1, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
