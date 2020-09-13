@@ -7,9 +7,9 @@ import aiofiles.os as aios
 import aiohttp
 from sanic.response import json
 
+from Heliotrope.utils.database.models.user import User
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
-from Heliotrope.utils.database.models.user import User
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
