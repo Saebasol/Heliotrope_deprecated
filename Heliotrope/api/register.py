@@ -17,6 +17,6 @@ async def api_register(request):
     if not user_id:
         return json({"status": "bad_request"}, 400)
 
-    result = user_register(user_id)
+    result = await user_register(user_id)
 
     return result
