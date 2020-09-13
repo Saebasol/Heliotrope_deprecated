@@ -12,12 +12,13 @@ download = Blueprint("image_download", url_prefix="/download")
     methods=["POST"],
 )
 @authorized()
-async def downloader(request):
+async def api_download(request):
     index = request.json.get("index")
+    user_id = request.json.get("user_id")
     download_bool = request.json.get("download")
-    if download_bool is None or not index:
+    if download_bool is None or not index or not user_id:
         return json({"status": "bad_request"}, 400)
 
-    result = await check_folder_or_download(index, download_bool)
+    result = await check_folder_or_download(index, user_id, download_bool)
 
     return result
