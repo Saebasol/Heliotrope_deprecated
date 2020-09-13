@@ -14,7 +14,7 @@ class User(Model):
 
     def __repr__(self):
         return (
-            f"<User"
+            "<User"
             + f" id={self.user_id}"
             + f" download_count={self.download_count}"
             + ">"
