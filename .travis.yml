@@ -5,6 +5,7 @@ addons:
   mariadb: '10.5'
 before_install:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - sudo mysql -e "SET PASSWORD FOR 'travis'@'localhost' = PASSWORD('test')"
   # command to install dependencies
 install:
   - pip install --upgrade pip
