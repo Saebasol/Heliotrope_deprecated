@@ -3,6 +3,7 @@ import os
 import sentry_sdk
 from sanic import Sanic
 from sentry_sdk.integrations.sanic import SanicIntegration
+from tortoise.contrib.sanic import register_tortoise
 
 from Heliotrope.api import api
 from Heliotrope.utils import database
@@ -14,13 +15,9 @@ sentry_sdk.init(
 
 app = Sanic(__name__)
 app.blueprint(api)
-
-
-@app.listener("before_server_start")
-async def setup_db(app, loop):
-    await database.init()
-
-
-@app.listener("after_server_stop")
-async def close_db(app, loop):
-    await database.close()
+register_tortoise(
+    app,
+    db_url=f"mysql://{os.environ['DB_UNAME']}:{os.environ['DB_PW']}@{os.environ['DB_HOST']}:3306/{os.environ['DB_DBNAME']}",
+    modules={"models": ["Heliotrope.utils.database.models"]},
+    generate_schemas=True,
+)
