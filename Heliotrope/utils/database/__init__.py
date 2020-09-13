@@ -2,6 +2,7 @@ import os
 
 from tortoise import Tortoise
 from .models import User
+from .user_management import check_user, user_register
 
 
 async def init():
@@ -13,4 +14,8 @@ async def init():
     await Tortoise.generate_schemas(safe=True)
 
 
-__all__ = ["User"]
+async def close():
+    await Tortoise.close_connections()
+
+
+__all__ = ["User", "check_user", "user_register"]
