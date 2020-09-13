@@ -24,7 +24,7 @@ async def create_folder():
         await aios.mkdir(f"{base_directory}/download")
 
 
-async def check_folder_or_download(index, user_id, download_bool):
+async def check_folder_and_download(index, user_id, download_bool):
     await create_folder()
     img_links = await check_vaild(index)
     if img_links:
