@@ -1,7 +1,11 @@
 language: python
 python:
   - "3.8"
-# command to install dependencies
+addons:
+  mariadb: '10.5'
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  # command to install dependencies
 install:
   - pip install --upgrade pip
   - pip install pytest-cov pytest-sanic
