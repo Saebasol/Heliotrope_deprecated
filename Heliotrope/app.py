@@ -6,7 +6,6 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 from Heliotrope.api import api
-from Heliotrope.utils import database
 
 sentry_sdk.init(
     dsn=os.environ["sentry"],
