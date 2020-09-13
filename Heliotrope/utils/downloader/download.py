@@ -9,11 +9,12 @@ from sanic.response import json
 
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
-from Heliotrope.utils.database import User
+from Heliotrope.utils.database import check_user
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
 base_directory = os.environ["directory"]
+
 
 async def create_folder():
     if not os.path.exists(f"{base_directory}/image"):
@@ -23,10 +24,11 @@ async def create_folder():
         await aios.mkdir(f"{base_directory}/download")
 
 
-async def check_folder_or_download(index, download_bool):
+async def check_folder_or_download(index, user_id, download_bool):
     await create_folder()
     img_links = await check_vaild(index)
     if img_links:
+        await check_user(user_id)
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
