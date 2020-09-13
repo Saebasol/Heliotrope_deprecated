@@ -2,7 +2,7 @@ from sanic import Blueprint
 from sanic.response import json
 
 from Heliotrope.utils.checker.check import authorized
-from Heliotrope.utils.downloader.download import check_folder_or_download
+from Heliotrope.utils.downloader.download import check_folder_and_download
 
 download = Blueprint("image_download", url_prefix="/download")
 
@@ -19,6 +19,6 @@ async def api_download(request):
     if download_bool is None or not index or not user_id:
         return json({"status": "bad_request"}, 400)
 
-    result = await check_folder_or_download(index, user_id, download_bool)
+    result = await check_folder_and_download(index, user_id, download_bool)
 
     return result
