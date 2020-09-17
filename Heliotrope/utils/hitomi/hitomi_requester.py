@@ -27,7 +27,7 @@ async def get_galleryinfo(index: int):
 
 async def get_gallery(galleryinfomodel: HitomiGalleryInfoModel):
     url_title = re.sub(
-        r"([\"|\'|\%|\(|\)|\{|\}|\[|\]|\<|\>])", "-", galleryinfomodel.title
+        r"(\"|\'|\%|\(|\)|\{|\}|\[|\]|\<|\>)", "-", galleryinfomodel.title
     ).replace(" ", "-")
     url = f"https://hitomi.la/{galleryinfomodel.type_ if galleryinfomodel.type_.lower() != 'artistcg' else 'cg'}/{url_title}-{galleryinfomodel.language_localname}-{galleryinfomodel.galleryid}.html".lower()
     async with aiohttp.ClientSession() as cs:
