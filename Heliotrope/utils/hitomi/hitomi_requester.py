@@ -3,8 +3,10 @@ import re
 
 import aiohttp
 
-from Heliotrope.utils.hitomi.galleryinfomodel import (HitomiGalleryInfoModel,
-                                                      parse_galleryinfo)
+from Heliotrope.utils.hitomi.galleryinfomodel import (
+    HitomiGalleryInfoModel,
+    parse_galleryinfo,
+)
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
 from Heliotrope.utils.option import config
 
@@ -25,7 +27,7 @@ async def get_galleryinfo(index: int):
 
 async def get_gallery(galleryinfomodel: HitomiGalleryInfoModel):
     url_title = re.sub(
-        r"(\"|\'|\%|\(|\)|\{|\}|\[|\]|\<|\>)", "-", galleryinfomodel.title
+        r"(\"|\'|\%|\?|\(|\)|\{|\}|\[|\]|\<|\>)", "-", galleryinfomodel.title
     ).replace(" ", "-")
 
     type_ = (
