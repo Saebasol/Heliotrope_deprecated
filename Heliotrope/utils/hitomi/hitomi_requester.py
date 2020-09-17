@@ -1,9 +1,12 @@
+import re
 import json
 
 import aiohttp
 
-from Heliotrope.utils.hitomi.galleryinfomodel import (HitomiGalleryInfoModel,
-                                                      parse_galleryinfo)
+from Heliotrope.utils.hitomi.galleryinfomodel import (
+    HitomiGalleryInfoModel,
+    parse_galleryinfo,
+)
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
 from Heliotrope.utils.option import config
 
@@ -23,9 +26,10 @@ async def get_galleryinfo(index: int):
 
 
 async def get_gallery(galleryinfomodel: HitomiGalleryInfoModel):
-    url = f"https://hitomi.la/{galleryinfomodel.type_}/{galleryinfomodel.title.replace(' ', '-')}-{galleryinfomodel.language_localname}-{galleryinfomodel.galleryid}.html".lower()
+    url = f"https://hitomi.la/{galleryinfomodel.type_ if galleryinfomodel.type_.lower() != 'artistcg' else 'cg'}/{galleryinfomodel.title.replace(' ', '-')}-{galleryinfomodel.language_localname}-{galleryinfomodel.galleryid}.html".lower()
+    regex_url = re.sub(r"([\"|\'|\%|\(|\)|\{|\}|\[|\]|\<|\>])", "-", url)
     async with aiohttp.ClientSession() as cs:
-        async with cs.get(url, headers=headers) as r:
+        async with cs.get(regex_url, headers=headers) as r:
             if r.status != 200:
                 return None
             response = await r.text()
