@@ -29,7 +29,7 @@ def parse_tags(html: str, type_: str):
     elif type_ == "doujinshi":
         soup_type = "dj"
     elif type_ == "artistcg":
-        soup_type = "ac"
+        soup_type = "acg"
     elif type_ == "gamecg":
         soup_type = "cg"
     elif type_ == "anime":
