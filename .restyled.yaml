@@ -34,11 +34,11 @@ commit_template: |
 
 restylers:
   - black:
-    include:
-      - "."
+      include:
+        - "."
 
   - isort:
-    arguments: 
-     - "--profile black"
-    include:
-      - "."
+      arguments: 
+        - "--profile black"
+      include:
+        - "."
