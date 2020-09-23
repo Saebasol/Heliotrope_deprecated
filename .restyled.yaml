@@ -33,7 +33,8 @@ commit_template: |
   style(${restyler.name}): apply code style
 
 restylers:
-  - black
+  - name: black
+    incluse: ["."]
 
   - name: isort
     arguments: ["--profile black"]
