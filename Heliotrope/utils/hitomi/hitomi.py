@@ -52,7 +52,7 @@ async def galleryinfo(index: int):
 
 async def integrated_info(index: int):
     galleryinfomodel = await get_galleryinfo(index)
-    tags = await get_gallery(galleryinfomodel)
+    _, tags = await get_gallery(galleryinfomodel)
 
     if not galleryinfomodel:
         gi = None
