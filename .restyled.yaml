@@ -36,4 +36,5 @@ restylers:
   - black
   - isort:
       arguments: ["--profile black"]
-      include: ["."]
+      include:
+        - "."
