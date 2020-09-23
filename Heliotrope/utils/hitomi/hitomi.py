@@ -1,10 +1,8 @@
 import asyncio
 
-from Heliotrope.utils.hitomi.common import (image_model_generator,
-                                            image_url_from_image)
+from Heliotrope.utils.hitomi.common import image_model_generator, image_url_from_image
 from Heliotrope.utils.hitomi.fetch_index import fetch_index
-from Heliotrope.utils.hitomi.hitomi_requester import (get_gallery,
-                                                      get_galleryinfo)
+from Heliotrope.utils.hitomi.hitomi_requester import get_gallery, get_galleryinfo
 from Heliotrope.utils.option import config
 
 
@@ -12,12 +10,13 @@ async def info(index: int):
     galleryinfomodel = await get_galleryinfo(index)
     if not galleryinfomodel:
         return None
-    tags = await get_gallery(galleryinfomodel)
+    url, tags = await get_gallery(galleryinfomodel)
     if not tags:
         return None
 
     data = {
-        "title": tags.title,
+        "title": {"value": tags.title, "url": url},
+        "galleryid": galleryinfomodel.galleryid,
         "artist": tags.artist,
         "group": tags.group,
         "type": tags.type_,
@@ -120,5 +119,5 @@ async def images(index: int):
     images = [
         image_url_from_image(index, img, True)
         for img in image_model_generator(galleryinfomodel.files)
-    ]  # 추후에 파일 이름 변경예정
+    ]  # TODO: 추후에 파일 이름 변경예정
     return images
