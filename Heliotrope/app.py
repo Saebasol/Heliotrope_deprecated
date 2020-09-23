@@ -1,9 +1,10 @@
 import os
 
-import sentry_sdk
 from sanic import Sanic
 from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
+import sentry_sdk
+
 
 import Heliotrope
 from Heliotrope.api import api
