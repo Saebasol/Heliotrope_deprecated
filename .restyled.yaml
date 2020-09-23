@@ -34,7 +34,7 @@ commit_template: |
 
 restylers:
   - name: black
-    incluse: ["."]
+    include: ["."]
 
   - name: isort
     arguments: ["--profile black"]
