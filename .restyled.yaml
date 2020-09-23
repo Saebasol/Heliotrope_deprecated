@@ -37,5 +37,4 @@ restylers:
 
   - isort:
       command:
-        - "isort"
-        - "-- profile black"
+        - "isort --profile black"
