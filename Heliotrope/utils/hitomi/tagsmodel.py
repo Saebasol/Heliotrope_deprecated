@@ -28,7 +28,7 @@ def parse_tags(html: str, type_: str):
         soup_type = "manga"
     elif type_ == "doujinshi":
         soup_type = "dj"
-    elif type_ == "artistcg":
+    elif type_ == "cg":
         soup_type = "acg"
     elif type_ == "gamecg":
         soup_type = "cg"
