@@ -5,7 +5,7 @@ class HitomiTagsModel:
     def __init__(
         self,
         title: str,
-        img_link:str,
+        img_link: str,
         artist: list,
         group: list,
         type_: str,
@@ -39,20 +39,20 @@ def parse_tags(html: str, type_: str):
     else:
         return None
 
-    soup = BeautifulSoup(html, "lxml").find(
-        "div", class_=f"gallery {soup_type}-gallery"
-    )
+    soup = BeautifulSoup(html, "lxml")
+
+    gallery_element = soup.find("div", class_=f"gallery {soup_type}-gallery")
 
     if not soup:
         return None
 
-    galleryinfo = soup.find("div", class_="gallery-info")
+    galleryinfo = gallery_element.find("div", class_="gallery-info")
     infos = galleryinfo.find_all("tr")
 
-    title = soup.find("h1").find("a").text
+    title = gallery_element.find("h1").find("a").text
     img_link = soup.find("picture").find("img")["src"]
 
-    artist_elements = soup.find("h2").find_all("a")
+    artist_elements = gallery_element.find("h2").find_all("a")
     group_elements = infos[0].find_all("a")
     type_element = infos[1].find("a")
     language_element = infos[2].find("a")
