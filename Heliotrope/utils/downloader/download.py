@@ -26,8 +26,8 @@ async def create_folder():
 
 async def check_folder_and_download(index, user_id, download_bool):
     await create_folder()
-    img_links = await check_vaild(index)
-    if img_links:
+    img_dicts = await check_vaild(index)
+    if img_dicts:
 
         user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
         if not user_data:
@@ -46,7 +46,7 @@ async def check_folder_and_download(index, user_id, download_bool):
                 return json({"status": "already", "total": total}, 200)
             else:
                 await aios.mkdir(f"{base_directory}/image/{index}")
-                total = await compression_or_download(index, img_links)
+                total = await compression_or_download(index, img_dicts)
                 return json({"status": "pending", "total": total}, 200)
 
         if download_bool:
@@ -73,7 +73,7 @@ async def check_folder_and_download(index, user_id, download_bool):
                 )
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
-                link = await compression_or_download(index, img_links, True)
+                link = await compression_or_download(index, img_dicts, True)
                 return json({"status": "successfully", "link": link}, 200)
 
     else:
@@ -90,24 +90,22 @@ async def downloader(index: int, img_link: str, filename: str):
 
 
 async def check_vaild(index):
-    img_links = await images(index)
-    if not img_links:
+    img_dicts = await images(index)
+    if not img_dicts:
         return None
     else:
-        return img_links
+        return img_dicts
 
 
-async def download_tasks(index: int, img_links: list):
-    filename = 0
-    for img_link in img_links:
-        filename += 1
-        yield downloader(index, img_link, filename)
+async def download_tasks(index: int, img_dicts: dict):
+    for img_dict in img_dicts:
+        yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
-async def compression_or_download(index: int, img_links: list, compression=False):
+async def compression_or_download(index: int, img_dicts: dict, compression=False):
     if compression:
         done, _ = await asyncio.wait(
-            [task async for task in download_tasks(index, img_links)]
+            [task async for task in download_tasks(index, img_dicts)]
         )
         if done:
             shutil.make_archive(
@@ -118,7 +116,7 @@ async def compression_or_download(index: int, img_links: list, compression=False
             return f"https://doujinshiman.ga/download/{index}/{index}.zip"
     else:
         total = 0
-        async for task in download_tasks(index, img_links):
+        async for task in download_tasks(index, img_dicts):
             total += 1
             asyncio.create_task(task)
         return total
