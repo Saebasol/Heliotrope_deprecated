@@ -7,16 +7,15 @@ from Heliotrope.utils.option import config
 
 
 async def info(index: int):
-    galleryinfomodel = await get_galleryinfo(index)
-    if not galleryinfomodel:
+    arg = await get_gallery(index)
+    if not arg:
         return None
-    url, tags = await get_gallery(galleryinfomodel)
-    if not tags:
-        return None
+    else:
+        url, tags = arg
 
     data = {
         "title": {"value": tags.title, "url": url},
-        "galleryid": galleryinfomodel.galleryid,
+        "galleryid": index,
         "artist": tags.artist,
         "group": tags.group,
         "type": tags.type_,
@@ -52,7 +51,7 @@ async def galleryinfo(index: int):
 
 async def integrated_info(index: int):
     galleryinfomodel = await get_galleryinfo(index)
-    _, tags = await get_gallery(galleryinfomodel)
+    _, tags = await get_gallery(index)
 
     if not galleryinfomodel:
         gi = None
@@ -117,7 +116,7 @@ async def images(index: int):
     if not galleryinfomodel:
         return None
     images = [
-        image_url_from_image(index, img, True)
+        {"url": image_url_from_image(index, img, True), "filename": img.name}
         for img in image_model_generator(galleryinfomodel.files)
-    ]  # TODO: 추후에 파일 이름 변경예정
+    ]
     return images
