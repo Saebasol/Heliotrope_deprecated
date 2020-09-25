@@ -5,6 +5,7 @@ class HitomiTagsModel:
     def __init__(
         self,
         title: str,
+        img_link:str,
         artist: list,
         group: list,
         type_: str,
@@ -14,6 +15,7 @@ class HitomiTagsModel:
         tags: list,
     ):
         self.title = title
+        self.thumbnail = img_link
         self.artist = artist
         self.group = group
         self.type_ = type_
@@ -48,6 +50,7 @@ def parse_tags(html: str, type_: str):
     infos = galleryinfo.find_all("tr")
 
     title = soup.find("h1").find("a").text
+    img_link = soup.find("picture").find("img")["src"]
 
     artist_elements = soup.find("h2").find_all("a")
     group_elements = infos[0].find_all("a")
@@ -59,6 +62,7 @@ def parse_tags(html: str, type_: str):
 
     return HitomiTagsModel(
         title,
+        img_link,
         check_element(artist_elements),
         check_element(group_elements),
         check_element(type_element),

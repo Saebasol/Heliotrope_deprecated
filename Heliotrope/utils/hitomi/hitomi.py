@@ -16,6 +16,7 @@ async def info(index: int):
     data = {
         "title": {"value": tags.title, "url": url},
         "galleryid": index,
+        "thumbnail": tags.thumbnail,
         "artist": tags.artist,
         "group": tags.group,
         "type": tags.type_,
