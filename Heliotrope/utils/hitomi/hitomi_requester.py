@@ -1,8 +1,8 @@
 import json
 from urllib.parse import urlparse
-from bs4 import BeautifulSoup
 
 import aiohttp
+from bs4 import BeautifulSoup
 
 from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
