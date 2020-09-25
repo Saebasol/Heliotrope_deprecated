@@ -84,7 +84,7 @@ async def downloader(index: int, img_link: str, filename: str):
     async with aiohttp.ClientSession() as cs:
         async with cs.get(img_link, headers=headers) as r:
             async with aiofiles.open(
-                f"{base_directory}/image/{index}/{filename}.jpg", mode="wb"
+                f"{base_directory}/image/{index}/{filename}", mode="wb"
             ) as f:
                 await f.write(await r.read())
 
