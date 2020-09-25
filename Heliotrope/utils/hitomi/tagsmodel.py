@@ -5,7 +5,7 @@ class HitomiTagsModel:
     def __init__(
         self,
         title: str,
-        img_link:str,
+        img_link: str,
         artist: list,
         group: list,
         type_: str,
