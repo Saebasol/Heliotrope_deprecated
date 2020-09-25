@@ -35,7 +35,7 @@ def parse_galleryinfo(galleryinfo_json: dict) -> HitomiGalleryInfoModel:
             elif not tag.get("male") and not tag.get("female"):
                 parsed_tags.append({"value": f"tag:{tag['tag']}", "url": tag["url"]})
             elif tag.get("male") and tag.get("female"):
-                pass  # 특별한 케이스
+                raise Exception
             else:
                 raise Exception
 
