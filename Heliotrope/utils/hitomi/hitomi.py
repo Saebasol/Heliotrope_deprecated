@@ -117,7 +117,7 @@ async def images(index: int):
     if not galleryinfomodel:
         return None
     images = [
-        image_url_from_image(index, img, True)
+        {"url:": image_url_from_image(index, img, True), "filename": img.name}
         for img in image_model_generator(galleryinfomodel.files)
     ]  # TODO: 추후에 파일 이름 변경예정
     return images
