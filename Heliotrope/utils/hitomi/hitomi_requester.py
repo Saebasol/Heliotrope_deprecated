@@ -41,4 +41,4 @@ async def get_gallery(galleryinfomodel: HitomiGalleryInfoModel):
             if r.status != 200:
                 return None
             response = await r.text()
-            return r.url, parse_tags(response, galleryinfomodel.type_)
+            return str(r.url), parse_tags(response, galleryinfomodel.type_)
