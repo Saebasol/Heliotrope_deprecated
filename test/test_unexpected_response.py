@@ -21,5 +21,5 @@ async def test_list_unexpected_response(test_cli):
 
 
 async def test_thumbnail_unexpected_response(test_cli):
-    response = await test_cli.get(f"/proxy/balbalblabla")
+    response = await test_cli.get("/proxy/balbalblabla")
     assert response.status == 404
