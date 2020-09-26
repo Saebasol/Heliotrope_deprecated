@@ -1,6 +1,5 @@
 import asyncio
 import os
-from test.conftest import test_cli
 
 headers = {"Authorization": os.environ["Authorization"]}
 
