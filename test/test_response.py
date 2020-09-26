@@ -1,5 +1,6 @@
 import asyncio
 import os
+from test.conftest import test_cli
 
 headers = {"Authorization": os.environ["Authorization"]}
 
@@ -87,3 +88,11 @@ async def test_download_zip_response_already(test_cli):
         "status": "already",
         "link": "https://doujinshiman.ga/download/1/1.zip",
     }
+
+
+async def test_thumbnail_response(test_cli):
+    info = await test_cli.get("/api/hitomi/info/1496588", headers=headers)
+    assert info.status == 200
+    response = await test_cli.get(f"/proxy/{info['thumbnail']}")
+    asyncio.sleep(3)
+    assert response.status == 200
