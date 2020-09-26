@@ -16,7 +16,7 @@ sentry_sdk.init(
 )
 
 app = Sanic(__name__)
-app.blueprint(api, proxy)
+app.blueprint((api, proxy))
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 register_tortoise(
     app,
