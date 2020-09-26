@@ -23,6 +23,9 @@ async def create_folder():
     if not os.path.exists(f"{base_directory}/download"):
         await aios.mkdir(f"{base_directory}/download")
 
+    if not os.path.exists(f"{base_directory}/thumbnail"):
+        await aios.mkdir(f"{base_directory}/thumbnail")
+
 
 async def check_folder_and_download(index, user_id, download_bool):
     await create_folder()
@@ -120,3 +123,19 @@ async def compression_or_download(index: int, img_dicts: dict, compression=False
             total += 1
             asyncio.create_task(task)
         return total
+
+
+async def thumbnail_cache(img_path: str):
+    if "thumbnail" not in img_path and "_" not in img_path:
+        return
+    path = img_path.replace("thumbnail", "").replace("_", "/")
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get(f"https://tn.hitomi.la{path}", headers=headers) as r:
+            if r.status != 200:
+                return
+            await create_folder()
+            async with aiofiles.open(
+                f"{base_directory}/thumbnail/{img_path}", mode="wb"
+            ) as f:
+                await f.write(await r.read())
+                return True
