@@ -6,8 +6,8 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
-from Heliotrope.image_proxy import proxy
 from Heliotrope.api import api
+from Heliotrope.image_proxy import proxy
 
 sentry_sdk.init(
     dsn=os.environ["sentry"],

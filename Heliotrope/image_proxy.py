@@ -1,9 +1,7 @@
-from sanic import Blueprint
-from sanic import response
+from sanic import Blueprint, response
 from sanic.response import json
 
-from Heliotrope.utils.downloader.download import thumbnail_cache, base_directory
-
+from Heliotrope.utils.downloader.download import base_directory, thumbnail_cache
 
 proxy = Blueprint("image_proxy", url_prefix="/proxy")
 
