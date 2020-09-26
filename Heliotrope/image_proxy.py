@@ -15,6 +15,6 @@ proxy = Blueprint("image_proxy", url_prefix="/proxy")
 async def image_proxy(request, path: str):
     cached = await thumbnail_cache(path)
     if cached:
-        return await response.file(f"{base_directory}/proxy{path}")
+        return await response.file(f"{base_directory}/thumbnail{path}")
     else:
         return json({"status": "not_found"}, 404)

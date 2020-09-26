@@ -135,7 +135,7 @@ async def thumbnail_cache(img_path: str):
                 return
             await create_folder()
             async with aiofiles.open(
-                f"{base_directory}/proxy/{img_path}", mode="wb"
+                f"{base_directory}/thumbnail/{img_path}", mode="wb"
             ) as f:
                 await f.write(await r.read())
                 return True
