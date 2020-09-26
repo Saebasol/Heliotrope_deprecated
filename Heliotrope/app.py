@@ -6,6 +6,7 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
+from Heliotrope.image_proxy import proxy
 from Heliotrope.api import api
 
 sentry_sdk.init(
@@ -15,7 +16,7 @@ sentry_sdk.init(
 )
 
 app = Sanic(__name__)
-app.blueprint(api)
+app.blueprint(api, proxy)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 register_tortoise(
     app,
