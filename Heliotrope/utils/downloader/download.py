@@ -58,6 +58,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                     {
                         "code": 200,
                         "status": "already",
+                        "count": 5 - user_data.download_count,
                         "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
                     },
                     200,
@@ -72,6 +73,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                     {
                         "code": 200,
                         "status": "use_cached",
+                        "count": 5 - user_data.download_count,
                         "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
                     },
                     200,
