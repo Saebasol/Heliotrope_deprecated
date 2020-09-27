@@ -56,6 +56,7 @@ async def check_folder_and_download(index, user_id, download_bool):
             if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
                 return json(
                     {
+                        "code": 200,
                         "status": "already",
                         "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
                     },
