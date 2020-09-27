@@ -16,9 +16,11 @@ async def api_download(request):
     index = request.json.get("index")
     user_id = request.json.get("user_id")
     download_bool = request.json.get("download")
-    if download_bool is None or not index or not user_id:
+    if download_bool is False:
+        result = await check_folder_and_download(index, download_bool)
+    elif download_bool is None or not index or not user_id:
         return json({"code": 400, "status": "bad_request"}, 400)
-
-    result = await check_folder_and_download(index, user_id, download_bool)
+    else:
+        result = await check_folder_and_download(index, download_bool, user_id)
 
     return result
