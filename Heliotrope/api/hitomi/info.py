@@ -13,6 +13,6 @@ info = Blueprint("hitomi_info", url_prefix="/info")
 async def hitomi_info(request, index: int):
     json_ = await hitomi.info(index)
     if not json_:
-        return json({"status":"not_found"}, 404)
+        return json({"code": 404, "status": "not_found"}, 404)
     else:
         return json(json_)
