@@ -13,6 +13,6 @@ list_ = Blueprint("hitomi_list", url_prefix="/list")
 async def hitomi_list(request, num: int):
     hitomi_info_list = await hitomi.list_(int(num) - 1)
     if not hitomi_info_list:
-        return json({"status":"not_found"}, 404)
+        return json({"code": 404, "status": "not_found"}, 404)
     else:
         return json(hitomi_info_list)

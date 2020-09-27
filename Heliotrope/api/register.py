@@ -15,7 +15,7 @@ register = Blueprint("register", url_prefix="/register")
 async def api_register(request):
     user_id = request.json.get("user_id")
     if not user_id:
-        return json({"status": "bad_request"}, 400)
+        return json({"code": 400, "status": "bad_request"}, 400)
 
     result = await user_register(user_id)
 

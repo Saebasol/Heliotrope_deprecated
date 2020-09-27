@@ -47,7 +47,7 @@ async def test_download_response(test_cli):
     await asyncio.sleep(5)
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": "pending", "total": 2}
+    assert response_json == {"code": 200, "status": "pending", "total": 2}
 
 
 async def test_download_response_already(test_cli):
@@ -58,7 +58,7 @@ async def test_download_response_already(test_cli):
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": "already", "total": 2}
+    assert response_json == {"code": 200, "status": "already", "total": 2}
 
 
 async def test_download_zip_response(test_cli):
@@ -70,6 +70,7 @@ async def test_download_zip_response(test_cli):
     assert response.status == 200
     response_json = await response.json()
     assert response_json == {
+        "code": 200,
         "status": "use_cached",
         "link": "https://doujinshiman.ga/download/1/1.zip",
     }
@@ -84,6 +85,7 @@ async def test_download_zip_response_already(test_cli):
     assert response.status == 200
     response_json = await response.json()
     assert response_json == {
+        "code": 200,
         "status": "already",
         "link": "https://doujinshiman.ga/download/1/1.zip",
     }
