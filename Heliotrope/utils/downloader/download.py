@@ -34,11 +34,11 @@ async def check_folder_and_download(index, user_id, download_bool):
 
         user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
         if not user_data:
-            return json({"status": "need_register"}, 403)
+            return json({"code": 403, "status": "need_register"}, 403)
         else:
             count = user_data.download_count
             if count >= 5:
-                return json({"status": "Too_many_requests"}, 429)
+                return json({"code": 429, "status": "Too_many_requests"}, 429)
             else:
                 user_data.download_count = count + 1
                 await user_data.save()
@@ -46,16 +46,17 @@ async def check_folder_and_download(index, user_id, download_bool):
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
-                return json({"status": "already", "total": total}, 200)
+                return json({"code": 200, "status": "already", "total": total}, 200)
             else:
                 await aios.mkdir(f"{base_directory}/image/{index}")
                 total = await compression_or_download(index, img_dicts)
-                return json({"status": "pending", "total": total}, 200)
+                return json({"code": 200, "status": "pending", "total": total}, 200)
 
         if download_bool:
             if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
                 return json(
                     {
+                        "code": 200,
                         "status": "already",
                         "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
                     },
@@ -69,6 +70,7 @@ async def check_folder_and_download(index, user_id, download_bool):
                 )
                 return json(
                     {
+                        "code": 200,
                         "status": "use_cached",
                         "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
                     },
@@ -77,10 +79,10 @@ async def check_folder_and_download(index, user_id, download_bool):
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
                 link = await compression_or_download(index, img_dicts, True)
-                return json({"status": "successfully", "link": link}, 200)
+                return json({"code": 200, "status": "successfully", "link": link}, 200)
 
     else:
-        return json({"status": "not_found"}, 404)
+        return json({"code": 404, "status": "not_found"}, 404)
 
 
 async def downloader(index: int, img_link: str, filename: str):

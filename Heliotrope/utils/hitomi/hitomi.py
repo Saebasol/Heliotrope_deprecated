@@ -14,6 +14,7 @@ async def info(index: int):
         url, tags = arg
 
     data = {
+        "code": 200,
         "title": {"value": tags.title, "url": url},
         "galleryid": index,
         "thumbnail": tags.thumbnail,
@@ -36,6 +37,7 @@ async def galleryinfo(index: int):
         return None
 
     data = {
+        "code": 200,
         "language_localname": galleryinfomodel.language_localname,
         "language": galleryinfomodel.language,
         "date": galleryinfomodel.date,
@@ -86,6 +88,7 @@ async def integrated_info(index: int):
     data = {
         "data": [
             {
+                "code": 200,
                 "galleryinfo": gi,
                 "tags": ts,
             }
@@ -107,7 +110,7 @@ async def list_(num: int):
 
     done, _ = await asyncio.wait([info(index) for index in split_index_list[num]])
     info_list = [d.result() for d in done]
-    data = {"list": info_list}
+    data = {"code": 200, "list": info_list}
 
     return data
 
@@ -117,7 +120,10 @@ async def images(index: int):
     if not galleryinfomodel:
         return None
     images = [
-        {"url": image_url_from_image(index, img, True), "filename": img.name}
+        {
+            "url": image_url_from_image(index, img, True),
+            "filename": img.name,
+        }
         for img in image_model_generator(galleryinfomodel.files)
     ]
     return images
