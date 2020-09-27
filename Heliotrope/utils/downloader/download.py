@@ -27,10 +27,19 @@ async def create_folder():
         await aios.mkdir(f"{base_directory}/thumbnail")
 
 
-async def check_folder_and_download(index, user_id, download_bool):
+async def check_folder_and_download(index, download_bool, user_id=None):
     await create_folder()
     img_dicts = await check_vaild(index)
     if img_dicts:
+
+        if not download_bool:
+            if os.path.exists(f"{base_directory}/image/{index}/"):
+                total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
+                return json({"code": 200, "status": "already", "total": total}, 200)
+            else:
+                await aios.mkdir(f"{base_directory}/image/{index}")
+                total = await compression_or_download(index, img_dicts)
+                return json({"code": 200, "status": "pending", "total": total}, 200)
 
         user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
         if not user_data:
@@ -42,15 +51,6 @@ async def check_folder_and_download(index, user_id, download_bool):
             else:
                 user_data.download_count = count + 1
                 await user_data.save()
-
-        if not download_bool:
-            if os.path.exists(f"{base_directory}/image/{index}/"):
-                total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
-                return json({"code": 200, "status": "already", "total": total}, 200)
-            else:
-                await aios.mkdir(f"{base_directory}/image/{index}")
-                total = await compression_or_download(index, img_dicts)
-                return json({"code": 200, "status": "pending", "total": total}, 200)
 
         if download_bool:
             if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
