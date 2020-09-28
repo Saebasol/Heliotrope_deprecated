@@ -71,6 +71,7 @@ async def test_download_zip_response(test_cli):
     response_json = await response.json()
     assert response_json == {
         "code": 200,
+        "count": 4,
         "status": "use_cached",
         "link": "https://doujinshiman.ga/download/1/1.zip",
     }
@@ -86,6 +87,7 @@ async def test_download_zip_response_already(test_cli):
     response_json = await response.json()
     assert response_json == {
         "code": 200,
+        "count": 3,
         "status": "already",
         "link": "https://doujinshiman.ga/download/1/1.zip",
     }
