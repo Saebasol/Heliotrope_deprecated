@@ -51,6 +51,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
             else:
                 user_data.download_count = count + 1
                 await user_data.save()
+                user_data = await User.get_or_none(user_id=user_id)
 
         if download_bool:
             if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
@@ -104,12 +105,12 @@ async def check_vaild(index):
         return img_dicts
 
 
-async def download_tasks(index: int, img_dicts: dict):
+async def download_tasks(index: int, img_dicts: list):
     for img_dict in img_dicts:
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
-async def compression_or_download(index: int, img_dicts: dict, compression=False):
+async def compression_or_download(index: int, img_dicts: list, compression=False):
     if compression:
         done, _ = await asyncio.wait(
             [task async for task in download_tasks(index, img_dicts)]
@@ -122,11 +123,13 @@ async def compression_or_download(index: int, img_dicts: dict, compression=False
             )
             return f"https://doujinshiman.ga/download/{index}/{index}.zip"
     else:
-        total = 0
-        async for task in download_tasks(index, img_dicts):
-            total += 1
-            asyncio.create_task(task)
-        return total
+        total = len(img_dicts)
+        done, _ = await asyncio.wait(
+            [task async for task in download_tasks(index, img_dicts)],
+            return_when="FIRST_COMPLETED",
+        )
+        if done:
+            return total
 
 
 async def thumbnail_cache(img_path: str):
