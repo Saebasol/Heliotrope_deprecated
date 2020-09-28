@@ -1,7 +1,7 @@
 aiohttp==3.6.2
 sanic==20.6.3
 sentry-sdk==0.17.8
-beautifulsoup4==4.9.1
+beautifulsoup4==4.9.2
 lxml==4.5.2
 tortoise-orm==0.16.16
 aiomysql==0.0.20
