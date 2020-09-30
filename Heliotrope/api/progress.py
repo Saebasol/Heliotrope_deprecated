@@ -28,11 +28,11 @@ async def image_progress(request, user_id: str):
             }
             for task_dict in task_list
         ]
-        info_list.append(task_info)
+        info_list.extend(task_info)
 
     if await task_progress.cache.exists(f"{user_id}_already"):
         already_info = await task_progress.cache.get(f"{user_id}_already")
-        info_list.append(already_info)
+        info_list.extend(already_info)
 
     if info_list:
         return json({"code": 200, "info": info_list})
