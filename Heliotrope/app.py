@@ -2,12 +2,12 @@ import os
 
 import sentry_sdk
 from sanic import Sanic
+from sanic.blueprints import Blueprint
 from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
 from Heliotrope.api import api
-from Heliotrope.image_proxy import proxy
 
 sentry_sdk.init(
     dsn=os.environ["sentry"],
@@ -16,7 +16,10 @@ sentry_sdk.init(
 )
 
 app = Sanic(__name__)
-app.blueprint((api, proxy))
+version = Blueprint.group(
+    api, url_prefix=f"/v{Heliotrope.version_info.major}"
+)  # hardcoding
+app.blueprint(version)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 register_tortoise(
     app,
