@@ -1,4 +1,5 @@
 import os
+from sanic.blueprints import Blueprint
 
 import sentry_sdk
 from sanic import Sanic
@@ -14,16 +15,11 @@ sentry_sdk.init(
     release=f"heliotrope@{Heliotrope.__version__}",
 )
 
-options = {
-    "name": "Heliotrope_v1",
-    "url_prefix": "/",
-    "host": None,
-    "version": f"v{Heliotrope.version_info.major}",
-    "strict_slashes": None,
-}
-
 app = Sanic(__name__)
-app.blueprint(api, options=options)
+version = Blueprint.group(
+    api, url_prefix=f"/v{Heliotrope.version_info.major}"
+)  # hardcoding
+app.blueprint(version)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 register_tortoise(
     app,
