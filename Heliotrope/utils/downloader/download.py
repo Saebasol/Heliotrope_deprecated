@@ -1,3 +1,4 @@
+from Heliotrope.utils.downloader.task_progress import TaskProgress
 import asyncio
 import os
 import shutil
@@ -14,6 +15,8 @@ from Heliotrope.utils.option import config
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
 base_directory = os.environ["directory"]
+
+task_progress = TaskProgress()
 
 
 async def create_folder():
@@ -55,34 +58,35 @@ async def check_folder_and_download(index, download_bool, user_id=None):
 
         if download_bool:
             if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
-                return json(
-                    {
-                        "code": 200,
-                        "status": "already",
-                        "count": 5 - user_data.download_count,
-                        "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
-                    },
-                    200,
+                await task_progress.cache_already(
+                    user_id,
+                    index,
+                    5 - user_data.download_count,
+                    "already",
+                    f"https://doujinshiman.ga/download/{index}/{index}.zip",
                 )
+
+                return json({"code": 200, "status": "pending"})
             elif os.path.exists(f"{base_directory}/image/{index}/"):
                 shutil.make_archive(
                     f"{base_directory}/download/{index}/{index}",
                     "zip",
                     f"{base_directory}/image/{index}/",
                 )
-                return json(
-                    {
-                        "code": 200,
-                        "status": "use_cached",
-                        "count": 5 - user_data.download_count,
-                        "link": f"https://doujinshiman.ga/download/{index}/{index}.zip",
-                    },
-                    200,
+                await task_progress.cache_already(
+                    user_id,
+                    index,
+                    5 - user_data.download_count,
+                    "use_cached",
+                    f"https://doujinshiman.ga/download/{index}/{index}.zip",
                 )
+
+                return json({"code": 200, "status": "pending"})
+
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
-                link = await compression_or_download(index, img_dicts, True)
-                return json({"code": 200, "status": "successfully", "link": link}, 200)
+                await compression_or_download(user_id, count, index, img_dicts, True)
+                return json({"code": 200, "status": "pending"}, 200)
 
     else:
         return json({"code": 404, "status": "not_found"}, 404)
@@ -110,18 +114,26 @@ async def download_tasks(index: int, img_dicts: list):
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
-async def compression_or_download(index: int, img_dicts: list, compression=False):
-    if compression:
-        done, _ = await asyncio.wait(
-            [task async for task in download_tasks(index, img_dicts)]
+async def compression(index, img_dicts):
+    done, _ = await asyncio.wait(
+        [task async for task in download_tasks(index, img_dicts)]
+    )
+    if done:
+        shutil.make_archive(
+            f"{base_directory}/download/{index}/{index}",
+            "zip",
+            f"{base_directory}/image/{index}/",
         )
-        if done:
-            shutil.make_archive(
-                f"{base_directory}/download/{index}/{index}",
-                "zip",
-                f"{base_directory}/image/{index}/",
-            )
-            return f"https://doujinshiman.ga/download/{index}/{index}.zip"
+        return
+
+
+async def compression_or_download(
+    user_id: int, count: int, index: int, img_dicts: list, compression=False
+):
+    if compression:
+        task = asyncio.create_task(compression(index, img_dicts))
+        await task_progress.cache_task(user_id, count, task)
+        return
     else:
         total = len(img_dicts)
         done, _ = await asyncio.wait(
