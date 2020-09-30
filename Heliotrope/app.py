@@ -14,8 +14,16 @@ sentry_sdk.init(
     release=f"heliotrope@{Heliotrope.__version__}",
 )
 
+options = {
+    "name": "Heliotrope_v1",
+    "url_prefix": "/",
+    "host": None,
+    "version": Heliotrope.version_info.major,
+    "strict_slashes": None,
+}
+
 app = Sanic(__name__)
-app.blueprint(api, options={"version": Heliotrope.version_info.major})
+app.blueprint(api, options=options)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 register_tortoise(
     app,
