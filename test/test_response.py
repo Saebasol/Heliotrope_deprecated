@@ -84,7 +84,7 @@ async def test_download_zip_response_already(test_cli):
 
 
 async def test_progress_response(test_cli):
-    response = await test_cli.post(
+    response = await test_cli.get(
         "/v1/api/progress/123456789101112131",
         headers=headers,
     )
