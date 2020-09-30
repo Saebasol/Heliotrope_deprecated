@@ -31,7 +31,7 @@ async def image_progress(request, user_id: str):
         info_list.append(task_info)
 
     if await task_progress.cache.exists(f"{user_id}_already"):
-        already_info = await task_progress.get(f"{user_id}_already")
+        already_info = await task_progress.cache.get(f"{user_id}_already")
         info_list.append(already_info)
 
     if info_list:
