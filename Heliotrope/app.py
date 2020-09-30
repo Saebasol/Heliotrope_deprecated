@@ -18,7 +18,7 @@ options = {
     "name": "Heliotrope_v1",
     "url_prefix": None,
     "host": None,
-    "version": Heliotrope.version_info.major,
+    "version": f"v{Heliotrope.version_info.major}",
     "strict_slashes": None,
 }
 
