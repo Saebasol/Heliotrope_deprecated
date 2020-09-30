@@ -1,4 +1,3 @@
-from Heliotrope.utils.downloader.task_progress import TaskProgress
 import asyncio
 import os
 import shutil
@@ -9,6 +8,7 @@ import aiohttp
 from sanic.response import json
 
 from Heliotrope.utils.database.models.user import User
+from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
 

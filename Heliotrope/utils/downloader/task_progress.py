@@ -1,5 +1,6 @@
-import aiocache
 import asyncio
+
+import aiocache
 
 
 class TaskProgress:
