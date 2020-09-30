@@ -16,7 +16,7 @@ sentry_sdk.init(
 
 options = {
     "name": "Heliotrope_v1",
-    "url_prefix": "/",
+    "url_prefix": None,
     "host": None,
     "version": Heliotrope.version_info.major,
     "strict_slashes": None,
