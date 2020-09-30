@@ -41,7 +41,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                 return json({"code": 200, "status": "already", "total": total}, 200)
             else:
                 await aios.mkdir(f"{base_directory}/image/{index}")
-                total = await compression_or_download(index, img_dicts)
+                total = await compression_or_download(user_id, index, img_dicts)
                 return json({"code": 200, "status": "pending", "total": total}, 200)
 
         user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
@@ -85,7 +85,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
 
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
-                await compression_or_download(user_id, count, index, img_dicts, True)
+                await compression_or_download(user_id, index, img_dicts, count, True)
                 return json({"code": 200, "status": "pending"}, 200)
 
     else:
@@ -128,7 +128,11 @@ async def compression(index, img_dicts):
 
 
 async def compression_or_download(
-    user_id: int, count: int, index: int, img_dicts: list, compression=False
+    user_id: int,
+    index: int,
+    img_dicts: list,
+    count: int = None,
+    compression: bool = False,
 ):
     if compression:
         task = asyncio.create_task(compression(index, img_dicts))
