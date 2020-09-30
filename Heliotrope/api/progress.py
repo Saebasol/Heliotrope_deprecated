@@ -15,8 +15,8 @@ task_progress = TaskProgress()
 @authorized()
 async def image_progress(request, user_id: str):
     info_list = []
-    if task_progress.cache.exists(user_id):
-        task_list = task_progress.cache.get(user_id)
+    if await task_progress.cache.exists(user_id):
+        task_list = await task_progress.cache.get(user_id)
         task_info = [
             {
                 "index": task_dict["task_name"],
@@ -30,7 +30,7 @@ async def image_progress(request, user_id: str):
         ]
         info_list.append(task_info)
 
-    if task_progress.exists(f"{user_id}_already"):
+    if await task_progress.exists(f"{user_id}_already"):
         already_info = await task_progress.get(f"{user_id}_already")
         info_list.append(already_info)
 
