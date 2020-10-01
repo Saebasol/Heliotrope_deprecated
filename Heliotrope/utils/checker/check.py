@@ -27,7 +27,7 @@ def authorized():
                 return response
             else:
                 # the user is not authorized.
-                return json({"status": "not_authorized"}, 403)
+                return json({"status": 403, "message": "not_authorized"}, 403)
 
         return decorated_function
 
