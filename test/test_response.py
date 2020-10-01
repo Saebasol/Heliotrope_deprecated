@@ -5,42 +5,42 @@ headers = {"Authorization": os.environ["Authorization"]}
 
 
 async def test_info_response(test_cli):
-    response = await test_cli.get("/v1/api/hitomi/info/1496588", headers=headers)
+    response = await test_cli.get("/v2/api/hitomi/info/1496588", headers=headers)
     assert response.status == 200
 
 
 async def test_galleryindo_response(test_cli):
-    response = await test_cli.get("/v1/api/hitomi/galleryinfo/1496588", headers=headers)
+    response = await test_cli.get("/v2/api/hitomi/galleryinfo/1496588", headers=headers)
     assert response.status == 200
 
 
 async def test_integrated_info_response(test_cli):
-    response = await test_cli.get("/v1/api/hitomi/integrated/1496588", headers=headers)
+    response = await test_cli.get("/v2/api/hitomi/integrated/1496588", headers=headers)
     assert response.status == 200
 
 
 async def test_list_response(test_cli):
-    response = await test_cli.get("/v1/api/hitomi/list/1", headers=headers)
+    response = await test_cli.get("/v2/api/hitomi/list/1", headers=headers)
     assert response.status == 200
 
 
 async def test_register_response(test_cli):
     response = await test_cli.post(
-        "/v1/api/register", headers=headers, json={"user_id": 123456789101112131}
+        "/v2/api/register", headers=headers, json={"user_id": 123456789101112131}
     )
     assert response.status == 201
 
 
 async def test_register_response_already(test_cli):
     response = await test_cli.post(
-        "/v1/api/register", headers=headers, json={"user_id": 123456789101112131}
+        "/v2/api/register", headers=headers, json={"user_id": 123456789101112131}
     )
     assert response.status == 200
 
 
 async def test_download_response(test_cli):
     response = await test_cli.post(
-        "/v1/api/download",
+        "/v2/api/download",
         headers=headers,
         json={"download": False, "index": 1, "user_id": 123456789101112131},
     )
@@ -52,7 +52,7 @@ async def test_download_response(test_cli):
 
 async def test_download_response_already(test_cli):
     response = await test_cli.post(
-        "/v1/api/download",
+        "/v2/api/download",
         headers=headers,
         json={"download": False, "index": 1, "user_id": 123456789101112131},
     )
@@ -63,7 +63,7 @@ async def test_download_response_already(test_cli):
 
 async def test_download_zip_response(test_cli):
     response = await test_cli.post(
-        "/v1/api/download",
+        "/v2/api/download",
         headers=headers,
         json={"download": True, "index": 1, "user_id": 123456789101112131},
     )
@@ -74,7 +74,7 @@ async def test_download_zip_response(test_cli):
 
 async def test_download_zip_response_already(test_cli):
     response = await test_cli.post(
-        "/v1/api/download",
+        "/v2/api/download",
         headers=headers,
         json={"download": True, "index": 1, "user_id": 123456789101112131},
     )
@@ -85,7 +85,7 @@ async def test_download_zip_response_already(test_cli):
 
 async def test_progress_response(test_cli):
     response = await test_cli.get(
-        "/v1/api/progress/123456789101112131",
+        "/v2/api/progress/123456789101112131",
         headers=headers,
     )
     assert response.status == 200
@@ -110,9 +110,9 @@ async def test_progress_response(test_cli):
 
 
 async def test_thumbnail_response(test_cli):
-    info = await test_cli.get("/v1/api/hitomi/info/1496588", headers=headers)
+    info = await test_cli.get("/v2/api/hitomi/info/1496588", headers=headers)
     assert info.status == 200
     info_json = await info.json()
-    response = await test_cli.get(f"/v1/api/proxy/{info_json['thumbnail']}")
+    response = await test_cli.get(f"/v2/api/proxy/{info_json['thumbnail']}")
     asyncio.sleep(3)
     assert response.status == 200
