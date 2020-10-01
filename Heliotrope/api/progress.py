@@ -13,7 +13,7 @@ task_progress = TaskProgress()
     methods=["GET"],
 )
 @authorized()
-async def image_progress(request, user_id: str):
+async def image_progress(request, user_id: int):
     info_list = []
     if await task_progress.cache.exists(user_id):
         task_list = await task_progress.cache.get(user_id)
