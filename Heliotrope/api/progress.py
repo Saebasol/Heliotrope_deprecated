@@ -5,7 +5,6 @@ from Heliotrope.utils.checker.check import authorized
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 
 progress = Blueprint("download_progress", url_prefix="/progress")
-task_progress = TaskProgress()
 
 
 @progress.route(
@@ -15,8 +14,9 @@ task_progress = TaskProgress()
 @authorized()
 async def image_progress(request, user_id: int):
     info_list = []
-    if await task_progress.cache.exists(user_id):
-        task_list = await task_progress.cache.get(user_id)
+    task_progress = TaskProgress()
+    if await task_progress.cache.exists(int(user_id)):
+        task_list = await task_progress.cache.get(int(user_id))
         task_info = [
             {
                 "index": task_dict["task_name"],
@@ -37,4 +37,4 @@ async def image_progress(request, user_id: int):
     if info_list:
         return json({"code": 200, "info": info_list})
     else:
-        return json({"code": 404, "status": "not_found"})
+        return json({"code": 404, "status": "not_found"}, 404)

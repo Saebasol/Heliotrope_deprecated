@@ -85,7 +85,10 @@ async def check_folder_and_download(index, download_bool, user_id=None):
 
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
-                await compression_or_download(user_id, index, img_dicts, count, True)
+                await aios.mkdir(f"{base_directory}/image/{index}")
+                await compression_or_download(
+                    user_id, index, img_dicts, 5 - user_data.download_count, True
+                )
                 return json({"code": 200, "status": "pending"}, 200)
 
     else:
@@ -109,15 +112,13 @@ async def check_vaild(index):
         return img_dicts
 
 
-async def download_tasks(index: int, img_dicts: list):
+def download_tasks(index: int, img_dicts: list):
     for img_dict in img_dicts:
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
-async def download_compression(index, img_dicts):
-    done, _ = await asyncio.wait(
-        [task async for task in download_tasks(index, img_dicts)]
-    )
+async def download_compression(task_list, index):
+    done, _ = await asyncio.wait(task_list)
     if done:
         shutil.make_archive(
             f"{base_directory}/download/{index}/{index}",
@@ -134,14 +135,15 @@ async def compression_or_download(
     count: int = None,
     compression: bool = False,
 ):
+    task_list = list(download_tasks(index, img_dicts))
     if compression:
-        task = asyncio.create_task(download_compression(index, img_dicts))
+        task = asyncio.create_task(download_compression(task_list, index), name=index)
         await task_progress.cache_task(user_id, count, task)
         return
     else:
         total = len(img_dicts)
         done, _ = await asyncio.wait(
-            [task async for task in download_tasks(index, img_dicts)],
+            task_list,
             return_when="FIRST_COMPLETED",
         )
         if done:
