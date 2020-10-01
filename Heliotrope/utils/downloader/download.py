@@ -38,19 +38,19 @@ async def check_folder_and_download(index, download_bool, user_id=None):
         if not download_bool:
             if os.path.exists(f"{base_directory}/image/{index}/"):
                 total = len(next(os.walk(f"{base_directory}/image/{index}/"))[2])
-                return json({"code": 200, "status": "already", "total": total}, 200)
+                return json({"status": 200, "message": "already", "total": total}, 200)
             else:
                 await aios.mkdir(f"{base_directory}/image/{index}")
                 total = await compression_or_download(user_id, index, img_dicts)
-                return json({"code": 200, "status": "pending", "total": total}, 200)
+                return json({"status": 200, "message": "pending", "total": total}, 200)
 
         user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
         if not user_data:
-            return json({"code": 403, "status": "need_register"}, 403)
+            return json({"status": 403, "message": "need_register"}, 403)
         else:
             count = user_data.download_count
             if count >= 5:
-                return json({"code": 429, "status": "Too_many_requests"}, 429)
+                return json({"status": 429, "message": "Too_many_requests"}, 429)
             else:
                 user_data.download_count = count + 1
                 await user_data.save()
@@ -66,7 +66,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                     f"https://doujinshiman.ga/download/{index}/{index}.zip",
                 )
 
-                return json({"code": 200, "status": "pending"})
+                return json({"status": 200, "message": "pending"})
             elif os.path.exists(f"{base_directory}/image/{index}/"):
                 shutil.make_archive(
                     f"{base_directory}/download/{index}/{index}",
@@ -81,7 +81,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                     f"https://doujinshiman.ga/download/{index}/{index}.zip",
                 )
 
-                return json({"code": 200, "status": "pending"})
+                return json({"status": 200, "message": "pending"})
 
             else:
                 await aios.mkdir(f"{base_directory}/download/{index}")
@@ -89,10 +89,10 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                 await compression_or_download(
                     user_id, index, img_dicts, 5 - user_data.download_count, True
                 )
-                return json({"code": 200, "status": "pending"}, 200)
+                return json({"status": 200, "message": "pending"}, 200)
 
     else:
-        return json({"code": 404, "status": "not_found"}, 404)
+        return json({"status": 404, "message": "not_found"}, 404)
 
 
 async def downloader(index: int, img_link: str, filename: str):

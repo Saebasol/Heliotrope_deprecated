@@ -35,6 +35,6 @@ async def image_progress(request, user_id: int):
         info_list.extend(already_info)
 
     if info_list:
-        return json({"code": 200, "info": info_list})
+        return json({"status": 200, "info": info_list})
     else:
-        return json({"code": 404, "status": "not_found"}, 404)
+        return json({"status": 404, "message": "not_found"}, 404)
