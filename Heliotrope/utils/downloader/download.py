@@ -114,7 +114,7 @@ async def download_tasks(index: int, img_dicts: list):
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
-async def compression(index, img_dicts):
+async def download_compression(index, img_dicts):
     done, _ = await asyncio.wait(
         [task async for task in download_tasks(index, img_dicts)]
     )
@@ -135,7 +135,7 @@ async def compression_or_download(
     compression: bool = False,
 ):
     if compression:
-        task = asyncio.create_task(compression(index, img_dicts))
+        task = asyncio.create_task(download_compression(index, img_dicts))
         await task_progress.cache_task(user_id, count, task)
         return
     else:
