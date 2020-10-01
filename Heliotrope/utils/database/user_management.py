@@ -3,10 +3,16 @@ from sanic.response import json
 from Heliotrope.utils.database import User
 
 
-async def user_register(user_id):
+async def user_register(user_id: int, check: bool = False):
     user_data = await User.get_or_none(user_id=user_id)
-    if user_data:
-        return json({"status": "already_register"}, 200)
+    if check:
+        if user_data:
+            return json({"code": 200, "status": "already_register"}, 200)
+        else:
+            return json({"code": 404, "status": "not_found"}, 404)
     else:
-        await User.create(user_id=user_id)
-        return json({"status": "successfully"}, 201)
+        if user_data:
+            return json({"code": 200, "status": "already_register"}, 200)
+        else:
+            await User.create(user_id=user_id)
+            return json({"code": 201, "ststus": "successfully"}, 201)
