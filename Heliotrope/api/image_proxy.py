@@ -15,4 +15,4 @@ async def image_proxy(request, path: str):
     if cached:
         return await response.file(f"{base_directory}/thumbnail/{path}")
     else:
-        return json({"status": "not_found"}, 404)
+        return json({"status": 404, "message": "not_found"}, 404)
