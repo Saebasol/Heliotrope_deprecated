@@ -8,6 +8,7 @@ from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
 from Heliotrope.api import api
+from Heliotrope.utils.scheduler import reset_scheduler
 
 sentry_sdk.init(
     dsn=os.environ["sentry"],
@@ -22,6 +23,7 @@ version = Blueprint.group(
 app.blueprint(version)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 app.config.FALLBACK_ERROR_FORMAT = "json"
+app.add_task(reset_scheduler())
 register_tortoise(
     app,
     db_url=f"mysql://{os.environ['DB_UNAME']}:{os.environ['DB_PW']}@{os.environ['DB_HOST']}:3306/{os.environ['DB_DBNAME']}",
