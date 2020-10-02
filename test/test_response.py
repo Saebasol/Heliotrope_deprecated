@@ -26,14 +26,18 @@ async def test_list_response(test_cli):
 
 async def test_register_response(test_cli):
     response = await test_cli.post(
-        "/v2/api/register", headers=headers, json={"user_id": 123456789101112131}
+        "/v2/api/register",
+        headers=headers,
+        json={"user_id": 123456789101112131, "check": False},
     )
     assert response.status == 201
 
 
 async def test_register_response_already(test_cli):
     response = await test_cli.post(
-        "/v2/api/register", headers=headers, json={"user_id": 123456789101112131}
+        "/v2/api/register",
+        headers=headers,
+        json={"user_id": 123456789101112131, "check": True},
     )
     assert response.status == 200
 
