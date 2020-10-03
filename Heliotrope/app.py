@@ -7,7 +7,7 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
-from Heliotrope.api import api
+from Heliotrope.v2 import version
 from Heliotrope.utils.scheduler import reset_scheduler
 
 sentry_sdk.init(
@@ -17,9 +17,6 @@ sentry_sdk.init(
 )
 
 app = Sanic(__name__)
-version = Blueprint.group(
-    api, url_prefix=f"/v{Heliotrope.version_info.major}"
-)  # hardcoding
 app.blueprint(version)
 app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
 app.config.FALLBACK_ERROR_FORMAT = "json"
