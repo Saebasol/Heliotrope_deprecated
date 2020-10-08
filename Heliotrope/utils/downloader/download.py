@@ -50,7 +50,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
         result = await user_download_count_check(user_id)
 
         if result is True:
-            count = user_download_count(user_id)
+            count = await user_download_count(user_id)
 
             if download_bool:
                 if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
