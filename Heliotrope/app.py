@@ -6,8 +6,8 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
-from Heliotrope.v2 import version
 from Heliotrope.utils.scheduler import reset_scheduler
+from Heliotrope.v2 import version
 
 sentry_sdk.init(
     dsn=os.environ["sentry"],
