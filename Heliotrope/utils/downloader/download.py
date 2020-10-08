@@ -8,7 +8,10 @@ import aiohttp
 from sanic.response import json
 
 from Heliotrope.utils.database.models.user import User
-from Heliotrope.utils.database.user_management import user_download_count, user_download_count_check
+from Heliotrope.utils.database.user_management import (
+    user_download_count,
+    user_download_count_check,
+)
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
