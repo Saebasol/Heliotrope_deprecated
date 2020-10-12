@@ -1,7 +1,7 @@
 import asyncio
+import functools
 import os
 import shutil
-from typing import Coroutine
 
 import aiofiles
 import aiofiles.os as aios
@@ -121,7 +121,7 @@ def archive(index):
 
 
 async def executer(index):
-    return await asyncio.get_running_loop().run_in_executor(None, archive(index))
+    return await asyncio.get_running_loop().run_in_executor(None, archive, index)
 
 
 async def download_compression(task_list, index):
