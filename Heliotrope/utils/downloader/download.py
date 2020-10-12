@@ -1,6 +1,7 @@
 import asyncio
 import os
 import shutil
+from typing import Coroutine
 
 import aiofiles
 import aiofiles.os as aios
@@ -64,11 +65,7 @@ async def check_folder_and_download(index, download_bool, user_id=None):
 
                     return json({"status": 200, "message": "pending"})
                 elif os.path.exists(f"{base_directory}/image/{index}/"):
-                    shutil.make_archive(
-                        f"{base_directory}/download/{index}/{index}",
-                        "zip",
-                        f"{base_directory}/image/{index}/",
-                    )
+                    await executer(index)
                     await task_progress.cache_already(
                         user_id,
                         index,
@@ -115,14 +112,24 @@ def download_tasks(index: int, img_dicts: list):
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
+def archive(index):
+    shutil.make_archive(
+        f"{base_directory}/download/{index}/{index}",
+        "zip",
+        f"{base_directory}/image/{index}/",
+    )
+
+
+def executer(
+    index, loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+) -> Coroutine:
+    loop.run_in_executor(None, archive(index))
+
+
 async def download_compression(task_list, index):
     done, _ = await asyncio.wait(task_list)
     if done:
-        shutil.make_archive(
-            f"{base_directory}/download/{index}/{index}",
-            "zip",
-            f"{base_directory}/image/{index}/",
-        )
+        await executer(index)
         return
 
 
