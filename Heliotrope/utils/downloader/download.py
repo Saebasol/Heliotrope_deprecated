@@ -120,10 +120,8 @@ def archive(index):
     )
 
 
-async def executer(
-    index, loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
-) -> Coroutine:
-    return await loop.run_in_executor(None, archive(index))
+async def executer(index):
+    return await asyncio.get_running_loop().run_in_executor(None, archive(index))
 
 
 async def download_compression(task_list, index):
