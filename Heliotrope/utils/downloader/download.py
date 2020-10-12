@@ -121,7 +121,7 @@ def archive(index):
 
 
 def executer(
-    index, loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+    index, loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
 ) -> Coroutine:
     return loop.run_in_executor(None, archive(index))
 
