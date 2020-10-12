@@ -23,8 +23,7 @@ async def user_download_count_check(user_id: int):
     if not user_data:
         return json({"status": 403, "message": "need_register"}, 403)
     else:
-        count = user_data.download_count
-        if count >= 5:
+        if user_data.download_count >= 5:
             return json({"status": 429, "message": "Too_many_requests"}, 429)
         else:
             return True
@@ -32,7 +31,6 @@ async def user_download_count_check(user_id: int):
 
 async def user_download_count(user_id: int):
     user_data = await User.get_or_none(user_id=user_id)
-    count = user_data.download_count
-    user_data.download_count = count + 1
+    user_data.download_count += 1
     await user_data.save()
     return 5 - user_data.download_count
