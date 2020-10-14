@@ -7,7 +7,10 @@ import aiofiles.os as aios
 import aiohttp
 from sanic.response import json
 
-from Heliotrope.utils.database.models.user import User
+from Heliotrope.utils.database.user_management import (
+    user_download_count,
+    user_download_count_check,
+)
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
@@ -43,53 +46,43 @@ async def check_folder_and_download(index, download_bool, user_id=None):
                 await aios.mkdir(f"{base_directory}/image/{index}")
                 total = await compression_or_download(user_id, index, img_dicts)
                 return json({"status": 200, "message": "pending", "total": total}, 200)
+        result = await user_download_count_check(user_id)
 
-        user_data = await User.get_or_none(user_id=user_id)  # 따로 나눠야함
-        if not user_data:
-            return json({"status": 403, "message": "need_register"}, 403)
+        if result is True:
+            count = await user_download_count(user_id)
+
+            if download_bool:
+                if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
+                    await task_progress.cache_already(
+                        user_id,
+                        index,
+                        count,
+                        "already",
+                        f"https://doujinshiman.ga/download/{index}/{index}.zip",
+                    )
+
+                    return json({"status": 200, "message": "pending"})
+                elif os.path.exists(f"{base_directory}/image/{index}/"):
+                    await executer(index)
+                    await task_progress.cache_already(
+                        user_id,
+                        index,
+                        count,
+                        "use_cached",
+                        f"https://doujinshiman.ga/download/{index}/{index}.zip",
+                    )
+
+                    return json({"status": 200, "message": "pending"})
+
+                else:
+                    await aios.mkdir(f"{base_directory}/download/{index}")
+                    await aios.mkdir(f"{base_directory}/image/{index}")
+                    await compression_or_download(
+                        user_id, index, img_dicts, count, True
+                    )
+                    return json({"status": 200, "message": "pending"}, 200)
         else:
-            count = user_data.download_count
-            if count >= 5:
-                return json({"status": 429, "message": "Too_many_requests"}, 429)
-            else:
-                user_data.download_count = count + 1
-                await user_data.save()
-                user_data = await User.get_or_none(user_id=user_id)
-
-        if download_bool:
-            if os.path.exists(f"{base_directory}/download/{index}/{index}.zip"):
-                await task_progress.cache_already(
-                    user_id,
-                    index,
-                    5 - user_data.download_count,
-                    "already",
-                    f"https://doujinshiman.ga/download/{index}/{index}.zip",
-                )
-
-                return json({"status": 200, "message": "pending"})
-            elif os.path.exists(f"{base_directory}/image/{index}/"):
-                shutil.make_archive(
-                    f"{base_directory}/download/{index}/{index}",
-                    "zip",
-                    f"{base_directory}/image/{index}/",
-                )
-                await task_progress.cache_already(
-                    user_id,
-                    index,
-                    5 - user_data.download_count,
-                    "use_cached",
-                    f"https://doujinshiman.ga/download/{index}/{index}.zip",
-                )
-
-                return json({"status": 200, "message": "pending"})
-
-            else:
-                await aios.mkdir(f"{base_directory}/download/{index}")
-                await aios.mkdir(f"{base_directory}/image/{index}")
-                await compression_or_download(
-                    user_id, index, img_dicts, 5 - user_data.download_count, True
-                )
-                return json({"status": 200, "message": "pending"}, 200)
+            return result
 
     else:
         return json({"status": 404, "message": "not_found"}, 404)
@@ -117,14 +110,22 @@ def download_tasks(index: int, img_dicts: list):
         yield downloader(index, img_dict["url"], img_dict["filename"])
 
 
+def archive(index):
+    shutil.make_archive(
+        f"{base_directory}/download/{index}/{index}",
+        "zip",
+        f"{base_directory}/image/{index}/",
+    )
+
+
+async def executer(index):
+    return await asyncio.get_running_loop().run_in_executor(None, archive, index)
+
+
 async def download_compression(task_list, index):
     done, _ = await asyncio.wait(task_list)
     if done:
-        shutil.make_archive(
-            f"{base_directory}/download/{index}/{index}",
-            "zip",
-            f"{base_directory}/image/{index}/",
-        )
+        await executer(index)
         return
 
 
