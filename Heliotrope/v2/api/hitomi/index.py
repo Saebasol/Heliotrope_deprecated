@@ -1,5 +1,4 @@
 from sanic import Blueprint
-from sanic.exceptions import abort
 from sanic.response import json
 
 from Heliotrope.utils.checker.check import authorized
