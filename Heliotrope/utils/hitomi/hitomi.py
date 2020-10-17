@@ -127,3 +127,7 @@ async def images(index: int):
         for img in image_model_generator(galleryinfomodel.files)
     ]
     return images
+
+
+async def index():
+    return await fetch_index(config)
