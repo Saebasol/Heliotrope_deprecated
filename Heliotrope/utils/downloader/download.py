@@ -13,8 +13,8 @@ from Heliotrope.utils.database.user_management import (
 )
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
-from Heliotrope.utils.option import config
 from Heliotrope.utils.image import convert_to_png
+from Heliotrope.utils.option import config
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
