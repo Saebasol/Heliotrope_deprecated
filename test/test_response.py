@@ -24,6 +24,11 @@ async def test_list_response(test_cli):
     assert response.status == 200
 
 
+async def test_index_response(test_cli):
+    response = await test_cli.get("/v2/api/hitomi/index", headers=headers)
+    assert response.status == 200
+
+
 async def test_register_response(test_cli):
     response = await test_cli.post(
         "/v2/api/register",
