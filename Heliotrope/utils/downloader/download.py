@@ -121,23 +121,19 @@ def archive(index):
 
 async def convert(index):
     loop = asyncio.get_running_loop()
-    result = await loop.run_in_executor(
-        None, convert_to_png, f"{base_directory}/image/{index}"
-    )
-    return loop, result
+    await loop.run_in_executor(None, convert_to_png, f"{base_directory}/image/{index}")
+    return loop
 
 
 async def executer(index):
-    loop, result = await convert(index)
-    if result.done():
-        return await loop.run_in_executor(None, archive, index)
+    loop = await convert(index)
+    return await loop.run_in_executor(None, archive, index)
 
 
 async def download_compression(task_list, index):
     done, _ = await asyncio.wait(task_list)
     if done:
-        await executer(index)
-        return
+        return await executer(index)
 
 
 async def compression_or_download(
@@ -159,9 +155,8 @@ async def compression_or_download(
             return_when="FIRST_COMPLETED",
         )
         if done:
-            _, result = await convert(index)
-            if result.done():
-                return total
+            await convert(index)
+            return total
 
 
 async def thumbnail_cache(img_path: str):
