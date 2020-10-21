@@ -13,6 +13,7 @@ from Heliotrope.utils.database.user_management import (
 )
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
+from Heliotrope.utils.image import convert_to_png
 from Heliotrope.utils.option import config
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
@@ -133,8 +134,7 @@ async def executer(index):
 async def download_compression(task_list, index):
     done, _ = await asyncio.wait(task_list)
     if done:
-        await executer(index)
-        return
+        return await executer(index)
 
 
 async def compression_or_download(
