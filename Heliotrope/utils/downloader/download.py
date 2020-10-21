@@ -12,8 +12,9 @@ from Heliotrope.utils.database.user_management import (
     user_download_count_check,
 )
 from Heliotrope.utils.downloader.task_progress import TaskProgress
-from Heliotrope.utils.hitomi.hitomi import images
+from Heliotrope.utils.hitomi.hitomi import images, index
 from Heliotrope.utils.option import config
+from Heliotrope.utils.image import convert_to_png
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
@@ -118,8 +119,18 @@ def archive(index):
     )
 
 
+async def convert(index):
+    loop = asyncio.get_running_loop()
+    result = await loop.run_in_executor(
+        None, convert_to_png, f"{base_directory}/image/{index}"
+    )
+    return loop, result
+
+
 async def executer(index):
-    return await asyncio.get_running_loop().run_in_executor(None, archive, index)
+    loop, result = await convert(index)
+    if result.done():
+        return await loop.run_in_executor(None, archive, index)
 
 
 async def download_compression(task_list, index):
@@ -148,7 +159,9 @@ async def compression_or_download(
             return_when="FIRST_COMPLETED",
         )
         if done:
-            return total
+            _, result = await convert(index)
+            if result.done():
+                return total
 
 
 async def thumbnail_cache(img_path: str):
