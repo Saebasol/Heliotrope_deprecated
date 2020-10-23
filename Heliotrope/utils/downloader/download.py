@@ -136,6 +136,7 @@ async def download_compression(task_list, index):
         return await executer(index)
 
 
+# BUG: 많은 이미지 뷰어 요청시 첫페이지 안나옴
 async def compression_or_download(
     user_id: int,
     index: int,
