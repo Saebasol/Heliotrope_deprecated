@@ -97,4 +97,3 @@ def image_url_from_image(galleryid: int, image: HitomiImageModel, no_webp: bool)
         webp = "webp"
 
     return url_from_url_from_hash(galleryid, image, webp)
-
