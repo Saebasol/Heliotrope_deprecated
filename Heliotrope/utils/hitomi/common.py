@@ -28,7 +28,7 @@ def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
 
 
 def subdomain_from_url(url: str) -> str:
-    retval = "a"
+    retval = "b"
 
     number_of_frontends = 3
     b = 16
@@ -97,3 +97,4 @@ def image_url_from_image(galleryid: int, image: HitomiImageModel, no_webp: bool)
         webp = "webp"
 
     return url_from_url_from_hash(galleryid, image, webp)
+

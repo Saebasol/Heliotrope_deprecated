@@ -121,7 +121,7 @@ async def images(index: int):
         return None
     images = [
         {
-            "url": image_url_from_image(index, img, False),
+            "url": image_url_from_image(index, img, True),
             "filename": img.name,
         }
         for img in image_model_generator(galleryinfomodel.files)
