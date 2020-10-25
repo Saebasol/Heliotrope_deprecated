@@ -1,4 +1,5 @@
 import asyncio
+from typing import Union
 
 from Heliotrope.utils.downloader.download import downloader, download_compression
 
@@ -23,11 +24,14 @@ class DownloadQueue(asyncio.Queue):
         self.task_done()
         self.completed += 1
 
-    async def start_download(self, compression: bool = False):
+    async def start_download(
+        self, compression: bool = False, name: Union[str, int] = None
+    ):
         if compression:
             return asyncio.create_task(
-                download_compression(self.queue_list, self.index)
+                download_compression(self.queue_list, self.index), name=name
             )
         else:
-            for _ in self.total:
-                await self.worker()
+            return [self.worker() for _ in self.total]
+
+
