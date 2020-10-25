@@ -14,6 +14,7 @@ from Heliotrope.utils.database.user_management import (
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
+from Heliotrope.utils.downloader.queue import DownloadQueue
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 
@@ -145,18 +146,17 @@ async def compression_or_download(
     compression: bool = False,
 ):
     task_list = list(download_tasks(index, img_dicts))
+    downlaod_queue = DownloadQueue(task_list, index)
     if compression:
-        task = asyncio.create_task(download_compression(task_list, index), name=index)
+        await downlaod_queue.make_queue()
+        task = await downlaod_queue.start_download(True, name=index)
         await task_progress.cache_task(user_id, count, task)
         return
     else:
         total = len(img_dicts)
-        done, _ = await asyncio.wait(
-            task_list,
-            return_when="FIRST_COMPLETED",
-        )
+        tasks = await downlaod_queue.start_download()
+        done, _ = await asyncio.wait(tasks, return_when="FIRST_COMPLETED")
         if done:
-            # await convert(index)
             return total
 
 
