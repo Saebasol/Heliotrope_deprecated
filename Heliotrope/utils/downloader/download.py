@@ -11,10 +11,10 @@ from Heliotrope.utils.database.user_management import (
     user_download_count,
     user_download_count_check,
 )
+from Heliotrope.utils.downloader.queue import DownloadQueue
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 from Heliotrope.utils.hitomi.hitomi import images
 from Heliotrope.utils.option import config
-from Heliotrope.utils.downloader.queue import DownloadQueue
 
 headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
 

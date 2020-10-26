@@ -1,7 +1,7 @@
 import asyncio
 from typing import Union
 
-from Heliotrope.utils.downloader.download import downloader, download_compression
+from Heliotrope.utils.downloader.download import download_compression, downloader
 
 
 class DownloadQueue(asyncio.Queue):
@@ -33,5 +33,3 @@ class DownloadQueue(asyncio.Queue):
             )
         else:
             return [self.worker() for _ in self.total]
-
-
