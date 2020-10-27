@@ -6,7 +6,7 @@ from Heliotrope.utils.hitomi.hitomi import images
 
 class Download(Downloader):
     def __init__(self, index: int, download_bool: bool, user_id: int = None):
-        super().__init__(self, index, user_id)
+        super().__init__(index, user_id)
         self.download_bool = download_bool
 
     async def check_vaild(self):
