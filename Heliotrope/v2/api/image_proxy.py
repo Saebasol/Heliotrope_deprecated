@@ -12,7 +12,7 @@ proxy = Blueprint("image_proxy", url_prefix="/proxy")
 )
 async def image_proxy(request, path: str):
     core = Core()
-    cached = core.thumbnail_cache(path)
+    cached = await core.thumbnail_cache(path)
     if cached:
         return await response.file(f"{core.directory}/thumbnail/{path}")
     else:
