@@ -7,10 +7,6 @@ class DownloadQueue(asyncio.Queue):
         self.index = index
         self.completed = 0
 
-    @property
-    def total(self):
-        return self.qsize()
-
     async def make_queue(self, queue_list: list) -> None:
         for dl_queue in queue_list:
             await self.put(dl_queue)
@@ -22,4 +18,4 @@ class DownloadQueue(asyncio.Queue):
         self.completed += 1
 
     async def start_download(self):
-        return [self.worker() for _ in range(self.total)]
+        return [self.worker() for _ in range(self.qsize())]
