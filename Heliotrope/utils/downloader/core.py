@@ -8,8 +8,7 @@ from Heliotrope.utils import option
 
 
 class Core:
-    def __init__(self, index: int):
-        self.index = index
+    def __init__(self):
         self._directory = os.environ["directory"]
         self._headers = {
             "referer": f"http://{option.config['domain']}",
@@ -34,11 +33,11 @@ class Core:
         if not os.path.exists(f"{self.directory}/thumbnail"):
             await aios.mkdir(f"{self.directory}/thumbnail")
 
-    async def downloader(self, img_link: str, filename: str) -> None:
+    async def downloader(self, index: int, img_link: str, filename: str) -> None:
         async with aiohttp.ClientSession() as cs:
             async with cs.get(img_link, headers=self.headers) as r:
                 async with aiofiles.open(
-                    f"{self.directory}/image/{self.index}/{filename}", mode="wb"
+                    f"{self.directory}/image/{index}/{filename}", mode="wb"
                 ) as f:
                     await f.write(await r.read())
 

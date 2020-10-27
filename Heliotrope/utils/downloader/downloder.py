@@ -13,7 +13,7 @@ from Heliotrope.utils.downloader.task_progress import TaskProgress
 
 class Downloader(Core, TaskProgress, Management, DownloadQueue):
     def __init__(self, index: int, user_id: int):
-        Core.__init__(self, index)
+        Core.__init__(self)
         TaskProgress.__init__(self, user_id)
         Management.__init__(self, user_id)
         DownloadQueue.__init__(self, index)
