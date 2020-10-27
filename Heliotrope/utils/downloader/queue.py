@@ -6,11 +6,10 @@ class DownloadQueue(asyncio.Queue):
         super().__init__(maxsize)
         self.index = index
         self.completed = 0
-        self._total = self.qsize()
 
     @property
     def total(self):
-        return self._total
+        return self.qsize()
 
     async def make_queue(self, queue_list: list) -> None:
         for dl_queue in queue_list:
