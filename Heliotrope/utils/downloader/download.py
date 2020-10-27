@@ -25,7 +25,7 @@ class Download(Downloader):
     async def download(self):
         img_dicts = await self.check_vaild()
         if img_dicts:
-
+            await self.create_folder()
             task_list = self.download_tasks_list(img_dicts)
 
             if self.download_bool:
