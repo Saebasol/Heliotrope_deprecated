@@ -18,7 +18,7 @@ class Download(Downloader):
 
     def download_tasks_list(self, img_dicts: list) -> list:
         return [
-            self.downloader(img_dict["url"], img_dict["filename"])
+            self.downloader(self.index, img_dict["url"], img_dict["filename"])
             for img_dict in img_dicts
         ]
 
