@@ -27,7 +27,7 @@ class Downloader(Core, TaskProgress, Management, DownloadQueue):
 
     async def executer(self):
         loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(None, self.archive, self.index)
+        return await loop.run_in_executor(None, self.archive)
 
     async def download_viewer(self, tasks_list: list):
         if os.path.exists(f"{self.directory}/image/{self.index}/"):
