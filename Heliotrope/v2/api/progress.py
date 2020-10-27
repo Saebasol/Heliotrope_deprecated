@@ -14,7 +14,7 @@ progress = Blueprint("download_progress", url_prefix="/progress")
 @authorized()
 async def image_progress(request, user_id: int):
     info_list = []
-    task_progress = TaskProgress()
+    task_progress = TaskProgress(user_id)
     if await task_progress.cache.exists(int(user_id)):
         task_list = await task_progress.cache.get(int(user_id))
         task_info = [
