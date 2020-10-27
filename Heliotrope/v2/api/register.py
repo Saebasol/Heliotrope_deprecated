@@ -19,6 +19,6 @@ async def api_register(request):
         return json({"status": 400, "message": "bad_request"}, 400)
 
     db = Management(user_id)
-    result = await db.user_register(user_id, check)
+    result = await db.user_register(check)
 
     return result
