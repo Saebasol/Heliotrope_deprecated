@@ -29,9 +29,9 @@ class Download(Downloader):
             task_list = self.download_tasks_list(img_dicts)
 
             if self.download_bool:
-                return await self.download_zip()
+                return await self.download_zip(task_list)
             else:
-                return await self.download_viewer()
+                return await self.download_viewer(task_list)
 
         else:
             return json({"status": 404, "message": "not_found"}, 404)
