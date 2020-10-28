@@ -78,7 +78,7 @@ async def test_download_zip_response(test_cli):
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "pending"}
+    assert response_json == {"status": 200, "message": "use_cached"}
 
 
 async def test_download_zip_response_already(test_cli):
@@ -89,7 +89,7 @@ async def test_download_zip_response_already(test_cli):
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "pending"}
+    assert response_json == {"status": 200, "message": "already"}
 
 
 async def test_progress_response(test_cli):
