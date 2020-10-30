@@ -51,7 +51,7 @@ async def test_download_response(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": False, "index": 1, "user_id": 123456789101112131},
+        json={"download": False, "index": 1496588, "user_id": 123456789101112131},
     )
     await asyncio.sleep(5)
     assert response.status == 200
@@ -63,7 +63,7 @@ async def test_download_response_already(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": False, "index": 1, "user_id": 123456789101112131},
+        json={"download": False, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
@@ -74,7 +74,7 @@ async def test_download_zip_response(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": True, "index": 1, "user_id": 123456789101112131},
+        json={"download": True, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
@@ -85,7 +85,7 @@ async def test_download_zip_response_already(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": True, "index": 1, "user_id": 123456789101112131},
+        json={"download": True, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
@@ -103,13 +103,13 @@ async def test_progress_response(test_cli):
         "status": 200,
         "info": [
             {
-                "index": 1,
+                "index": 1496588,
                 "count": 4,
                 "task_status": "use_cached",
                 "link": "https://doujinshiman.ga/download/1/1.zip",
             },
             {
-                "index": 1,
+                "index": 1496588,
                 "count": 3,
                 "task_status": "already",
                 "link": "https://doujinshiman.ga/download/1/1.zip",
