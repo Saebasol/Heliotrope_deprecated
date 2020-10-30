@@ -106,13 +106,13 @@ async def test_progress_response(test_cli):
                 "index": 1496588,
                 "count": 4,
                 "task_status": "use_cached",
-                "link": "https://doujinshiman.ga/download/1/1.zip",
+                "link": "https://doujinshiman.ga/download/1496588/1496588.zip",
             },
             {
                 "index": 1496588,
                 "count": 3,
                 "task_status": "already",
-                "link": "https://doujinshiman.ga/download/1/1.zip",
+                "link": "https://doujinshiman.ga/download/1496588/1496588.zip",
             },
         ],
     }
