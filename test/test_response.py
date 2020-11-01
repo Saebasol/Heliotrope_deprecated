@@ -53,7 +53,7 @@ async def test_download_response(test_cli):
         headers=headers,
         json={"download": False, "index": 1496588, "user_id": 123456789101112131},
     )
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)
     assert response.status == 200
     response_json = await response.json()
     assert response_json == {"status": 200, "message": "pending", "total": 207}
