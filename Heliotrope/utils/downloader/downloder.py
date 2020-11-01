@@ -1,22 +1,23 @@
 import asyncio
 import os
 import shutil
+from typing import Generator
 
 import aiofiles.os as aios
 from sanic.response import json
 
 from Heliotrope.utils.database.user_management import Management
 from Heliotrope.utils.downloader.core import Core
-from Heliotrope.utils.downloader.queue import DownloadQueue
 from Heliotrope.utils.downloader.task_progress import TaskProgress
 
 
-class Downloader(Core, TaskProgress, Management, DownloadQueue):
+class Downloader(Core, TaskProgress, Management):
     def __init__(self, index: int, user_id: int):
         Core.__init__(self)
         TaskProgress.__init__(self, user_id)
         Management.__init__(self, user_id)
-        DownloadQueue.__init__(self, index)
+
+        self.index = index
 
     def archive(self):
         shutil.make_archive(
@@ -29,20 +30,20 @@ class Downloader(Core, TaskProgress, Management, DownloadQueue):
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(None, self.archive)
 
-    async def download_viewer(self, tasks_list: list):
+    async def download_viewer(self, tasks_generator: Generator):
         if os.path.exists(f"{self.directory}/image/{self.index}/"):
             total = len(next(os.walk(f"{self.directory}/image/{self.index}/"))[2])
             return json({"status": 200, "message": "already", "total": total}, 200)
         else:
             await aios.mkdir(f"{self.directory}/image/{self.index}")
+            tasks_list = list(tasks_generator)
             total = len(tasks_list)
-            await self.make_queue(tasks_list)
-            tasks = await self.start_download()
-            await tasks[0]
-            asyncio.create_task(asyncio.wait(tasks[1:]))
-            return json({"status": 200, "message": "pending", "total": total}, 200)
+            await tasks_list[0]
+            done, _ = asyncio.wait(tasks_list[1:], return_when="FIRST_COMPLETED")
+            if done:
+                return json({"status": 200, "message": "pending", "total": total}, 200)
 
-    async def download_zip(self, task_list):
+    async def download_zip(self, tasks_generator: Generator):
         result = await self.user_download_count_check()
 
         if result is True:
@@ -74,11 +75,8 @@ class Downloader(Core, TaskProgress, Management, DownloadQueue):
             else:
                 await aios.mkdir(f"{self.directory}/download/{self.index}")
                 await aios.mkdir(f"{self.directory}/image/{self.index}")
-
-                await self.make_queue(task_list)
-                tasks = await self.start_download()
-
-                task = asyncio.create_task(asyncio.wait(tasks), name=self.index)
+                tasks_list = list(tasks_generator)
+                task = asyncio.create_task(asyncio.wait(tasks_list), name=self.index)
                 await self.cache_task(count, task)
 
                 return json({"status": 200, "message": "pending"}, 200)

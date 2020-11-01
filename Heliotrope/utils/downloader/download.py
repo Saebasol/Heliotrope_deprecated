@@ -17,21 +17,17 @@ class Download(Downloader):
             return img_dicts
 
     def download_tasks_list(self, img_dicts: list) -> list:
-        return [
-            self.downloader(self.index, img_dict["url"], img_dict["filename"])
-            for img_dict in img_dicts
-        ]
+        for img_dict in img_dicts:
+            yield self.downloader(self.index, img_dict["url"], img_dict["filename"])
 
     async def download(self):
         img_dicts = await self.check_vaild()
         if img_dicts:
             await self.create_folder()
-            task_list = self.download_tasks_list(img_dicts)
-
             if self.download_bool:
-                return await self.download_zip(task_list)
+                return await self.download_zip(self.download_tasks_list(img_dicts))
             else:
-                return await self.download_viewer(task_list)
+                return await self.download_viewer(self.download_tasks_list(img_dicts))
 
         else:
             return json({"status": 404, "message": "not_found"}, 404)
