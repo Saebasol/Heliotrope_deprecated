@@ -123,5 +123,4 @@ async def test_thumbnail_response(test_cli):
     assert info.status == 200
     info_json = await info.json()
     response = await test_cli.get(f"/v2/api/proxy/{info_json['thumbnail']}")
-    asyncio.sleep(3)
     assert response.status == 200
