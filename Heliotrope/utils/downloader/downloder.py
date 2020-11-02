@@ -39,10 +39,10 @@ class Downloader(Core, TaskProgress, Management):
             tasks_list = list(tasks_generator)
             total = len(tasks_list)
             await tasks_list[0]
-            done, _ = asyncio.wait(tasks_list[1:], return_when="FIRST_COMPLETED")
+            done, _ = await asyncio.wait(tasks_list[1:], return_when="FIRST_COMPLETED")
             if done:
                 return json({"status": 200, "message": "pending", "total": total}, 200)
-
+Corutine
     async def download_zip(self, tasks_generator: Generator):
         result = await self.user_download_count_check()
 
