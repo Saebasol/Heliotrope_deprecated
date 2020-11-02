@@ -1,5 +1,6 @@
-import Heliotrope
 from sanic.blueprints import Blueprint
+
+import Heliotrope
 
 from .api import api
 

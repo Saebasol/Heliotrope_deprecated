@@ -7,4 +7,3 @@ lxml==4.6.1
 tortoise-orm==0.16.17
 aiomysql==0.0.20
 aioschedule==0.5.2
-pillow==8.0.0

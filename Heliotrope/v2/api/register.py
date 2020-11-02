@@ -2,7 +2,7 @@ from sanic import Blueprint
 from sanic.response import json
 
 from Heliotrope.utils.checker.check import authorized
-from Heliotrope.utils.database import user_register
+from Heliotrope.utils.database import Management
 
 register = Blueprint("register", url_prefix="/register")
 
@@ -18,6 +18,7 @@ async def api_register(request):
     if not user_id or check is None:
         return json({"status": 400, "message": "bad_request"}, 400)
 
-    result = await user_register(user_id, check)
+    db = Management(user_id)
+    result = await db.user_register(check)
 
     return result

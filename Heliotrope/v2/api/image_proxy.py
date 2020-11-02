@@ -1,7 +1,7 @@
 from sanic import Blueprint, response
 from sanic.response import json
 
-from Heliotrope.utils.downloader.download import base_directory, thumbnail_cache
+from Heliotrope.utils.downloader.core import Core
 
 proxy = Blueprint("image_proxy", url_prefix="/proxy")
 
@@ -11,8 +11,9 @@ proxy = Blueprint("image_proxy", url_prefix="/proxy")
     methods=["GET"],
 )
 async def image_proxy(request, path: str):
-    cached = await thumbnail_cache(path)
+    core = Core()
+    cached = await core.thumbnail_cache(path)
     if cached:
-        return await response.file(f"{base_directory}/thumbnail/{path}")
+        return await response.file(f"{core.directory}/thumbnail/{path}")
     else:
         return json({"status": 404, "message": "not_found"}, 404)

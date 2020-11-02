@@ -51,45 +51,45 @@ async def test_download_response(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": False, "index": 1, "user_id": 123456789101112131},
+        json={"download": False, "index": 1496588, "user_id": 123456789101112131},
     )
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "pending", "total": 2}
+    assert response_json == {"status": 200, "message": "pending", "total": 207}
 
 
 async def test_download_response_already(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": False, "index": 1, "user_id": 123456789101112131},
+        json={"download": False, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "already", "total": 2}
+    assert response_json == {"status": 200, "message": "already", "total": 207}
 
 
 async def test_download_zip_response(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": True, "index": 1, "user_id": 123456789101112131},
+        json={"download": True, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "pending"}
+    assert response_json == {"status": 200, "message": "use_cached"}
 
 
 async def test_download_zip_response_already(test_cli):
     response = await test_cli.post(
         "/v2/api/download",
         headers=headers,
-        json={"download": True, "index": 1, "user_id": 123456789101112131},
+        json={"download": True, "index": 1496588, "user_id": 123456789101112131},
     )
     assert response.status == 200
     response_json = await response.json()
-    assert response_json == {"status": 200, "message": "pending"}
+    assert response_json == {"status": 200, "message": "already"}
 
 
 async def test_progress_response(test_cli):
@@ -103,16 +103,16 @@ async def test_progress_response(test_cli):
         "status": 200,
         "info": [
             {
-                "index": 1,
+                "index": 1496588,
                 "count": 4,
                 "task_status": "use_cached",
-                "link": "https://doujinshiman.ga/download/1/1.zip",
+                "link": "https://doujinshiman.ga/download/1496588/1496588.zip",
             },
             {
-                "index": 1,
+                "index": 1496588,
                 "count": 3,
                 "task_status": "already",
-                "link": "https://doujinshiman.ga/download/1/1.zip",
+                "link": "https://doujinshiman.ga/download/1496588/1496588.zip",
             },
         ],
     }
@@ -123,5 +123,4 @@ async def test_thumbnail_response(test_cli):
     assert info.status == 200
     info_json = await info.json()
     response = await test_cli.get(f"/v2/api/proxy/{info_json['thumbnail']}")
-    asyncio.sleep(3)
     assert response.status == 200

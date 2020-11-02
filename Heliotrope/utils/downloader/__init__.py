@@ -1,3 +1,3 @@
-from .download import check_folder_and_download
+from .download import Download
 
-__all__ = ["check_folder_and_download"]
+__all__ = ["Download"]
