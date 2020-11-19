@@ -4,6 +4,6 @@ sanic==20.9.1
 sentry-sdk==0.19.3
 beautifulsoup4==4.9.3
 lxml==4.6.1
-tortoise-orm==0.16.17
+tortoise-orm==0.16.18
 aiomysql==0.0.20
 aioschedule==0.5.2
