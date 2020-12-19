@@ -1,8 +1,6 @@
 from sanic import Blueprint, response
 from sanic.response import json
 
-from Heliotrope.utils.downloader.core import Core
-
 proxy = Blueprint("image_proxy", url_prefix="/proxy")
 
 
