@@ -42,16 +42,11 @@ def parse_galleryinfo(galleryinfo_json: dict) -> HitomiGalleryInfoModel:
             else:
                 raise Exception
 
-    files = galleryinfo_json.get("files")
-
-    if files:
-        files = [shufle_image_url(url) for url in files]
-
     return HitomiGalleryInfoModel(
         galleryinfo_json.get("language_localname"),
         galleryinfo_json.get("language"),
         galleryinfo_json.get("date"),
-        files,
+        galleryinfo_json.get("files"),
         parsed_tags,
         galleryinfo_json.get("japanese_title"),
         galleryinfo_json.get("title"),
