@@ -54,7 +54,7 @@ async def image_proxer(shufled_img_url: str):
     if not isinstance(url, str):
         return url
 
-    response = await request.get(url)
+    response = await request.get(url, headers=headers)
 
     if response.status != 200:
         return
