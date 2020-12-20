@@ -1,5 +1,4 @@
-from urllib.parse import urlparse
-
+from Heliotrope.utils.shufle import shufle_image_url
 from bs4 import BeautifulSoup
 
 
@@ -64,7 +63,7 @@ def parse_tags(html: str, type_: str):
 
     return HitomiTagsModel(
         title,
-        "thumbnail" + urlparse(img_link).path.replace("/", "_"),
+        shufle_image_url(img_link),
         check_element(artist_elements),
         check_element(group_elements),
         check_element(type_element),
