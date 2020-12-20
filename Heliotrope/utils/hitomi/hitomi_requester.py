@@ -1,4 +1,5 @@
 import json
+import struct
 from urllib.parse import urlparse
 
 import aiohttp
@@ -6,36 +7,34 @@ from bs4 import BeautifulSoup
 
 from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
-from Heliotrope.utils.option import config
+from Heliotrope.utils.option import config, Config
+from Heliotrope.utils.requester import request
 
-headers = {"referer": f"http://{config['domain']}", "User-Agent": config["user_agent"]}
+
+headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
 
 async def get_redirect_url(index: int):
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get(
-            f"https://hitomi.la/galleries/{index}.html", headers=headers
-        ) as r:
-            if r.status != 200:
-                return
-            response = await r.text()
-            soup = BeautifulSoup(response, "lxml")
-            url = soup.find("a", href=True)["href"]
-            type_ = urlparse(url).path.split("/")[1]
-            # index = re.search(r"\-([0-9]*)\.html", "url")[1]
-            return url, type_
+    r = await request.get(
+        f"https://hitomi.la/galleries/{index}.html", "text", headers=headers
+    )
+    if r.status != 200:
+        return
+    soup = BeautifulSoup(r.body, "lxml")
+    url = soup.find("a", href=True)["href"]
+    type_ = urlparse(url).path.split("/")[1]
+    # index = re.search(r"\-([0-9]*)\.html", "url")[1]
+    return url, type_
 
 
 async def get_galleryinfo(index: int):
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get(
-            f"https://ltn.hitomi.la/galleries/{index}.js", headers=headers
-        ) as r:
-            if r.status != 200:
-                return None
-            response = await r.text()
-            js_to_json = response.replace("var galleryinfo = ", "")
-            return parse_galleryinfo(json.loads(js_to_json))
+    r = await request.get(
+        f"https://ltn.hitomi.la/galleries/{index}.js", "text", headers=headers
+    )
+    if r.status != 200:
+        return None
+    js_to_json = r.body.replace("var galleryinfo = ", "")
+    return parse_galleryinfo(json.loads(js_to_json))
 
 
 async def get_gallery(index: int):
@@ -44,9 +43,26 @@ async def get_gallery(index: int):
         return None
     else:
         url, type_ = redirect
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get(url, headers=headers) as r:
-            if r.status != 200:
-                return None
-            response = await r.text()
-            return str(r.url), parse_tags(response, type_)
+    r = await request.get(url, headers=headers)
+    if r.status != 200:
+        return None
+    return str(r.url), parse_tags(r.body, type_)
+
+
+async def fetch_index(opts: Config) -> list:  # thx to seia-soto
+    byte_start = (opts.page - 1) * opts.item * 4
+    byte_end = byte_start + opts.item * 4 - 1
+
+    r = await request.get(
+        f"https://ltn.{opts.domain}/{opts.index_file}",
+        headers={
+            "User-Agent": opts.user_agent,
+            "Range": f"byte={byte_start}-{byte_end}",
+            "referer": f"https://{opts.domain}/index-all-${opts.page}.html",
+            "origin": f"http://{opts.domain}",
+        },
+    )
+
+    # len(buffer) % 4 this check 32bit
+    total_items = len(r.body) // 4
+    return struct.unpack(f">{total_items}i", r.body)
