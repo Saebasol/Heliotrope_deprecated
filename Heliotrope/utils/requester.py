@@ -3,10 +3,12 @@ from aiohttp.client_reqrep import ClientResponse
 
 
 class Response:
-    def __init__(self, status, message, body):
+    def __init__(self, status, message, body, url, headers):
         self.status = status
         self.message = message
         self.body = body
+        self.url = url
+        self.headers = headers
 
 
 class Request:
@@ -36,7 +38,11 @@ class Request:
             if response_method not in dispatch:
                 raise ValueError(f"Invalid response_method value: {response_method}")
             return Response(
-                response.status, response.reason, await dispatch[response_method]()
+                response.status,
+                response.reason,
+                await dispatch[response_method](),
+                response.url,
+                response.headers,
             )
 
     async def request(
@@ -57,3 +63,6 @@ class Request:
     async def post(self, url: str, response_method: str, *args, **kwargs) -> Response:
         """Perform HTTP POST request."""
         return await self.request(url, "POST", response_method, *args, **kwargs)
+
+
+request = Request()
