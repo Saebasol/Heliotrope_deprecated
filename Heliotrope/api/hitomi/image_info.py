@@ -1,9 +1,8 @@
 from sanic import Blueprint
 from sanic.response import json
 
-
-from Heliotrope.utils.hitomi import hitomi
 from Heliotrope.utils.auth import authorized
+from Heliotrope.utils.hitomi import hitomi
 
 images = Blueprint("hitomi_shuffled_image_info", url_prefix="/images")
 
