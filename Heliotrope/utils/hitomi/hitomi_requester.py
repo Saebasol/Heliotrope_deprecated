@@ -50,6 +50,10 @@ async def get_gallery(index: int):
 
 async def image_proxer(shufled_img_url: str):
     url = solve_shufle_image_url(shufled_img_url)
+
+    if not isinstance(url, str):
+        return url
+
     response = await request.get(url)
 
     if response.status != 200:
