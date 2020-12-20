@@ -1,14 +1,15 @@
+
 import json
 import struct
 from urllib.parse import urlparse
 
-import aiohttp
 from bs4 import BeautifulSoup
 
 from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
 from Heliotrope.utils.option import config, Config
 from Heliotrope.utils.requester import request
+from Heliotrope.utils.shufle import  solve_shufle_image_url
 
 
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
@@ -47,6 +48,16 @@ async def get_gallery(index: int):
     if r.status != 200:
         return None
     return str(r.url), parse_tags(r.body, type_)
+
+
+async def image_proxer(shufled_img_url: str):
+    url = solve_shufle_image_url(shufled_img_url)
+    response = await request.get(url)
+
+    if response.status != 200:
+        return
+
+    return response.body, response.headers.get("content-type") or "image"
 
 
 async def fetch_index(opts: Config) -> list:  # thx to seia-soto
