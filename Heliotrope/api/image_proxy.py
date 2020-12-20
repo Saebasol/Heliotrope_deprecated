@@ -1,5 +1,6 @@
 from sanic import Blueprint
-from sanic.response import raw, json
+from sanic.response import json, raw
+
 from Heliotrope.utils.hitomi.hitomi_requester import image_proxer
 
 proxy = Blueprint("image_proxy", url_prefix="/proxy")
