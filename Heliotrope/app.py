@@ -1,8 +1,8 @@
 import os
-from sanic.blueprints import Blueprint
 
 import sentry_sdk
 from sanic import Sanic
+from sanic.blueprints import Blueprint
 from sentry_sdk.integrations.sanic import SanicIntegration
 
 import Heliotrope

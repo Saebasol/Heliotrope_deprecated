@@ -6,10 +6,9 @@ from bs4 import BeautifulSoup
 
 from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
-from Heliotrope.utils.option import config, Config
+from Heliotrope.utils.option import Config, config
 from Heliotrope.utils.requester import request
 from Heliotrope.utils.shufle import solve_shufle_image_url
-
 
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
