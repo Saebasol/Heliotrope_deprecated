@@ -1,6 +1,6 @@
 aiohttp==3.7.3
 sanic==20.9.1
-sentry-sdk==0.19.4
+sentry-sdk==0.19.5
 beautifulsoup4==4.9.3
 lxml==4.6.2
 aiomysql==0.0.21
