@@ -1,5 +1,6 @@
-from Heliotrope.utils.shufle import shufle_image_url
 from bs4 import BeautifulSoup
+
+from Heliotrope.utils.shufle import shufle_image_url
 
 
 class HitomiTagsModel:
