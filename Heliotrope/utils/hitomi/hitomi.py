@@ -1,4 +1,3 @@
-from Heliotrope.utils.shufle import shufle_image_url
 import asyncio
 
 from Heliotrope.utils.hitomi.common import image_model_generator, image_url_from_image
@@ -8,6 +7,7 @@ from Heliotrope.utils.hitomi.hitomi_requester import (
     get_galleryinfo,
 )
 from Heliotrope.utils.option import config
+from Heliotrope.utils.shufle import shufle_image_url
 
 
 async def info(index: int):
