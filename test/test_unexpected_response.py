@@ -23,6 +23,6 @@ async def test_integrated_unexpected_response(test_cli):
     assert response.status == 200
 
 
-async def test_proxy_unexpected_reponse(test_cli):
+async def test_proxy_unexpected_response(test_cli):
     response = await test_cli.get("/v3/api/proxy/this_is_test")
     assert response.status == 404
