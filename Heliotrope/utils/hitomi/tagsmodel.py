@@ -41,6 +41,9 @@ def parse_tags(html: str, type_: str):
     else:
         return None
 
+    if isinstance(html, bytes):
+        html = html.decode("utf-8")
+
     soup = BeautifulSoup(html, "lxml")
 
     gallery_element = soup.find("div", class_=f"gallery {soup_type}-gallery")
