@@ -9,7 +9,6 @@ variables:
 
 trigger:
 - main
-- develop
 
 pool:
   vmImage: 'ubuntu-latest'
