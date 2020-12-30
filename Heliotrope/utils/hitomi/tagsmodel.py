@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from Heliotrope.utils.shufle import shufle_image_url
+from Heliotrope.utils.shuffle import shuffle_image_url
 
 
 class HitomiTagsModel:
@@ -67,7 +67,7 @@ def parse_tags(html: str, type_: str):
 
     return HitomiTagsModel(
         title,
-        shufle_image_url(img_link),
+        shuffle_image_url(img_link),
         check_element(artist_elements),
         check_element(group_elements),
         check_element(type_element),
