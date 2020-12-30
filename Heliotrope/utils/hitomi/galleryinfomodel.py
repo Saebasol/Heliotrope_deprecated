@@ -1,4 +1,4 @@
-from Heliotrope.utils.shufle import shufle_image_url
+from Heliotrope.utils.shuffle import shuffle_image_url
 
 
 class HitomiGalleryInfoModel:

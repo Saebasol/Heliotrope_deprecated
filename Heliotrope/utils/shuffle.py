@@ -3,7 +3,7 @@ import re
 from sanic.response import json
 
 
-def shufle_image_url(url: str):
+def shuffle_image_url(url: str):
     url_parse_regex = re.compile(r"\/\/(..?)(\.hitomi\.la|\.pximg\.net)\/(.+?)\/(.+)")
 
     parsed_url: list[str] = url_parse_regex.findall(url)[0]
@@ -22,9 +22,9 @@ def shufle_image_url(url: str):
     return f"{type_}_{prefix}{replaced_sliced_hash}{image}"
 
 
-def solve_shufle_image_url(shufled_image_url: str):
+def solve_shuffle_image_url(shuffled_image_url: str):
     try:
-        solve_regex = re.findall(r"(.+?)_(.+?)_(.+)", shufled_image_url)[0]
+        solve_regex = re.findall(r"(.+?)_(.+?)_(.+)", shuffled_image_url)[0]
     except:
         return json({"code": 400, "message": "bad_request"})
 

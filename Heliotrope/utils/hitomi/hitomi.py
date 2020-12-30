@@ -7,7 +7,7 @@ from Heliotrope.utils.hitomi.hitomi_requester import (
     get_galleryinfo,
 )
 from Heliotrope.utils.option import config
-from Heliotrope.utils.shufle import shufle_image_url
+from Heliotrope.utils.shuffle import shuffle_image_url
 
 
 async def info(index: int):
@@ -125,7 +125,7 @@ async def images(index: int):
         return None
     images = [
         {
-            "url": f"https://doujinshiman.ga/v3/api/proxy/{shufle_image_url(image_url_from_image(index, img, True))}",
+            "url": f"https://doujinshiman.ga/v3/api/proxy/{shuffle_image_url(image_url_from_image(index, img, True))}",
         }
         for img in image_model_generator(galleryinfomodel.files)
     ]
