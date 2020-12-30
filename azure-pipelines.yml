@@ -5,7 +5,7 @@
 
 variables:
 - name: TEST_FLAG
-  TEST_FLAG: "true"
+  value: "true"
 
 trigger:
 - main
