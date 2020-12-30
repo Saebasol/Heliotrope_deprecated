@@ -11,25 +11,24 @@ def shuffle_image_url(url: str):
     prefix = parsed_url[0]
     main_url = parsed_url[1].replace(".", "_")
     type_ = parsed_url[2]
-    image = parsed_url[3]
+    image = parsed_url[3].replace("/", "_")
 
-    sliced_hash_regex = re.compile(r"[0-9a-f]\/([0-9a-f]{2})\/")
-    sliced_hash = sliced_hash_regex.search("/" + image)
+    main = f"{prefix}_{type_}{main_url}_{image}"
 
-    replaced_sliced_hash = sliced_hash[0].replace("/", "_")
-    image = url.rsplit("/", 1)[1]
-
-    return f"{type_}_{prefix}{replaced_sliced_hash}{image}"
+    return main
 
 
 def solve_shuffle_image_url(shuffled_image_url: str):
     try:
-        solve_regex = re.findall(r"(.+?)_(.+?)_(.+)", shuffled_image_url)[0]
+        solve_regex: list[str] = re.findall(
+            r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)", shuffled_image_url
+        )[0]
     except:
         return json({"code": 400, "message": "bad_request"})
 
-    type_ = solve_regex[0]
-    prefix = solve_regex[1]
-    image = solve_regex[2]
+    prefix = solve_regex[0]
+    type_ = solve_regex[1]
+    main_url = solve_regex[2].replace("_", ".")
+    image = solve_regex[3].replace("_", "/")
 
-    return f"https://{prefix}.hitomi.la/{type_ }/{image}".replace("_", "/")
+    return f"https://{prefix}.{main_url}/{type_}/{image}"
