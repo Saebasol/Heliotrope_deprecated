@@ -3,6 +3,10 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+variables:
+- name: TEST_FLAG
+  TEST_FLAG: "true"
+
 trigger:
 - main
 
@@ -27,6 +31,6 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
+    pip install pytest pytest-azurepipelines pytest-sanic
     pytest
   displayName: 'pytest'
