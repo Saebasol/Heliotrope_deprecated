@@ -9,7 +9,9 @@ import Heliotrope
 from Heliotrope.api import api
 
 sentry_sdk.init(
-    dsn=os.environ["sentry"],
+    dsn=None
+    if os.environ.get("TEST_FLAG")
+    else "https://aad296bf8e654dbc84b7919b13485227@o440492.ingest.sentry.io/5417505",
     integrations=[SanicIntegration()],
     release=f"heliotrope@{Heliotrope.__version__}",
 )
@@ -17,5 +19,7 @@ sentry_sdk.init(
 app = Sanic(__name__)
 app.blueprint(Blueprint.group(api, url_prefix=f"/v{Heliotrope.version_info.major}"))
 
-app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
+if not os.environ.get("TEST_FLAG"):
+    app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
+
 app.config.FALLBACK_ERROR_FORMAT = "json"

@@ -1,4 +1,4 @@
-from . import auth, hitomi, requester, shufle
+from . import auth, hitomi, requester, shuffle
 from .option import config
 
-__all__ = ["hitomi", "auth", "config", "requester", "shufle"]
+__all__ = ["hitomi", "auth", "config", "requester", "shuffle"]
