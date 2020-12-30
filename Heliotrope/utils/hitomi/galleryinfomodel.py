@@ -1,6 +1,3 @@
-from Heliotrope.utils.shuffle import shuffle_image_url
-
-
 class HitomiGalleryInfoModel:
     def __init__(
         self,
