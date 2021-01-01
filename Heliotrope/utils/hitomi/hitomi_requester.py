@@ -54,6 +54,9 @@ async def image_proxer(shuffled_img_url: str):
     if not isinstance(url, str):
         return url
 
+    if "pximg" in url:
+        headers.update({"referer": "https://pixiv.net"})
+
     response = await request.get(url, headers=headers)
 
     if response.status != 200:
