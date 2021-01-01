@@ -4,8 +4,8 @@ from Heliotrope.utils.database import User
 
 
 async def user_register(user_id, check=False):
-    user_data = await User.get_or_none(user_id=user_id)
     if check:
+        user_data = await User.get_or_none(user_id=int(user_id))
         if user_data:
             return True
         else:
