@@ -8,7 +8,7 @@ from Heliotrope.utils.database.user_management import user_register
 
 def check_request_for_authorization_status(request):
     token = request.headers.get("Authorization")
-    in_database = user_register(token, check=True)
+    in_database = await user_register(token, check=True)
     if not token or not in_database:
         return False
     else:
