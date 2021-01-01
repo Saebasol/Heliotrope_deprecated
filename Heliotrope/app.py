@@ -4,6 +4,7 @@ import sentry_sdk
 from sanic import Sanic
 from sanic.blueprints import Blueprint
 from sentry_sdk.integrations.sanic import SanicIntegration
+from tortoise.contrib.sanic import register_tortoise
 
 import Heliotrope
 from Heliotrope.api import api
@@ -21,5 +22,11 @@ app.blueprint(Blueprint.group(api, url_prefix=f"/v{Heliotrope.version_info.major
 
 if not os.environ.get("TEST_FLAG"):
     app.config.FORWARDED_SECRET = os.environ["forwarded_secret"]
+    register_tortoise(
+        app,
+        db_url=os.environ["DB_URL"],
+        modules={"models": ["Heliotrope.utils.database.models"]},
+        generate_schemas=True,
+    )
 
 app.config.FALLBACK_ERROR_FORMAT = "json"
