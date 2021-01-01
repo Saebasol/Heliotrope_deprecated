@@ -2,6 +2,7 @@ import os
 from functools import wraps
 
 from sanic.response import json
+
 from Heliotrope.utils.database.user_management import user_register
 
 
