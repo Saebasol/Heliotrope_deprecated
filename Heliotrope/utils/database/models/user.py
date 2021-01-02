@@ -3,6 +3,7 @@ from tortoise import Model, fields
 
 class User(Model):
     user_id = fields.BigIntField(pk=True, description="discord user id")
+    api_key = fields.CharField(255)
 
     class Meta:
         table = "users"
