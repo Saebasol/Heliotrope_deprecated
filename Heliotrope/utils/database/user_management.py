@@ -20,7 +20,6 @@ async def user_register(user_id, api_key=None, check=False):
     if user_data:
         return json({"status": 200, "message": "already_register"}, 200)
     else:
-        user = await User.create(user_id=user_id)
-        user.api_key = api_key
+        user = await User.create(user_id=user_id, api_key=api_key)
         await user.save()
         return json({"status": 201, "message": "successfully"}, 201)
