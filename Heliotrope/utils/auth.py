@@ -1,11 +1,10 @@
 import os
 from functools import wraps
-from nacl.exceptions import BadSignatureError
-
-from sanic.response import json
 
 from nacl.encoding import Base64Encoder
+from nacl.exceptions import BadSignatureError
 from nacl.signing import VerifyKey
+from sanic.response import json
 
 
 async def check_request_for_authorization_status(request):
