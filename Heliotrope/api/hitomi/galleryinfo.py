@@ -13,5 +13,4 @@ async def hitomi_galleryinfo(request, index: int):
     json_ = await hitomi.galleryinfo(index)
     if not json_:
         return json({"status": 404, "message": "not_found"}, 404)
-    else:
-        return json(json_)
+    return json(json_)

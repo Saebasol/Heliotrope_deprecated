@@ -40,8 +40,7 @@ async def get_gallery(index: int):
     redirect = await get_redirect_url(index)
     if not redirect:
         return None
-    else:
-        url, type_ = redirect
+    url, type_ = redirect
     r = await request.get(url, headers=headers)
     if r.status != 200:
         return None
