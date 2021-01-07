@@ -21,14 +21,18 @@ def shuffle_image_url(url: str):
 def solve_shuffle_image_url(shuffled_image_url: str):
     try:
         solve_regex: list[str] = re.findall(
-            r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)", shuffled_image_url
+            r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)_(.+?_.+)", shuffled_image_url
         )[0]
     except:
-        return json({"code": 400, "message": "bad_request"})
+        return json({"code": 400, "message": "bad_request"}, 400)
 
     prefix = solve_regex[0]
     type_ = solve_regex[1]
     main_url = solve_regex[2].replace("_", ".")
-    image = solve_regex[3].replace("_", "/")
+    img_date_or_hitomi_url_etc = solve_regex[3].replace("_", "/")
+    image = solve_regex[4]
 
-    return f"https://{prefix}.{main_url}/{type_}/{image}"
+    if "pximg" not in main_url:
+        image = image.replace("_", "/")
+
+    return f"https://{prefix}.{main_url}/{type_}/{img_date_or_hitomi_url_etc}/{image}"

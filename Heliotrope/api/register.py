@@ -20,5 +20,4 @@ async def _register(request):
         return await user_register(user_id, check=True)
     if not user_id or check_header != os.environ["VERIFI"]:
         return json({"status": 400, "message": "bad_request"}, 400)
-    else:
-        return await user_register(user_id, api_key)
+    return await user_register(user_id, api_key)

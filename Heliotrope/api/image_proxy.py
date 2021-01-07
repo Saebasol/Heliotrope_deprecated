@@ -14,6 +14,6 @@ async def image_proxy(request, path: str):
     r = await image_proxer(path)
 
     if not isinstance(r, tuple):
-        return json({"code": "404", "message": "not_found"}, 404) or r
+        return r or json({"code": "404", "message": "not_found"}, 404)
 
     return raw(r[0], content_type=r[1])
