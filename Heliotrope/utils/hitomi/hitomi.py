@@ -14,8 +14,7 @@ async def info(index: int):
     arg = await get_gallery(index)
     if not arg:
         return None
-    else:
-        url, tags = arg
+    url, tags = arg
 
     data = {
         "status": 200,

@@ -13,5 +13,4 @@ async def hitomi_list(request, num: int):
     hitomi_info_list = await hitomi.list_(int(num) - 1)
     if not hitomi_info_list:
         return json({"status": 404, "message": "not_found"}, 404)
-    else:
-        return json(hitomi_info_list)
+    return json(hitomi_info_list)

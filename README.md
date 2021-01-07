@@ -14,4 +14,6 @@ This is an api that implements the rest of the functions except Hitomi's search 
 
 Search function will be implemented
 
-Working on...
+## Docs
+
+https://github.com/Saebasol/Heliotrope/wiki
