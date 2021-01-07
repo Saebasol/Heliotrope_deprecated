@@ -82,15 +82,10 @@ def check_element(elements):
     if isinstance(elements, list):
         if not elements:
             return []
-        else:
-            return [
-                {"value": element.text, "url": element["href"]} for element in elements
-            ]
-    else:
-        if not elements:
-            return None
-        else:
-            return {
-                "value": elements.text.replace(" ", "").replace("\n", ""),
-                "url": elements["href"],
-            }
+        return [{"value": element.text, "url": element["href"]} for element in elements]
+    if not elements:
+        return None
+    return {
+        "value": elements.text.replace(" ", "").replace("\n", ""),
+        "url": elements["href"],
+    }
