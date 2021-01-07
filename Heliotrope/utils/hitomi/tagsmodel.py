@@ -82,9 +82,7 @@ def check_element(elements):
     if isinstance(elements, list):
         if not elements:
             return []
-        return [
-            {"value": element.text, "url": element["href"]} for element in elements
-        ]
+        return [{"value": element.text, "url": element["href"]} for element in elements]
     else:
         if not elements:
             return None
