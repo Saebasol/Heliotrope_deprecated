@@ -30,12 +30,9 @@ def solve_shuffle_image_url(shuffled_image_url: str):
     type_ = solve_regex[1]
     main_url = solve_regex[2].replace("_", ".")
     img_date_or_hitomi_url_etc = solve_regex[3].replace("_", "/")
-    image = solve_regex[4].replace("_", "/")
+    image = solve_regex[4]
 
-    if "pximg" in main_url:
-        image = solve_regex[4]
-        return (
-            f"https://{prefix}.{main_url}/{img_date_or_hitomi_url_etc}/{type_}/{image}"
-        )
+    if "pximg" not in main_url:
+        image = image.replace("_", "/")
 
     return f"https://{prefix}.{main_url}/{type_}/{img_date_or_hitomi_url_etc}/{image}"
