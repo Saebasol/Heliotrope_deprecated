@@ -8,7 +8,6 @@ from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
 from Heliotrope.utils.hitomi.tagsmodel import parse_tags
 from Heliotrope.utils.option import Config, config
 from Heliotrope.utils.requester import request
-from Heliotrope.utils.shuffle import solve_shuffle_image_url
 
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
@@ -45,23 +44,6 @@ async def get_gallery(index: int):
     if r.status != 200:
         return None
     return str(r.url), parse_tags(r.body, type_)
-
-
-async def image_proxer(shuffled_img_url: str):
-    url = solve_shuffle_image_url(shuffled_img_url)
-
-    if not isinstance(url, str):
-        return url
-
-    if "pximg" in url:
-        headers.update({"referer": "https://pixiv.net"})
-
-    response = await request.get(url, headers=headers)
-
-    if response.status != 200:
-        return
-
-    return response.body, response.headers.get("content-type") or "image"
 
 
 async def fetch_index(opts: Config) -> list:  # thx to seia-soto
