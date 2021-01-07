@@ -83,10 +83,9 @@ def check_element(elements):
         if not elements:
             return []
         return [{"value": element.text, "url": element["href"]} for element in elements]
-    else:
-        if not elements:
-            return None
-        return {
-            "value": elements.text.replace(" ", "").replace("\n", ""),
-            "url": elements["href"],
-        }
+    if not elements:
+        return None
+    return {
+        "value": elements.text.replace(" ", "").replace("\n", ""),
+        "url": elements["href"],
+    }
