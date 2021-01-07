@@ -24,7 +24,7 @@ def solve_shuffle_image_url(shuffled_image_url: str):
             r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)_(.+?_.+)", shuffled_image_url
         )[0]
     except:
-        return json({"code": 400, "message": "bad_request"})
+        return json({"code": 400, "message": "bad_request"}, 400)
 
     prefix = solve_regex[0]
     type_ = solve_regex[1]
