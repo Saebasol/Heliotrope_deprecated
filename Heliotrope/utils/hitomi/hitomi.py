@@ -125,6 +125,7 @@ async def images(index: int):
     images = [
         {
             "url": f"https://doujinshiman.ga/v3/api/proxy/{shuffle_image_url(image_url_from_image(index, img, True))}",
+            "filename": img.name,
         }
         for img in image_model_generator(galleryinfomodel.files)
     ]
