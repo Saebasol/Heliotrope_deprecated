@@ -9,16 +9,16 @@ class HitomiImageModel:
         self.name = str(name)
         self.height = int(height)
 
-
-def image_model_generator(files: list):
-    for file_ in files:
-        yield HitomiImageModel(
-            file_["width"],
-            file_["hash"],
-            file_["haswebp"],
-            file_["name"],
-            file_["height"],
-        )
+    @classmethod
+    def image_model_generator(cls, files: list):
+        for file_ in files:
+            yield cls(
+                file_["width"],
+                file_["hash"],
+                file_["haswebp"],
+                file_["name"],
+                file_["height"],
+            )
 
 
 def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
