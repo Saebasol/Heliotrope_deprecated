@@ -4,8 +4,8 @@ from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
-from Heliotrope.utils.hitomi.galleryinfomodel import parse_galleryinfo
-from Heliotrope.utils.hitomi.tagsmodel import parse_tags
+from Heliotrope.utils.hitomi.galleryinfomodel import HitomiGalleryInfoModel
+from Heliotrope.utils.hitomi.tagsmodel import HitomiTagsModel
 from Heliotrope.utils.option import Config, config
 from Heliotrope.utils.requester import request
 from Heliotrope.utils.shuffle import solve_shuffle_image_url
@@ -33,7 +33,7 @@ async def get_galleryinfo(index: int):
     if r.status != 200:
         return None
     js_to_json = r.body.replace("var galleryinfo = ", "")
-    return parse_galleryinfo(json.loads(js_to_json))
+    return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json))
 
 
 async def get_gallery(index: int):
@@ -44,7 +44,7 @@ async def get_gallery(index: int):
     r = await request.get(url, headers=headers)
     if r.status != 200:
         return None
-    return str(r.url), parse_tags(r.body, type_)
+    return str(r.url), HitomiTagsModel.parse_tags(r.body, type_)
 
 
 async def image_proxer(shuffled_img_url: str):

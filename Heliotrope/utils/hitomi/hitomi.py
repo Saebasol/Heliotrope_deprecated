@@ -1,6 +1,6 @@
 import asyncio
 
-from Heliotrope.utils.hitomi.common import image_model_generator, image_url_from_image
+from Heliotrope.utils.hitomi.common import HitomiImageModel, image_url_from_image
 from Heliotrope.utils.hitomi.hitomi_requester import (
     fetch_index,
     get_gallery,
@@ -127,7 +127,7 @@ async def images(index: int):
             "url": f"https://doujinshiman.ga/v3/api/proxy/{shuffle_image_url(image_url_from_image(index, img, True))}",
             "filename": img.name,
         }
-        for img in image_model_generator(galleryinfomodel.files)
+        for img in HitomiImageModel.image_model_generator(galleryinfomodel.files)
     ]
     return images
 
