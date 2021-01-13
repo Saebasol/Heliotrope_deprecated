@@ -1,7 +1,55 @@
-from sanic import Blueprint
-from sanic.response import json, raw
+import asyncio
+import aiohttp
 
-from Heliotrope.utils.hitomi.hitomi_requester import image_proxer
+from sanic import Blueprint
+from sanic import response
+
+from Heliotrope.utils.shuffle import solve_shuffle_image_url
+from Heliotrope.utils.option import config
+
+# https://github.com/kijk2869/discodo/blob/v1.0.5b/discodo/node/server/server.py#L44
+class StreamSender:
+    def __init__(
+        self, session: aiohttp.ClientSession, response: aiohttp.ClientResponse
+    ):
+        self.loop = asyncio.get_event_loop()
+        self.session = session
+        self.response = response
+
+    def __del__(self):
+        if self.response:
+            self.response.close()
+        self.loop.create_task(self.session.close())
+
+    @classmethod
+    async def create(
+        cls,
+        url: str,
+    ):
+        headers = {
+            "referer": f"http://{config.domain}",
+            "User-Agent": config.user_agent,
+        }
+        if "pximg" in url:
+            headers.update({"referer": "https://pixiv.net"})
+
+        session = aiohttp.ClientSession()
+        response = await session.get(url, headers=headers)
+
+        return cls(session, response)
+
+    async def send(self, response: response.StreamingHTTPResponse):
+        try:
+            async for data, _ in self.response.content.iter_chunks():
+                try:
+                    await response.write(data)
+                except:
+                    break
+        except:
+            pass
+        finally:
+            self.__del__()
+
 
 proxy = Blueprint("image_proxy", url_prefix="/proxy")
 
@@ -11,9 +59,16 @@ proxy = Blueprint("image_proxy", url_prefix="/proxy")
     methods=["GET"],
 )
 async def image_proxy(request, path: str):
-    r = await image_proxer(path)
+    url = solve_shuffle_image_url(path)
 
-    if not isinstance(r, tuple):
-        return r or json({"code": "404", "message": "not_found"}, 404)
+    if not isinstance(url, str):
+        return url
 
-    return raw(r[0], content_type=r[1])
+    sender = await StreamSender.create(url)
+
+    if sender.response.status != 200:
+        return response.json({"code": "404", "message": "not_found"}, 404)
+
+    return response.stream(
+        sender.send, content_type=sender.response.headers.get("content-type")
+    )

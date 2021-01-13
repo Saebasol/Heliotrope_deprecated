@@ -9,7 +9,6 @@ from Heliotrope.utils.hitomi.galleryinfomodel import HitomiGalleryInfoModel
 from Heliotrope.utils.hitomi.tagsmodel import HitomiTagsModel
 from Heliotrope.utils.option import Config, config
 from Heliotrope.utils.requester import request
-from Heliotrope.utils.shuffle import solve_shuffle_image_url
 
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
@@ -48,7 +47,6 @@ async def get_gallery(
     if r.status != 200:
         return None
     return str(r.url), HitomiTagsModel.parse_tags(r.body, type_)
-
 
 async def image_proxer(shuffled_img_url: str):
     url = solve_shuffle_image_url(shuffled_img_url)
