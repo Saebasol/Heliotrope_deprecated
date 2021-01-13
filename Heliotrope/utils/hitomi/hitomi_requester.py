@@ -1,4 +1,3 @@
-from Heliotrope.utils.shuffle import solve_shuffle_image_url
 import json
 import struct
 from typing import Any, Optional, Union
@@ -10,6 +9,7 @@ from Heliotrope.utils.hitomi.galleryinfomodel import HitomiGalleryInfoModel
 from Heliotrope.utils.hitomi.tagsmodel import HitomiTagsModel
 from Heliotrope.utils.option import Config, config
 from Heliotrope.utils.requester import request
+from Heliotrope.utils.shuffle import solve_shuffle_image_url
 
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
