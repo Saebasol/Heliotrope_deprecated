@@ -1,15 +1,19 @@
+from Heliotrope.utils.hitomi.common import Files
+from typing import Optional, Union
+
+
 class HitomiGalleryInfoModel:
     def __init__(
         self,
-        language_localname: str,
-        language: str,
-        date: str,
-        files: list,
-        tags: list,
-        japanese_title: str,
-        title: str,
-        galleryid: int,
-        type_: str,
+        language_localname: Optional[str],
+        language: Optional[str],
+        date: Optional[str],
+        files: Optional[list[Files]],
+        tags: Optional[list[dict[str, str]]],
+        japanese_title: Optional[str],
+        title: Optional[str],
+        galleryid: Optional[str],
+        type_: Optional[str],
     ):
         self.language_localname = language_localname
         self.language = language
@@ -24,16 +28,22 @@ class HitomiGalleryInfoModel:
     @classmethod
     def parse_galleryinfo(cls, galleryinfo_json: dict):
         if not galleryinfo_json["tags"]:
-            parsed_tags = []
+            parsed_tags: list[dict] = []
         else:
             parsed_tags = []
             for tag in galleryinfo_json["tags"]:
                 if not tag.get("male") and tag.get("female"):
-                    parsed_tags.append({"value": f"female:{tag['tag']}", "url": tag["url"]})
+                    parsed_tags.append(
+                        {"value": f"female:{tag['tag']}", "url": tag["url"]}
+                    )
                 elif tag.get("male") and not tag.get("female"):
-                    parsed_tags.append({"value": f"male:{tag['tag']}", "url": tag["url"]})
+                    parsed_tags.append(
+                        {"value": f"male:{tag['tag']}", "url": tag["url"]}
+                    )
                 elif not tag.get("male") and not tag.get("female"):
-                    parsed_tags.append({"value": f"tag:{tag['tag']}", "url": tag["url"]})
+                    parsed_tags.append(
+                        {"value": f"tag:{tag['tag']}", "url": tag["url"]}
+                    )
                 elif tag.get("male") and tag.get("female"):
                     raise Exception
                 else:
