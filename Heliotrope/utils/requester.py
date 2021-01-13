@@ -1,9 +1,12 @@
+from typing import Any
+
 import aiohttp
-from aiohttp.client_reqrep import ClientResponse
 
 
 class Response:
-    def __init__(self, status, message, body, url, headers):
+    def __init__(
+        self, status: int, message: Any, body: Any, url: str, headers: dict[str, Any]
+    ):
         self.status = status
         self.message = message
         self.body = body
@@ -28,9 +31,9 @@ class Request:
         response_method: str,
         *args,
         **kwargs,
-    ) -> ClientResponse:
+    ) -> Response:
         async with session.request(method, url, *args, **kwargs) as response:
-            dispatch = {
+            dispatch: dict[str, Any] = {
                 "json": response.json,
                 "read": response.read,
                 "text": response.text,

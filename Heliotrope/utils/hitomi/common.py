@@ -1,4 +1,13 @@
 import re
+from typing import TypedDict
+
+
+class Files(TypedDict):
+    width: int
+    hash: str
+    haswebp: int
+    name: str
+    height: int
 
 
 class HitomiImageModel:
@@ -9,16 +18,16 @@ class HitomiImageModel:
         self.name = str(name)
         self.height = int(height)
 
-
-def image_model_generator(files: list):
-    for file_ in files:
-        yield HitomiImageModel(
-            file_["width"],
-            file_["hash"],
-            file_["haswebp"],
-            file_["name"],
-            file_["height"],
-        )
+    @classmethod
+    def image_model_generator(cls, files: list[Files]):
+        for file_ in files:
+            yield cls(
+                file_["width"],
+                file_["hash"],
+                file_["haswebp"],
+                file_["name"],
+                file_["height"],
+            )
 
 
 def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
@@ -34,17 +43,17 @@ def subdomain_from_url(url: str) -> str:
     b = 16
 
     r = re.compile(r"\/[0-9a-f]\/([0-9a-f]{2})\/")
-    m = r.search(url)
 
-    g = int(m[1], b)
+    if m := r.search(url):
+        g = int(m[1], b)
 
-    if g < 0x30:
-        number_of_frontends = 2
+        if g < 0x30:
+            number_of_frontends = 2
 
-    if g < 0x09:
-        g = 1
+        if g < 0x09:
+            g = 1
 
-    retval = subdomain_from_galleryid(g, number_of_frontends) + retval
+        retval = subdomain_from_galleryid(g, number_of_frontends) + retval
 
     return retval
 

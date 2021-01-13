@@ -8,19 +8,17 @@ from sanic.response import json
 
 
 async def check_request_for_authorization_status(request):
-    api_key: str = request.headers.get("Authorization")
-    if not api_key:
-        return False
-    verify = VerifyKey(
-        "+h1d9bCXPTmJl71Ek80xxr31P0Fzjt+qMNfR9c37WMA=".encode(),
-        encoder=Base64Encoder,
-    )
-    try:
-        verify.verify(api_key.encode(), encoder=Base64Encoder)
-    except BadSignatureError:
-        return False
-    else:
-        return True
+    if api_key := request.headers.get("Authorization"):
+        verify = VerifyKey(
+            "+h1d9bCXPTmJl71Ek80xxr31P0Fzjt+qMNfR9c37WMA=".encode(),
+            encoder=Base64Encoder,
+        )
+        try:
+            verify.verify(api_key.encode(), encoder=Base64Encoder)
+        except BadSignatureError:
+            return False
+        else:
+            return True
 
 
 def authorized():
