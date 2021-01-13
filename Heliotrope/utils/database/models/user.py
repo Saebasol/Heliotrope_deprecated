@@ -13,4 +13,4 @@ class User(Model):
         return self.user_id
 
     def __repr__(self):
-        return f"<User id={self.user_id} >"
+        return f"<User id={self.user_id}>"
