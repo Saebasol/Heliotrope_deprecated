@@ -1,5 +1,6 @@
 import json
 import struct
+from typing import Any, Optional, Union
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
@@ -36,7 +37,9 @@ async def get_galleryinfo(index: int):
     return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json))
 
 
-async def get_gallery(index: int):
+async def get_gallery(
+    index: int,
+) -> Optional[Union[tuple[str, Optional[HitomiTagsModel]]]]:
     redirect = await get_redirect_url(index)
     if not redirect:
         return None
@@ -64,7 +67,7 @@ async def image_proxer(shuffled_img_url: str):
     return response.body, response.headers.get("content-type") or "image"
 
 
-async def fetch_index(opts: Config) -> list:  # thx to seia-soto
+async def fetch_index(opts: Config) -> tuple[int, ...]:  # thx to seia-soto
     byte_start = (opts.page - 1) * opts.item * 4
     byte_end = byte_start + opts.item * 4 - 1
 
