@@ -1,3 +1,4 @@
+from typing import Any, Optional, Union
 from bs4 import BeautifulSoup
 
 from Heliotrope.utils.shuffle import shuffle_image_url
@@ -8,13 +9,13 @@ class HitomiTagsModel:
         self,
         title: str,
         img_link: str,
-        artist: list,
-        group: list,
-        type_: str,
-        language: str,
-        series: list,
-        characters: list,
-        tags: list,
+        artist: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        group: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        type_: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        language: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        series: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        characters: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        tags: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
     ):
         self.title = title
         self.thumbnail = img_link
@@ -26,7 +27,8 @@ class HitomiTagsModel:
         self.characters = characters
         self.tags = tags
 
-    def check_element(self, elements):
+    @staticmethod
+    def check_element(elements):
         if isinstance(elements, list):
             if not elements:
                 return []
@@ -41,7 +43,7 @@ class HitomiTagsModel:
         }
 
     @classmethod
-    def parse_tags(cls, html: str, type_: str):
+    def parse_tags(cls, html: Union[str, bytes], type_: str):
         if type_ == "manga":
             soup_type = "manga"
         elif type_ == "doujinshi":
