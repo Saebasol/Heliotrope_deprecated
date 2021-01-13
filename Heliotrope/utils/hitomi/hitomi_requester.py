@@ -1,3 +1,4 @@
+from Heliotrope.utils.shuffle import solve_shuffle_image_url
 import json
 import struct
 from typing import Any, Optional, Union
@@ -47,6 +48,7 @@ async def get_gallery(
     if r.status != 200:
         return None
     return str(r.url), HitomiTagsModel.parse_tags(r.body, type_)
+
 
 async def image_proxer(shuffled_img_url: str):
     url = solve_shuffle_image_url(shuffled_img_url)
