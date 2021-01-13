@@ -1,5 +1,6 @@
-from Heliotrope.utils.hitomi.common import Files
 from typing import Optional, Union
+
+from Heliotrope.utils.hitomi.common import Files
 
 
 class HitomiGalleryInfoModel:

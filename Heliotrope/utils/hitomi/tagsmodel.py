@@ -1,4 +1,5 @@
 from typing import Any, Optional, Union
+
 from bs4 import BeautifulSoup
 
 from Heliotrope.utils.shuffle import shuffle_image_url
