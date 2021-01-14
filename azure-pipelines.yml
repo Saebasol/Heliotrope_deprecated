@@ -41,7 +41,22 @@ stages:
       - script: |
           bash <(curl -s https://codecov.io/bash)
         displayName: 'Upload coverage to Codecov'
-  
+
+    - job: Artifact
+      dependsOn: Test
+      condition: eq(variables['Build.SourceBranchName'], 'main')
+      steps:
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.SourcesDirectory)'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/Application$(Build.BuildId).zip'
+            replaceExistingArchive: true
+        - publish: $(Build.ArtifactStagingDirectory)/Application$(Build.BuildId).zip
+          displayName: 'Upload package'
+          artifact: drop
+          
   - stage: Docker
     dependsOn: Testflow
     jobs:
