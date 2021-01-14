@@ -4,35 +4,52 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-- name: TEST_FLAG
-  value: "true"
+  TEST_FLAG: "true"
+  DOCKER_BUILDKIT: 1
 
 trigger:
 - master
 
 pool:
   vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python39:
-      python.version: '3.9'
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+stages:
+  - stage: Testflow
+    jobs:
+    - job: Test
+      strategy:
+        matrix:
+          Python39:
+            python.version: '3.9'
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+        displayName: 'Use Python $(python.version)'
 
-- script: |
-    pip install pytest pytest-azurepipelines pytest-sanic pytest-cov
-    pytest --cov=./
-  displayName: 'Test with pytest and generate coverage report'
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName: 'Install dependencies'
 
-- script: |
-    bash <(curl -s https://codecov.io/bash)
-  displayName: 'Upload coverage to Codecov'
+      - script: |
+          pip install pytest pytest-azurepipelines pytest-sanic pytest-cov
+          pytest --cov=./
+        displayName: 'Test with pytest and generate coverage report'
+
+      - script: |
+          bash <(curl -s https://codecov.io/bash)
+        displayName: 'Upload coverage to Codecov'
+  
+  - stage: Docker
+    dependsOn: Testflow
+    jobs:
+      - job: Build
+        steps:
+        - task: Docker@2
+          displayName: Build an image
+          inputs:
+            repository: Heliotrope
+            command: build
+            Dockerfile: ./Dockerfile
