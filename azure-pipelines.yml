@@ -52,4 +52,4 @@ stages:
           inputs:
             repository: Heliotrope
             command: build
-            Dockerfile: app/Dockerfile
+            Dockerfile: ./Dockerfile
