@@ -42,7 +42,7 @@ stages:
           bash <(curl -s https://codecov.io/bash)
         displayName: 'Upload coverage to Codecov'
   
-  - stage: BuildDocker
+  - stage: Docker
     dependsOn: Testflow
     jobs:
       - job: Build
