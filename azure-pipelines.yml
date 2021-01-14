@@ -18,7 +18,7 @@ pool:
         python.version: '3.9'
 
 stages:
-  - stage: Test with pytest
+  - stage: Test_and_upload_Codecov
     jobs:
     - job: pytest
       steps:
