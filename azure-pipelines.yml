@@ -12,15 +12,15 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
-  strategy:
-    matrix:
-      Python39:
-        python.version: '3.9'
 
 stages:
-  - stage: Test_and_upload_Codecov
+  - stage: Test
     jobs:
     - job: pytest
+      strategy:
+        matrix:
+          Python39:
+            python.version: '3.9'
       steps:
       - task: UsePythonVersion@0
         inputs:
