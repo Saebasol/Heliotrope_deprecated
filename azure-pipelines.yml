@@ -4,8 +4,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-- name: TEST_FLAG
-  value: "true"
+  TEST_FLAG: "true"
+  DOCKER_BUILDKIT: 1
 
 trigger:
 - master
@@ -41,3 +41,15 @@ stages:
       - script: |
           bash <(curl -s https://codecov.io/bash)
         displayName: 'Upload coverage to Codecov'
+  
+  - stage: BuildDocker
+    dependsOn: Testflow
+    jobs:
+      - job: Build
+        steps:
+        - task: Docker@2
+          displayName: Build an image
+          inputs:
+            repository: Heliotrope
+            command: build
+            Dockerfile: app/Dockerfile
