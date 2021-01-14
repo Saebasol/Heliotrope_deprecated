@@ -14,13 +14,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-  - stage: Test
+  - stage: Testflow
     jobs:
-    - job: pytest
+    - job: Test
       strategy:
         matrix:
           Python39:
             python.version: '3.9'
+
       steps:
       - task: UsePythonVersion@0
         inputs:
@@ -37,9 +38,6 @@ stages:
           pytest --cov=./
         displayName: 'Test with pytest and generate coverage report'
 
-    - job: Codecov
-      dependsOn: pytest
-      steps:
       - script: |
           bash <(curl -s https://codecov.io/bash)
         displayName: 'Upload coverage to Codecov'
