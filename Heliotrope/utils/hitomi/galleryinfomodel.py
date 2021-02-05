@@ -13,7 +13,7 @@ class HitomiGalleryInfoModel:
         japanese_title: Optional[str],
         title: Optional[str],
         galleryid: Optional[str],
-        type: Optional[str],
+        type_: Optional[str],
     ):
         self.language_localname = language_localname
         self.language = language
@@ -23,7 +23,7 @@ class HitomiGalleryInfoModel:
         self.japanese_title = japanese_title
         self.title = title
         self.galleryid = galleryid
-        self.type = type
+        self.type_ = type_
 
     @classmethod
     def parse_galleryinfo(cls, galleryinfo_json: GalleryInfoJSON):
@@ -58,5 +58,5 @@ class HitomiGalleryInfoModel:
             galleryinfo_json.get("japanese_title"),
             galleryinfo_json.get("title"),
             galleryinfo_json.get("id"),
-            galleryinfo_json.get("type"),
+            galleryinfo_json.get("type_"),
         )

@@ -35,7 +35,7 @@ class GalleryInfoJSON(TypedDict):
     tags: list[Tags]
     japanese_title: Optional[str]
     title: str
-    type: str
+    type_: str
 
 
 config = Config()
