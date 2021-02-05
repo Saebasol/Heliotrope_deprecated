@@ -1,11 +1,11 @@
 import asyncio
+
 import aiohttp
+from sanic import Blueprint, response
 
-from sanic import Blueprint
-from sanic import response
-
-from Heliotrope.utils.shuffle import solve_shuffle_image_url
 from Heliotrope.utils.option import config
+from Heliotrope.utils.shuffle import solve_shuffle_image_url
+
 
 # https://github.com/kijk2869/discodo/blob/v1.0.5b/discodo/node/server/server.py#L44
 class StreamSender:
@@ -70,5 +70,5 @@ async def image_proxy(request, path: str):
         return response.json({"code": "404", "message": "not_found"}, 404)
 
     return response.stream(
-        sender.send, content_type=sender.response.headers.get("content-type")
+        sender.send, content_type=sender.response.headers.get("content-type_")
     )
