@@ -1,5 +1,6 @@
 from typing import Optional
-from Heliotrope.utils.option import GalleryInfoJSON, Files, Tags
+
+from Heliotrope.utils.option import Files, GalleryInfoJSON, Tags
 
 
 class HitomiGalleryInfoModel:
