@@ -70,5 +70,5 @@ async def image_proxy(request, path: str):
         return response.json({"code": "404", "message": "not_found"}, 404)
 
     return response.stream(
-        sender.send, content_type_=sender.response.headers.get("content-type_")
+        sender.send, content_type=sender.response.headers.get("content-type_")
     )
