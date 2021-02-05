@@ -12,7 +12,7 @@ class HitomiTagsModel:
         img_link: str,
         artist: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         group: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        type_: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        type: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         language: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         series: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         characters: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
@@ -22,7 +22,7 @@ class HitomiTagsModel:
         self.thumbnail = img_link
         self.artist = artist
         self.group = group
-        self.type_ = type_
+        self.type = type
         self.language = language
         self.series = series
         self.characters = characters
@@ -44,16 +44,16 @@ class HitomiTagsModel:
         }
 
     @classmethod
-    def parse_tags(cls, html: Union[str, bytes], type_: str):
-        if type_ == "manga":
+    def parse_tags(cls, html: Union[str, bytes], type: str):
+        if type == "manga":
             soup_type = "manga"
-        elif type_ == "doujinshi":
+        elif type == "doujinshi":
             soup_type = "dj"
-        elif type_ == "cg":
+        elif type == "cg":
             soup_type = "acg"
-        elif type_ == "gamecg":
+        elif type == "gamecg":
             soup_type = "cg"
-        elif type_ == "anime":
+        elif type == "anime":
             soup_type = "anime"
         else:
             return None

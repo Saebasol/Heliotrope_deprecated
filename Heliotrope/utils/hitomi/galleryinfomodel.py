@@ -1,7 +1,5 @@
-from typing import Optional, Union
-
-from Heliotrope.utils.hitomi.common import Files
-
+from typing import Optional
+from Heliotrope.utils.option import GalleryInfoJSON, Files, Tags, 
 
 class HitomiGalleryInfoModel:
     def __init__(
@@ -10,11 +8,11 @@ class HitomiGalleryInfoModel:
         language: Optional[str],
         date: Optional[str],
         files: Optional[list[Files]],
-        tags: Optional[list[dict[str, str]]],
+        tags: Optional[list[Tags]],
         japanese_title: Optional[str],
         title: Optional[str],
         galleryid: Optional[str],
-        type_: Optional[str],
+        type: Optional[str],
     ):
         self.language_localname = language_localname
         self.language = language
@@ -24,12 +22,12 @@ class HitomiGalleryInfoModel:
         self.japanese_title = japanese_title
         self.title = title
         self.galleryid = galleryid
-        self.type_ = type_
+        self.type = type
 
     @classmethod
-    def parse_galleryinfo(cls, galleryinfo_json: dict):
+    def parse_galleryinfo(cls, galleryinfo_json: GalleryInfoJSON):
         if not galleryinfo_json["tags"]:
-            parsed_tags: list[dict] = []
+            parsed_tags = []
         else:
             parsed_tags = []
             for tag in galleryinfo_json["tags"]:

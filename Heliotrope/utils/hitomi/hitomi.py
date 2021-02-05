@@ -22,7 +22,7 @@ async def info(index: int):
             "thumbnail": tags.thumbnail,
             "artist": tags.artist,
             "group": tags.group,
-            "type": tags.type_,
+            "type": tags.type,
             "language": tags.language,
             "series": tags.series,
             "characters": tags.characters,
@@ -44,7 +44,7 @@ async def galleryinfo(index: int):
             "japanese_title": galleryinfomodel.japanese_title,
             "title": galleryinfomodel.title,
             "id": galleryinfomodel.galleryid,
-            "type": galleryinfomodel.type_,
+            "type": galleryinfomodel.type,
         }
 
         return data
@@ -61,7 +61,7 @@ async def integrated_info(index: int):
             "japanese_title": galleryinfomodel.japanese_title,
             "title": galleryinfomodel.title,
             "id": galleryinfomodel.galleryid,
-            "type": galleryinfomodel.type_,
+            "type": galleryinfomodel.type,
         }
     else:
         gi = None
@@ -72,7 +72,7 @@ async def integrated_info(index: int):
             "title": tags.title,
             "artist": tags.artist,
             "group": tags.group,
-            "type": tags.type_,
+            "type": tags.type,
             "language": tags.language,
             "series": tags.series,
             "characters": tags.characters,
