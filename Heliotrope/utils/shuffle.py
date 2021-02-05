@@ -3,7 +3,7 @@ import re
 from sanic.response import json
 
 
-def shuffle_image_url(url: str):
+def shuffle_image_url(url: str) -> str:
     url_parse_regex = re.compile(r"\/\/(..?)(\.hitomi\.la|\.pximg\.net)\/(.+?)\/(.+)")
 
     parsed_url: list[str] = url_parse_regex.findall(url)[0]
@@ -18,7 +18,7 @@ def shuffle_image_url(url: str):
     return main
 
 
-def solve_shuffle_image_url(shuffled_image_url: str):
+def solve_shuffle_image_url(shuffled_image_url: str) -> str:
     try:
         solve_regex: list[str] = re.findall(
             r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)_(.+?_.+)", shuffled_image_url

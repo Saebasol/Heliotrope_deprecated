@@ -46,15 +46,15 @@ class HitomiTagsModel:
     @classmethod
     def parse_tags(cls, html: Union[str, bytes], type_: str):
         if type_ == "manga":
-            soup_type = "manga"
+            soup_type_ = "manga"
         elif type_ == "doujinshi":
-            soup_type = "dj"
+            soup_type_ = "dj"
         elif type_ == "cg":
-            soup_type = "acg"
+            soup_type_ = "acg"
         elif type_ == "gamecg":
-            soup_type = "cg"
+            soup_type_ = "cg"
         elif type_ == "anime":
-            soup_type = "anime"
+            soup_type_ = "anime"
         else:
             return None
 
@@ -63,7 +63,7 @@ class HitomiTagsModel:
 
         soup = BeautifulSoup(html, "lxml")
 
-        gallery_element = soup.find("div", class_=f"gallery {soup_type}-gallery")
+        gallery_element = soup.find("div", class_=f"gallery {soup_type_}-gallery")
 
         if not soup:
             return None
