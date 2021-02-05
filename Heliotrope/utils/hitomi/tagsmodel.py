@@ -12,7 +12,7 @@ class HitomiTagsModel:
         img_link: str,
         artist: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         group: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        type: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        type_: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         language: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         series: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         characters: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
@@ -22,7 +22,7 @@ class HitomiTagsModel:
         self.thumbnail = img_link
         self.artist = artist
         self.group = group
-        self.type = type
+        self.type_ = type_
         self.language = language
         self.series = series
         self.characters = characters
@@ -44,17 +44,17 @@ class HitomiTagsModel:
         }
 
     @classmethod
-    def parse_tags(cls, html: Union[str, bytes], type: str):
-        if type == "manga":
-            soup_type = "manga"
-        elif type == "doujinshi":
-            soup_type = "dj"
-        elif type == "cg":
-            soup_type = "acg"
-        elif type == "gamecg":
-            soup_type = "cg"
-        elif type == "anime":
-            soup_type = "anime"
+    def parse_tags(cls, html: Union[str, bytes], type_: str):
+        if type_ == "manga":
+            soup_type_ = "manga"
+        elif type_ == "doujinshi":
+            soup_type_ = "dj"
+        elif type_ == "cg":
+            soup_type_ = "acg"
+        elif type_ == "gamecg":
+            soup_type_ = "cg"
+        elif type_ == "anime":
+            soup_type_ = "anime"
         else:
             return None
 
@@ -63,7 +63,7 @@ class HitomiTagsModel:
 
         soup = BeautifulSoup(html, "lxml")
 
-        gallery_element = soup.find("div", class_=f"gallery {soup_type}-gallery")
+        gallery_element = soup.find("div", class_=f"gallery {soup_type_}-gallery")
 
         if not soup:
             return None
@@ -76,7 +76,7 @@ class HitomiTagsModel:
 
         artist_elements = gallery_element.find("h2").find_all("a")
         group_elements = infos[0].find_all("a")
-        type_element = infos[1].find("a")
+        type__element = infos[1].find("a")
         language_element = infos[2].find("a")
         series_elements = infos[3].find_all("a")
         characters_elements = infos[4].find_all("a")
@@ -87,7 +87,7 @@ class HitomiTagsModel:
             shuffle_image_url(img_link),
             cls.check_element(artist_elements),
             cls.check_element(group_elements),
-            cls.check_element(type_element),
+            cls.check_element(type__element),
             cls.check_element(language_element),
             cls.check_element(series_elements),
             cls.check_element(characters_elements),

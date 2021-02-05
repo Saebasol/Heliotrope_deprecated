@@ -22,9 +22,9 @@ async def get_redirect_url(index: int) -> Optional[tuple[str, str]]:
         return
     soup = BeautifulSoup(r.body, "lxml")
     url: str = soup.find("a", href=True)["href"]
-    type = urlparse(url).path.split("/")[1]
+    type_ = urlparse(url).path.split("/")[1]
     # index = re.search(r"\-([0-9]*)\.html", "url")[1]
-    return url, type
+    return url, type_
 
 
 async def get_galleryinfo(index: int):
@@ -43,11 +43,11 @@ async def get_gallery(
     redirect = await get_redirect_url(index)
     if not redirect:
         return None
-    url, type = redirect
+    url, type_ = redirect
     r = await request.get(url, headers=headers)
     if r.status != 200:
         return None
-    return str(r.url), HitomiTagsModel.parse_tags(r.body, type)
+    return str(r.url), HitomiTagsModel.parse_tags(r.body, type_)
 
 
 async def image_proxer(shuffled_img_url: str):
@@ -64,7 +64,7 @@ async def image_proxer(shuffled_img_url: str):
     if response.status != 200:
         return
 
-    return response.body, response.headers.get("content-type") or "image"
+    return response.body, response.headers.get("content-type_") or "image"
 
 
 async def fetch_index(opts: Config) -> tuple[int, ...]:  # thx to seia-soto
