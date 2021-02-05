@@ -1,11 +1,24 @@
-from typing import Any
+from typing import Any, Awaitable, Callable, Coroutine, Literal, TypedDict, Union
 
 import aiohttp
+from multidict import CIMultiDictProxy
+from yarl import URL
+
+
+class Dispatch(TypedDict):
+    json: Callable[[], Awaitable[Any]]
+    read: Callable[[], Awaitable[bytes]]
+    text: Callable[[], Awaitable[str]]
 
 
 class Response:
     def __init__(
-        self, status: int, message: Any, body: Any, url: str, headers: dict[str, Any]
+        self,
+        status: int,
+        message: str,
+        body: Any,
+        url: URL,
+        headers: CIMultiDictProxy[str],
     ):
         self.status = status
         self.message = message
@@ -28,12 +41,12 @@ class Request:
         session: aiohttp.ClientSession,
         url: str,
         method: str,
-        response_method: str,
+        response_method: Literal["json", "read", "text"],
         *args,
         **kwargs,
     ) -> Response:
         async with session.request(method, url, *args, **kwargs) as response:
-            dispatch: dict[str, Any] = {
+            dispatch: Dispatch = {
                 "json": response.json,
                 "read": response.read,
                 "text": response.text,
@@ -49,7 +62,12 @@ class Request:
             )
 
     async def request(
-        self, url: str, method: str, response_method: str, *args, **kwargs
+        self,
+        url: str,
+        method: str,
+        response_method: Literal["json", "read", "text"],
+        *args,
+        **kwargs,
     ) -> Response:
         async with aiohttp.ClientSession(*self.args, **self.kwargs) as session:
             response = await self.fetch(
@@ -58,12 +76,22 @@ class Request:
             return response
 
     async def get(
-        self, url: str, response_method: str = "read", *args, **kwargs
+        self,
+        url: str,
+        response_method: Literal["json", "read", "text"] = "read",
+        *args,
+        **kwargs,
     ) -> Response:
         """Perform HTTP GET request."""
         return await self.request(url, "GET", response_method, *args, **kwargs)
 
-    async def post(self, url: str, response_method: str, *args, **kwargs) -> Response:
+    async def post(
+        self,
+        url: str,
+        response_method: Literal["json", "read", "text"],
+        *args,
+        **kwargs,
+    ) -> Response:
         """Perform HTTP POST request."""
         return await self.request(url, "POST", response_method, *args, **kwargs)
 

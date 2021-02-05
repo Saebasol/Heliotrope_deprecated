@@ -14,17 +14,17 @@ from Heliotrope.utils.shuffle import solve_shuffle_image_url
 headers = {"referer": f"http://{config.domain}", "User-Agent": config.user_agent}
 
 
-async def get_redirect_url(index: int):
+async def get_redirect_url(index: int) -> Optional[tuple[str, str]]:
     r = await request.get(
         f"https://hitomi.la/galleries/{index}.html", "text", headers=headers
     )
     if r.status != 200:
         return
     soup = BeautifulSoup(r.body, "lxml")
-    url = soup.find("a", href=True)["href"]
-    type_ = urlparse(url).path.split("/")[1]
+    url: str = soup.find("a", href=True)["href"]
+    type = urlparse(url).path.split("/")[1]
     # index = re.search(r"\-([0-9]*)\.html", "url")[1]
-    return url, type_
+    return url, type
 
 
 async def get_galleryinfo(index: int):
@@ -33,7 +33,7 @@ async def get_galleryinfo(index: int):
     )
     if r.status != 200:
         return None
-    js_to_json = r.body.replace("var galleryinfo = ", "")
+    js_to_json = str(r.body).replace("var galleryinfo = ", "")
     return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json))
 
 
@@ -43,11 +43,11 @@ async def get_gallery(
     redirect = await get_redirect_url(index)
     if not redirect:
         return None
-    url, type_ = redirect
+    url, type = redirect
     r = await request.get(url, headers=headers)
     if r.status != 200:
         return None
-    return str(r.url), HitomiTagsModel.parse_tags(r.body, type_)
+    return str(r.url), HitomiTagsModel.parse_tags(r.body, type)
 
 
 async def image_proxer(shuffled_img_url: str):
@@ -83,4 +83,4 @@ async def fetch_index(opts: Config) -> tuple[int, ...]:  # thx to seia-soto
 
     # len(buffer) % 4 this check 32bit
     total_items = len(r.body) // 4
-    return struct.unpack(f">{total_items}i", r.body)
+    return struct.unpack(f">{total_items}i", bytes(r.body))
