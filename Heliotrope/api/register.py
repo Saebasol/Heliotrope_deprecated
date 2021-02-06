@@ -1,6 +1,7 @@
 import os
 
 from sanic import Blueprint
+from sanic.request import Request
 from sanic.response import json
 
 from Heliotrope.utils.database.user_management import user_register
@@ -12,7 +13,7 @@ register = Blueprint("register", url_prefix="/register")
     "/",
     methods=["POST"],
 )
-async def _register(request):
+async def _register(request: Request):
     user_id = request.json.get("user_id")
     api_key = request.json.get("api_key")
     check_header = request.headers.get("Verification")
