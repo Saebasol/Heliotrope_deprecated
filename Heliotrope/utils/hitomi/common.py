@@ -1,13 +1,6 @@
 import re
-from typing import TypedDict
 
-
-class Files(TypedDict):
-    width: int
-    hash: str
-    haswebp: int
-    name: str
-    height: int
+from Heliotrope.utils.option import Files
 
 
 class HitomiImageModel:
