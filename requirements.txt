@@ -1,6 +1,6 @@
 aiohttp==3.7.3
 sanic==20.12.1
-sentry-sdk==0.20.1
+sentry-sdk==0.20.2
 beautifulsoup4==4.9.3
 tortoise-orm==0.16.21
 PyNaCl==1.4.0
