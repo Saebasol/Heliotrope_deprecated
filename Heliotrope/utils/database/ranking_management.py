@@ -20,8 +20,8 @@ async def add_count(index, check=False):
 
 async def view_ranking(check=False):
     if check:
-        rank_list = await Ranking.all().values('index', 'count')
-        sorted_ranking = sorted(rank_list, key=lambda info: info['count'], reverse=True)
+        rank_list = await Ranking.all().values("index", "count")
+        sorted_ranking = sorted(rank_list, key=lambda info: info["count"], reverse=True)
         ranking = {"count": len(sorted_ranking), "list": sorted_ranking}
         return json(ranking, 200)
     else:
