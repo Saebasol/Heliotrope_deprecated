@@ -1,7 +1,6 @@
 import os
 
 from sanic import Blueprint
-from sanic.request import Request
 from sanic.response import json
 
 from Heliotrope.utils.database.ranking_management import add_count, view_ranking
