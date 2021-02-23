@@ -31,5 +31,4 @@ async def _view_ranking(request):
 
     if check_header == f"check {os.environ['VERIFI']}":
         return await view_ranking(check=True)
-    else:
-        return json({"status": 400, "message": "bad_request"}, 400)
+    return await view_ranking()
