@@ -1,7 +1,7 @@
 from collections import namedtuple
 
-__version__ = "3.3.8"
+__version__ = "3.4.0"
 
 VersionInfo = namedtuple("VersionInfo", "major minor micro releaselevel serial")
 
-version_info = VersionInfo(major=3, minor=3, micro=8, releaselevel="final", serial=0)
+version_info = VersionInfo(major=3, minor=4, micro=0, releaselevel="final", serial=0)
