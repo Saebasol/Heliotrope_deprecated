@@ -1,5 +1,6 @@
-from sanic.response import json
 from datetime import datetime
+
+from sanic.response import json
 
 from Heliotrope.utils.database import Ranking
 
