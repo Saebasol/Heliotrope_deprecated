@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sanic.response import json
 
 from Heliotrope.utils.database import Ranking
@@ -22,7 +24,11 @@ async def view_ranking(check=False):
     if check:
         rank_list = await Ranking.all().values("index", "count")
         sorted_ranking = sorted(rank_list, key=lambda info: info["count"], reverse=True)
-        ranking = {"count": len(sorted_ranking), "list": sorted_ranking}
+        ranking = {
+            "total": len(sorted_ranking),
+            "month": datetime.today().month,
+            "list": sorted_ranking,
+        }
         return json(ranking, 200)
     else:
         return json({"status": 400, "message": "bad_request"}, 400)
