@@ -1,5 +1,6 @@
-from heliotrope.server import heliotrope
 import argparse
+
+from heliotrope.server import heliotrope
 
 parser = argparse.ArgumentParser("heliotrope")
 
