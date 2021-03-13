@@ -1,10 +1,14 @@
 import re
+from typing import Optional
 
-from sanic.response import json
 
-
-def shuffle_image_url(url: str) -> str:
-    url_parse_regex = re.compile(r"\/\/(..?)(\.hitomi\.la|\.pximg\.net)\/(.+?)\/(.+)")
+def shuffle_image_url(url: str) -> Optional[str]:
+    try:
+        url_parse_regex = re.compile(
+            r"\/\/(..?)(\.hitomi\.la|\.pximg\.net)\/(.+?)\/(.+)"
+        )
+    except:
+        return
 
     parsed_url: list[str] = url_parse_regex.findall(url)[0]
 
@@ -18,13 +22,13 @@ def shuffle_image_url(url: str) -> str:
     return main
 
 
-def solve_shuffle_image_url(shuffled_image_url: str) -> str:
+def solve_shuffle_image_url(shuffled_image_url: str) -> Optional[str]:
     try:
         solve_regex: list[str] = re.findall(
             r"(.+?)_(.+?)_(.+?_net|.+?la)_(.+)_(.+?_.+)", shuffled_image_url
         )[0]
     except:
-        return json({"code": 400, "message": "bad_request"}, 400)
+        return
 
     prefix = solve_regex[0]
     type_ = solve_regex[1]
