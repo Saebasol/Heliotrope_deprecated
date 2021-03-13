@@ -59,5 +59,5 @@ class HitomiGalleryInfoModel:
             galleryinfo_json.get("japanese_title"),
             galleryinfo_json.get("title"),
             galleryinfo_json.get("id"),
-            galleryinfo_json.get("type_"),
+            galleryinfo_json.get("type"),
         )
