@@ -1,16 +1,13 @@
 from sanic import Blueprint
 from sanic.response import json
+from sanic.views import HTTPMethodView
 
-from Heliotrope.utils.auth import authorized
-from Heliotrope.utils.hitomi import hitomi
-
-info = Blueprint("hitomi_info", url_prefix="/info")
+hitomi_info = Blueprint("hitomi_info", url_prefix="/info")
 
 
-@info.route("/<index>")
-@authorized()
-async def hitomi_info(request, index: int):
-    json_ = await hitomi.info(index)
-    if not json_:
-        return json({"status": 404, "message": "not_found"}, 404)
-    return json(json_)
+class HitomiInfoView(HTTPMethodView):
+    async def get(self, request, index):
+        return json({"status": 200})
+
+
+hitomi_info.add_route(HitomiInfoView.as_view(), "<index:int>")

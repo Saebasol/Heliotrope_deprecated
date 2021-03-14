@@ -2,12 +2,12 @@ from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
-hitomi_list = Blueprint("hitomi_list", url_prefix="/list")
+hitomi_images = Blueprint("hitomi_images", url_prefix="/images")
 
 
-class HitomiGalleryInfoView(HTTPMethodView):
+class HitomiImagesInfoView(HTTPMethodView):
     async def get(self, request, index):
         return json({"status": 200})
 
 
-hitomi_list.add_route(HitomiGalleryInfoView.as_view(), "<index:int>")
+hitomi_images.add_route(HitomiImagesInfoView.as_view(), "<index:int>")
