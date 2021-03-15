@@ -1,7 +1,23 @@
-import os
+from heliotrope.server import heliotrope
+import argparse
 
-from Heliotrope.app import app
+parser = argparse.ArgumentParser("heliotrope")
 
-app.run(
-    host="0.0.0.0", port=int(os.environ["PORT"]) if os.environ.get("PORT") else 8000
+parser.add_argument(
+    "--host",
+    "-H",
+    type=str,
+    default="0.0.0.0",
+    help="the hostname to listen on (default: 0.0.0.0)",
 )
+parser.add_argument(
+    "--port",
+    "-P",
+    type=int,
+    default=8000,
+    help="the port of the webserver (default: 8000)",
+)
+
+args = parser.parse_args()
+
+heliotrope.run(args.host, args.port)
