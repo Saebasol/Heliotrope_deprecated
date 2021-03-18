@@ -1,9 +1,8 @@
 from functools import wraps
+from inspect import getfullargspec
 from typing import Literal, get_args
-from sanic.request import Request
 
 from sanic.response import json
-from inspect import getfullargspec
 
 
 def hiyobot_only(f):
@@ -37,16 +36,22 @@ def strict_literal(argument_name: str):
     def decorator(f):
         @wraps(f)
         async def decorated_function(*args, **kwargs):
+            # First get about func args
             full_arg_spec = getfullargspec(f)
+            # Get annotation
             arg_annoration = full_arg_spec.annotations[argument_name]
+            # Check annotation is Lireral
             if arg_annoration.__origin__ is Literal:
+                # Literal -> Tuple
                 literal_list = get_args(arg_annoration)
+                # Get index
                 arg_index = full_arg_spec.args.index(argument_name)
-
+                # Handle arguments
                 if arg_index < len(args) and args[arg_index] not in literal_list:
                     raise ValueError(
                         f"Arguments do not match. Expected: {literal_list}"
                     )
+                # Handle keyword arguments
                 elif recive_arg := kwargs.get(argument_name):
                     if recive_arg not in literal_list:
                         raise ValueError(
