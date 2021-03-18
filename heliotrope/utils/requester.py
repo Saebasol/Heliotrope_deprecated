@@ -44,6 +44,8 @@ class RestrictedRequester:
         return_method: Literal["read", "text", "json"],
         **kwargs: Any,
     ):
+        if not self.session:
+            raise RuntimeError("Need ClientSession")
         async with self.session.request(method, url, **kwargs) as r:
             return Response(
                 r.status,
@@ -155,7 +157,7 @@ class HitomiRequester(RestrictedRequester):
             headers={
                 "User-Agent": self.user_agent,
                 "Range": f"byte={byte_start}-{byte_end}",
-                "referer": f"https://{self.domain}/index-all-${page}.html",
+                "referer": f"https://{self.domain}/index-all-{page}.html",
                 "origin": f"http://{self.domain}",
             },
         )
