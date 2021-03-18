@@ -1,6 +1,7 @@
 from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
+
 from heliotrope.utils.decorators import hiyobot_only
 
 request_count = Blueprint("request_count", url_prefix="/count")
@@ -12,7 +13,7 @@ class RequestCountView(HTTPMethodView):
         return json({"status": 200})
 
     @hiyobot_only
-    async def porst(self, request):
+    async def post(self, request):
         return json({"status": 200})
 
 
