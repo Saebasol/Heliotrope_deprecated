@@ -10,4 +10,4 @@ class HitomiImagesInfoView(HTTPMethodView):
         return json({"status": 200})
 
 
-hitomi_images.add_route(HitomiImagesInfoView.as_view(), "<index:int>")
+hitomi_images.add_route(HitomiImagesInfoView.as_view(), "/<index:int>")
