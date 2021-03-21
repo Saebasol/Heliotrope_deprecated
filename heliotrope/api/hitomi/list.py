@@ -10,4 +10,4 @@ class HitomiListView(HTTPMethodView):
         return json({"status": 200})
 
 
-hitomi_list.add_route(HitomiListView.as_view(), "<index:int>")
+hitomi_list.add_route(HitomiListView.as_view(), "/<index:int>")
