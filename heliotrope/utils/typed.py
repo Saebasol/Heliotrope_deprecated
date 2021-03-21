@@ -1,4 +1,12 @@
 from typing import Literal, Optional, TypedDict
+from sanic.app import Sanic
+
+from sanic.request import Request
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+
+    from heliotrope.utils.requester import HitomiRequester
 
 
 class Files(TypedDict):
@@ -24,4 +32,13 @@ class GalleryInfoJSON(TypedDict):
     tags: list[Tags]
     japanese_title: Optional[str]
     title: str
-    type_: str
+    id: str
+    type: str
+
+
+class Heliotrope(Sanic):
+    hitomi_requester: "HitomiRequester"
+
+
+class HeliotropeRequest(Request):
+    app: "Heliotrope"
