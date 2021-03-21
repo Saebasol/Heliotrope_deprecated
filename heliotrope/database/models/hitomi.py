@@ -1,14 +1,14 @@
-from tortoise.models import Model
 from tortoise.fields.data import CharField, IntField, TextField
-from tortoise.fields.relational import ManyToManyField
+from tortoise.fields.relational import ManyToManyField, ManyToManyRelation
+from tortoise.models import Model
 
 
 class GalleryInfo(Model):
     language_localname = TextField(null=True)
     language = TextField(null=True)
     date = TextField(null=True)
-    files = ManyToManyField("models.File")
-    tags = ManyToManyField("models.Tag")
+    files: ManyToManyRelation["File"] = ManyToManyField("models.File")
+    tags: ManyToManyRelation["Tag"] = ManyToManyField("models.Tag")
     japanese_title = TextField(null=True)
     title = TextField(null=True)
     id = CharField(255, pk=True)
@@ -30,5 +30,6 @@ class File(Model):
 class Tag(Model):
     id = IntField(pk=True)
     index_id = CharField(255)
-    value = TextField(null=True)
-    url = TextField(null=True)
+    male = CharField(1, null=True)
+    female = CharField(1, null=True)
+    url = CharField(255, null=True)
