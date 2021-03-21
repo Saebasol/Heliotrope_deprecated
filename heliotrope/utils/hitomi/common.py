@@ -1,7 +1,8 @@
 # https://ltn.hitomi.la/common.js
 
-from heliotrope.utils.hitomi.models import HitomiImageModel
 import re
+
+from heliotrope.utils.hitomi.models import HitomiImageModel
 
 
 def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
