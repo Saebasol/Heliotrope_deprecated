@@ -6,7 +6,7 @@
 variables:
   IS_TEST: "True"
   DOCKER_BUILDKIT: 1
-  DB_URL: "mysql://root:root@127.0.0.1/test_heliotrope"
+  DB_URL: "mysql://root:test@127.0.0.1/test_heliotrope"
 
 trigger:
 - master
@@ -30,8 +30,9 @@ stages:
         displayName: 'Use Python $(python.version)'
       
       - script: |
-          sudo apt install -y mariadb-server
-          sudo mysql -uroot -proot -e 'create database test_heliotrope;'
+          sudo apt install -y mariadb-server mariadb-client
+          sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('test') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+          sudo mysql -uroot -ptest -e 'create database test_heliotrope;'
         displayName: 'Install mariadb and setup'
 
       - script: |
