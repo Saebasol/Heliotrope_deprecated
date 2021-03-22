@@ -30,9 +30,11 @@ stages:
         displayName: 'Use Python $(python.version)'
       
       - script: |
-          sudo apt-get install -y mariadb-server mariadb-client
+          sudo apt-get update
+          sudo apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
+          sudo rm -rf /etc/mysql /var/lib/mysql
+          sudo apt-get install -y mariadb-server
           /etc/init.d/mysql start
-          systemctl status mysql.service
           sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('test') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
           sudo mysql -uroot -ptest -e 'create database test_heliotrope;'
         displayName: 'Install mariadb and setup'
