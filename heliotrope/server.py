@@ -1,10 +1,10 @@
 import os
 from asyncio.events import AbstractEventLoop
-from sentry_sdk import init
-from aiohttp.client import ClientSession
 
+from aiohttp.client import ClientSession
 from sanic import Sanic
 from sanic_cors import CORS
+from sentry_sdk import init
 from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
