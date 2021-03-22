@@ -4,8 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-  TEST_FLAG: "true"
+  IS_TEST: "True"
   DOCKER_BUILDKIT: 1
+  DB_URL: "mysql://root:root@127.0.0.1/test_heliotrope"
 
 trigger:
 - master
@@ -14,9 +15,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-  - stage: Testflow
+  - stage: Test
     jobs:
-    - job: Test
+    - job: pytest
       strategy:
         matrix:
           Python39:
@@ -27,6 +28,11 @@ stages:
         inputs:
           versionSpec: '$(python.version)'
         displayName: 'Use Python $(python.version)'
+      
+      - script: |
+          sudo apt install -y mariadb-server
+          sudo mysql -uroot -proot -e 'create database test_heliotrope;'
+        displayName: 'Install mariadb and setup'
 
       - script: |
           python -m pip install --upgrade pip
@@ -34,7 +40,7 @@ stages:
         displayName: 'Install dependencies'
 
       - script: |
-          pip install pytest pytest-azurepipelines pytest-sanic pytest-cov
+          pip install pytest pytest-azurepipelines sanic-testing pytest-cov
           pytest --cov=./
         displayName: 'Test with pytest and generate coverage report'
 
