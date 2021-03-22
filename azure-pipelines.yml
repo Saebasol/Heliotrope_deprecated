@@ -37,8 +37,7 @@ stages:
           sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.5/ubuntu focal main'
           sudo apt-get -y update
           sudo apt-get install -y mariadb-server
-          /etc/init.d/mysql start
-          sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('test') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+          sudo mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('test')"
           sudo mysql -uroot -ptest -e 'create database test_heliotrope;'
         displayName: 'Install mariadb and setup'
 
