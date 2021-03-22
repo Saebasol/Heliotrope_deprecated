@@ -1,11 +1,10 @@
-from typing import Literal, Optional, TypedDict
-from sanic.app import Sanic
+from types import SimpleNamespace
+from typing import TYPE_CHECKING, Literal, Optional, TypedDict
 
+from sanic.app import Sanic
 from sanic.request import Request
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-
     from heliotrope.utils.requester import HitomiRequester
 
 
@@ -36,9 +35,13 @@ class GalleryInfoJSON(TypedDict):
     type: str
 
 
-class Heliotrope(Sanic):
+class HeliotropeContext(SimpleNamespace):
     hitomi_requester: "HitomiRequester"
 
 
+class Heliotrope(Sanic):
+    ctx: HeliotropeContext
+
+
 class HeliotropeRequest(Request):
-    app: "Heliotrope"
+    app: Heliotrope
