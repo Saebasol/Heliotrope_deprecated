@@ -1,6 +1,6 @@
 import pytest
-
 from sanic_testing import TestManager
+
 from heliotrope.server import heliotrope_app
 
 
