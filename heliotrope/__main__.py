@@ -1,6 +1,6 @@
 import argparse
 
-from heliotrope.server import heliotrope
+from heliotrope.server import heliotrope_app
 
 parser = argparse.ArgumentParser("heliotrope")
 
@@ -21,4 +21,4 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-heliotrope.run(args.host, args.port)
+heliotrope_app.run(args.host, args.port)
