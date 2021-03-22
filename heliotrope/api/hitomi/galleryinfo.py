@@ -1,8 +1,9 @@
-from heliotrope.database.query import get_galleryinfo
 from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
+from heliotrope.database.query import get_galleryinfo
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 from heliotrope.utils.response import not_found
 from heliotrope.utils.typed import HeliotropeRequest
 
