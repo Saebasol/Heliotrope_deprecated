@@ -4,8 +4,8 @@ from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
-from heliotrope.utils.typed import HeliotropeRequest
 from heliotrope.utils.response import not_found
+from heliotrope.utils.typed import HeliotropeRequest
 
 hitomi_list = Blueprint("hitomi_list", url_prefix="/list")
 

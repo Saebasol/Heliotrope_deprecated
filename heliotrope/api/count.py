@@ -1,11 +1,11 @@
-from heliotrope.utils.typed import HeliotropeRequest
-from heliotrope.database.query import add_request_count, get_all_request_count
 from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
+from heliotrope.database.query import add_request_count, get_all_request_count
 from heliotrope.utils.decorators import hiyobot_only
 from heliotrope.utils.response import bad_request, not_found
+from heliotrope.utils.typed import HeliotropeRequest
 
 request_count = Blueprint("request_count", url_prefix="/count")
 
