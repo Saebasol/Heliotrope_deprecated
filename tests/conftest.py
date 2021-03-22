@@ -81,4 +81,4 @@ def app():
 
 @pytest.fixture(scope="session")
 def startup():
-    run_async(migration())
+    return run_async(migration())
