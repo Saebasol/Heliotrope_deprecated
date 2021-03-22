@@ -1,7 +1,6 @@
 from sanic import Blueprint
 from sanic.views import HTTPMethodView
 
-from heliotrope.utils.hitomi.models import HitomiTagsModel
 from heliotrope.utils.response import not_found
 from heliotrope.utils.typed import HeliotropeRequest
 
