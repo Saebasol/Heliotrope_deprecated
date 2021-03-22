@@ -1,4 +1,5 @@
 from typing import Union
+
 from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
 from heliotrope.database.models.requestcount import RequestCount
 
