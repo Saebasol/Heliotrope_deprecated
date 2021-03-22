@@ -169,3 +169,22 @@ class HitomiRequester(RestrictedRequester):
 
         total_items = len(response.body) // 4
         return unpack(f">{total_items}i", bytes(response.body))
+
+    async def get_info_using_index(self, index: int):
+        if url_hitomi_type_tuple := await self.get_redirect_url(index):
+            url, hitomi_type = url_hitomi_type_tuple
+            response = await self.session_get(url, "text")
+
+            if tags_model := HitomiTagsModel.parse_tags(response.body, hitomi_type):
+                tags_dict = {
+                    "title": tags_model.title,
+                    "thumbnail": tags_model.thumbnail,
+                    "artist": tags_model.artist,
+                    "group": tags_model.group,
+                    "type": tags_model.hitomi_type,
+                    "language": tags_model.language,
+                    "series": tags_model.series,
+                    "characters": tags_model.characters,
+                    "tags": tags_model.tags,
+                }
+                return tags_dict
