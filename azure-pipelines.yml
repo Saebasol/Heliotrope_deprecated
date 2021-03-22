@@ -49,7 +49,7 @@ stages:
         displayName: 'Upload coverage to Codecov'
   
   - stage: Docker
-    dependsOn: Testflow
+    dependsOn: Test
     jobs:
       - job: Build
         steps:
