@@ -1,5 +1,5 @@
 def test_get_galleryinfo_response(app):
-    _, response = app.test_client.get("/v4/api/hitomi/galleryinfo/1496588")
+    _, response = app.test_client.get("/v4/api/hitomi/galleryinfo/1536576")
     assert response.status == 200
 
 
