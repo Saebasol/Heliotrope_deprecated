@@ -11,6 +11,8 @@ from multidict import CIMultiDictProxy
 from yarl import URL
 
 from heliotrope.utils.decorators import strict_literal
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel, HitomiTagsModel
+from heliotrope.utils.response import not_found
 
 
 class Response:
@@ -135,7 +137,7 @@ class HitomiRequester(RestrictedRequester):
         return url, hitomi_type
 
     async def get_galleryinfo(self, index: int):
-        response = await self.get(
+        response = await self.session_get(
             f"https://ltn.{self.domain}/galleries/{index}.js",
             "text",
             headers=self.headers,
@@ -143,7 +145,7 @@ class HitomiRequester(RestrictedRequester):
         if response.status != 200:
             return
         js_to_json = str(response.body).replace("var galleryinfo = ", "")
-        return json.loads(js_to_json)
+        return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json))
 
     async def fetch_index(
         self, page: int = 1, item: int = 25, index_file: str = "index-korean.nozomi"
@@ -151,7 +153,7 @@ class HitomiRequester(RestrictedRequester):
         byte_start = (page - 1) * item * 4
         byte_end = byte_start + item * 4 - 1
 
-        response = await self.get(
+        response = await self.session_get(
             f"https://ltn.{self.domain}/{index_file}",
             "read",
             headers={
