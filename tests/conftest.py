@@ -1,15 +1,14 @@
+import asyncio
 import json
 import os
-import asyncio
 
 import aiohttp
 import pytest
 from sanic_testing import TestManager
 from tortoise import Tortoise, run_async
 
-from heliotrope.server import heliotrope_app
-
 from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
+from heliotrope.server import heliotrope_app
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 
 
