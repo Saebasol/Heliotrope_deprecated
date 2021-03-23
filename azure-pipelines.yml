@@ -47,10 +47,6 @@ stages:
         displayName: 'Install dependencies'
 
       - script: |
-          python ./tests/script/run_before_test.py
-        displayName: 'Query the database for an item for testing'
-
-      - script: |
           pip install pytest pytest-azurepipelines sanic-testing pytest-cov
           pytest --cov=./
         displayName: 'Test with pytest and generate coverage report'
