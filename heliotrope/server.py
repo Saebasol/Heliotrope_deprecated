@@ -1,10 +1,10 @@
 import os
 from asyncio.events import AbstractEventLoop
 
+import sentry_sdk
 from aiohttp.client import ClientSession
 from sanic import Sanic
 from sanic_cors import CORS
-from sentry_sdk import init
 from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
@@ -19,10 +19,11 @@ heliotrope_app.blueprint(heliotrope_endpoint)
 
 if not os.environ.get("BYPASS"):
     heliotrope_app.config.DB_URL = os.environ["DB_URL"]
+    heliotrope_app.config.HIYOBOT_SECRET = os.environ["HIYOBOT_SECRET"]
     if not os.environ.get("IS_TEST"):
         heliotrope_app.config.SENTRY_DSN = os.environ["SENTRY_DSN"]
         heliotrope_app.config.FORWARDED_SECRET = os.environ["FORWARDED_SECRET"]
-        init(
+        sentry_sdk.init(
             dsn=heliotrope_app.config.SENTRY_DSN,
             integrations=[SanicIntegration()],
             release=f"heliotrope@{heliotrope.__version__}",
