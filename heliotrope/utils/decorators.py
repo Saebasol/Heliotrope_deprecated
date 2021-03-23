@@ -2,34 +2,35 @@ from functools import wraps
 from inspect import getfullargspec
 from typing import Literal, get_args
 
-from sanic.response import json
+from heliotrope.utils.response import forbidden
+from heliotrope.utils.typed import HeliotropeRequest
 
 
 def hiyobot_only(f):
     @wraps(f)
-    async def decorator_function(request, *args, **kwargs):
-        is_hiyobot = True
+    async def decorator_function(request: HeliotropeRequest, *args, **kwargs):
+        if hiyobot_secret := request.headers.get("hiyobot"):
+            if request.app.config.HIYOBOT_SECRET == hiyobot_secret:
+                response = await f(request, *args, **kwargs)
+                return response
 
-        if is_hiyobot:
-            response = await f(request, *args, **kwargs)
-            return response
-        return json({"status": 403, "message": "not_authorized"}, 403)
+        return forbidden
 
     return decorator_function
 
 
-def authorized(f):
-    @wraps(f)
-    async def decorated_function(request, *args, **kwargs):
+# def authorized(f):
+#     @wraps(f)
+#     async def decorated_function(request, *args, **kwargs):
 
-        is_authorized = True
+#         is_authorized = True
 
-        if is_authorized:
-            response = await f(request, *args, **kwargs)
-            return response
-        return json({"status": 403, "message": "not_authorized"}, 403)
+#         if is_authorized:
+#             response = await f(request, *args, **kwargs)
+#             return response
+#         return json({"status": 403, "message": "not_authorized"}, 403)
 
-    return decorated_function
+#     return decorated_function
 
 
 def strict_literal(argument_name: str):
