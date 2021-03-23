@@ -12,7 +12,6 @@ from yarl import URL
 
 from heliotrope.utils.decorators import strict_literal
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel, HitomiTagsModel
-from heliotrope.utils.response import not_found
 
 
 class Response:
