@@ -3,7 +3,7 @@ def test_get_count_unexpected_response(app):
     assert response.status == 404
 
 
-def test_post_count_response(app, startup):
+def test_post_count_response(app):
     _, response = app.test_client.post("/v4/api/count", json={"index": 1536576})
     assert response.status == 200
 
