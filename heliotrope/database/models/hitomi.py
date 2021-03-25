@@ -3,6 +3,11 @@ from tortoise.fields.relational import ManyToManyField, ManyToManyRelation
 from tortoise.models import Model
 
 
+class Index(Model):
+    id = IntField(pk=True)
+    index_id = CharField(255)
+
+
 class GalleryInfo(Model):
     language_localname = TextField(null=True)
     language = TextField(null=True)
