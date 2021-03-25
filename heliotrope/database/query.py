@@ -1,4 +1,5 @@
-from heliotrope.database.models.hitomi import GalleryInfo
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
+from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.database.models.requestcount import RequestCount
 
 
@@ -47,3 +48,57 @@ async def get_galleryinfo(index: int):
             "type": galleryinfo.type,
         }
         return galleryinfo
+
+
+async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
+    galleyinfo_orm_object = await GalleryInfo.create(
+        language_localname=galleryinfo.language_localname,
+        language=galleryinfo.language,
+        date=galleryinfo.date,
+        japanese_title=galleryinfo.japanese_title,
+        title=galleryinfo.title,
+        id=galleryinfo.galleryid,
+        type=galleryinfo.hitomi_type,
+    )
+
+    if galleryinfo.files:
+        file_orm_object_list = []
+        for file_info in galleryinfo.files:
+            file_orm_object = File(
+                index_id=galleryinfo.galleryid,
+                width=file_info.width,
+                hash=file_info.hash,
+                haswebp=file_info.haswebp,
+                name=file_info.name,
+                height=file_info.height,
+            )
+            await file_orm_object.save()
+            file_orm_object_list.append(file_orm_object)
+        await galleyinfo_orm_object.files.add(*file_orm_object_list)
+
+    if galleryinfo.tags:
+        tag_orm_object_list = []
+        for tag_info in galleryinfo.tags:
+            tag_orm_object = Tag(
+                index_id=galleryinfo.galleryid,
+                male=tag_info.get("male"),
+                female=tag_info.get("female"),
+                url=tag_info.get("url"),
+            )
+            await tag_orm_object.save()
+            tag_orm_object_list.append(tag_orm_object)
+
+        await galleyinfo_orm_object.tags.add(*tag_orm_object_list)
+
+
+async def put_index(index: int):
+    await Index.create(index_id=index)
+
+
+async def get_index():
+    return list(
+        map(
+            lambda x: int(x),
+            map(lambda x: x["index_id"], await Index.all().values("index_id")),
+        )
+    )
