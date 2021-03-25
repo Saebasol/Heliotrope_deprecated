@@ -35,7 +35,7 @@ class SessionRequester:
         self.session = session
 
     @strict_literal("return_method")
-    async def session_request(
+    async def request(
         self,
         method: str,
         url: StrOrURL,
@@ -52,49 +52,6 @@ class SessionRequester:
                 r.url,
                 r.headers,
             )
-
-    @strict_literal("return_method")
-    async def session_get(
-        self,
-        url: StrOrURL,
-        return_method: Literal["read", "text", "json"],
-        **kwargs: Any,
-    ):
-        return await self.session_request("GET", url, return_method, **kwargs)
-
-    @strict_literal("return_method")
-    async def session_post(
-        self,
-        url: StrOrURL,
-        return_method: Literal["read", "text", "json"],
-        **kwargs: Any,
-    ):
-        return await self.session_request("POST", url, return_method, **kwargs)
-
-
-class SemaphoreRequester:
-    def __init__(self, semaphore: Semaphore = None) -> None:
-        self.semaphore = semaphore
-
-    @strict_literal("return_method")
-    async def request(
-        self,
-        method: str,
-        url: StrOrURL,
-        return_method: Literal["read", "text", "json"],
-        **kwargs: Any,
-    ):
-        if not self.semaphore:
-            raise RuntimeError("Need Semaphore")
-        async with ClientSession() as cs:
-            async with self.semaphore, cs.request(method, url, **kwargs) as r:
-                return Response(
-                    r.status,
-                    r.reason,
-                    await getattr(r, return_method)(),
-                    r.url,
-                    r.headers,
-                )
 
     @strict_literal("return_method")
     async def get(
@@ -115,6 +72,49 @@ class SemaphoreRequester:
         return await self.request("POST", url, return_method, **kwargs)
 
 
+# class SemaphoreRequester:
+#     def __init__(self, semaphore: Semaphore = None) -> None:
+#         self.semaphore = semaphore
+
+#     @strict_literal("return_method")
+#     async def request(
+#         self,
+#         method: str,
+#         url: StrOrURL,
+#         return_method: Literal["read", "text", "json"],
+#         **kwargs: Any,
+#     ):
+#         if not self.semaphore:
+#             raise RuntimeError("Need Semaphore")
+#         async with ClientSession() as cs:
+#             async with self.semaphore, cs.request(method, url, **kwargs) as r:
+#                 return Response(
+#                     r.status,
+#                     r.reason,
+#                     await getattr(r, return_method)(),
+#                     r.url,
+#                     r.headers,
+#                 )
+
+#     @strict_literal("return_method")
+#     async def get(
+#         self,
+#         url: StrOrURL,
+#         return_method: Literal["read", "text", "json"],
+#         **kwargs: Any,
+#     ):
+#         return await self.request("GET", url, return_method, **kwargs)
+
+#     @strict_literal("return_method")
+#     async def post(
+#         self,
+#         url: StrOrURL,
+#         return_method: Literal["read", "text", "json"],
+#         **kwargs: Any,
+#     ):
+#         return await self.request("POST", url, return_method, **kwargs)
+
+
 class HitomiRequester(SessionRequester):
     domain = "hitomi.la"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
@@ -124,7 +124,7 @@ class HitomiRequester(SessionRequester):
         super().__init__(session=session)
 
     async def get_redirect_url(self, index: int):
-        response = await self.session_get(
+        response = await self.get(
             f"https://{self.domain}/galleries/{index}.html",
             "text",
             headers=self.headers,
@@ -138,7 +138,7 @@ class HitomiRequester(SessionRequester):
         return url, hitomi_type
 
     async def get_galleryinfo(self, index: int):
-        response = await self.session_get(
+        response = await self.get(
             f"https://ltn.{self.domain}/galleries/{index}.js",
             "text",
             headers=self.headers,
@@ -154,7 +154,7 @@ class HitomiRequester(SessionRequester):
         byte_start = (page - 1) * item * 4
         byte_end = byte_start + item * 4 - 1
 
-        response = await self.session_get(
+        response = await self.get(
             f"https://ltn.{self.domain}/{index_file}",
             "read",
             headers={
@@ -174,7 +174,7 @@ class HitomiRequester(SessionRequester):
     async def get_info_using_index(self, index: int):
         if url_hitomi_type_tuple := await self.get_redirect_url(index):
             url, hitomi_type = url_hitomi_type_tuple
-            response = await self.session_get(url, "text")
+            response = await self.get(url, "text")
 
             if tags_model := HitomiTagsModel.parse_tags(response.body, hitomi_type):
                 tags_dict = {
