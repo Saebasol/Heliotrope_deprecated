@@ -30,11 +30,8 @@ class Response:
         self.headers = headers
 
 
-class RestrictedRequester:
-    def __init__(
-        self, semaphore: Semaphore = None, session: ClientSession = None
-    ) -> None:
-        self.semaphore = semaphore
+class SessionRequester:
+    def __init__(self, session: ClientSession = None) -> None:
         self.session = session
 
     @strict_literal("return_method")
@@ -73,6 +70,11 @@ class RestrictedRequester:
         **kwargs: Any,
     ):
         return await self.session_request("POST", url, return_method, **kwargs)
+
+
+class SemaphoreRequester:
+    def __init__(self, semaphore: Semaphore = None) -> None:
+        self.semaphore = semaphore
 
     @strict_literal("return_method")
     async def request(
@@ -113,7 +115,7 @@ class RestrictedRequester:
         return await self.request("POST", url, return_method, **kwargs)
 
 
-class HitomiRequester(RestrictedRequester):
+class HitomiRequester(SessionRequester):
     domain = "hitomi.la"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
     headers = {"referer": f"https://{domain}", "User-Agent": user_agent}
