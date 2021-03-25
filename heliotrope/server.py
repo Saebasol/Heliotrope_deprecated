@@ -12,6 +12,7 @@ import heliotrope
 from heliotrope.api import heliotrope_endpoint
 from heliotrope.utils.requester import HitomiRequester
 from heliotrope.utils.typed import Heliotrope
+from heliotrope.utils.tasks.mirroring import Mirroring
 
 heliotrope_app = Sanic("heliotrope")
 CORS(heliotrope_app, origins=["https://doujinshiman.ga"])
