@@ -8,10 +8,10 @@ from heliotrope.utils.typed import HeliotropeRequest
 
 def hiyobot_only(f):
     @wraps(f)
-    async def decorator_function(request: HeliotropeRequest, *args, **kwargs):
+    async def decorator_function(self, request: HeliotropeRequest, *args, **kwargs):
         if hiyobot_secret := request.headers.get("hiyobot"):
             if request.app.config.HIYOBOT_SECRET == hiyobot_secret:
-                response = await f(request, *args, **kwargs)
+                response = await f(self, request, *args, **kwargs)
                 return response
 
         return forbidden
