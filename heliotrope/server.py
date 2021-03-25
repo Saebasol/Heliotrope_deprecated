@@ -45,9 +45,13 @@ if not os.environ.get("BYPASS"):
 @heliotrope_app.before_server_start
 async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
     hitomi_session = ClientSession(loop=loop)
+    mirroring_manager_session = ClientSession(loop=loop)
     heliotrope.ctx.hitomi_requester = HitomiRequester(hitomi_session)
+    heliotrope.ctx.mirroring_manager = Mirroring(mirroring_manager_session)
+    heliotrope.add_task(heliotrope.ctx.mirroring_manager.mirroring_task(3600))
 
 
 @heliotrope_app.after_server_stop
 async def stop(heliotrope: Heliotrope, loop: AbstractEventLoop):
     await heliotrope.ctx.hitomi_requester.session.close()
+    await heliotrope.ctx.mirroring_manager.session.close()
