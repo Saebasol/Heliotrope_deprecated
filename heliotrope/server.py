@@ -42,12 +42,12 @@ if not os.environ.get("BYPASS"):
     )
 
 
-@heliotrope_app.listener("before_server_start")
-async def init(heliotrope: Heliotrope, loop: AbstractEventLoop):
+@heliotrope_app.before_server_start
+async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
     hitomi_session = ClientSession(loop=loop)
     heliotrope.ctx.hitomi_requester = HitomiRequester(hitomi_session)
 
 
-@heliotrope_app.listener("after_server_stop")
-async def finish(heliotrope: Heliotrope, loop: AbstractEventLoop):
+@heliotrope_app.after_server_stop
+async def stop(heliotrope: Heliotrope, loop: AbstractEventLoop):
     await heliotrope.ctx.hitomi_requester.session.close()
