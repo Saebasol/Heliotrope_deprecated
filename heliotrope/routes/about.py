@@ -15,7 +15,7 @@ class HeliotropeAboutView(HTTPMethodView):
                 return json(
                     {
                         "last_checked_time": manager.last_checked_time,
-                        "mirroring_time": manager.mirroring_time,
+                        "last_mirrored_time": manager.mirroring_time,
                         "new_item": manager.new_item,
                         "server_status": manager.status,
                     }
@@ -35,7 +35,7 @@ class HeliotropeAboutView(HTTPMethodView):
     <h1>About Heliotrope</h1>
     <div>
         <p>Last checked time: {manager.last_checked_time}</p>
-        <p>Mirroring time: {manager.mirroring_time}</p>
+        <p>Last mirrored time: {manager.mirroring_time}</p>
         <p>New item: {manager.new_item}</p>
         <p>Server status: {manager.status}</p>
     </div>
