@@ -1,6 +1,6 @@
-from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.database.models.requestcount import RequestCount
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 
 
 async def get_all_request_count():
@@ -97,8 +97,5 @@ async def put_index(index: int):
 
 async def get_index():
     return list(
-        map(
-            lambda x: int(x),
-            map(lambda x: x["index_id"], await Index.all().values("index_id")),
-        )
+        map(lambda x: int(x["index_id"]), await Index.all().values("index_id")),
     )
