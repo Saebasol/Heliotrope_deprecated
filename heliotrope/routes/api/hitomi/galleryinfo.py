@@ -12,8 +12,7 @@ hitomi_galleyinfo = Blueprint("hitomi_galleyinfo", url_prefix="/galleryinfo")
 class HitomiGalleryInfoView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index: int):
         if galleryinfo := await get_galleryinfo(index):
-            galleryinfo.update({"status": 200})
-            return json(galleryinfo)
+            return json({"status": 200, **galleryinfo})
         return not_found
 
 
