@@ -1,11 +1,11 @@
 import json
-from asyncio.locks import Semaphore
 from struct import unpack
 from typing import Any, Literal
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from aiohttp.typedefs import StrOrURL
+from dataclasses import dataclass
 from bs4 import BeautifulSoup
 from multidict import CIMultiDictProxy
 from yarl import URL
@@ -14,20 +14,13 @@ from heliotrope.utils.decorators import strict_literal
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel, HitomiTagsModel
 
 
+@dataclass
 class Response:
-    def __init__(
-        self,
-        status: int,
-        reason: str,
-        body: Any,
-        url: URL,
-        headers: CIMultiDictProxy[str],
-    ):
-        self.status = status
-        self.reason = reason
-        self.body = body
-        self.url = url
-        self.headers = headers
+    status: int
+    reason: str
+    body: Any
+    url: URL
+    headers: CIMultiDictProxy[str]
 
 
 class SessionRequester:
