@@ -1,9 +1,11 @@
 import asyncio
-from heliotrope.database.query import get_index, put_galleryinfo, put_index
-from aiohttp.client import ClientSession
-from heliotrope.utils.requester import HitomiRequester
 import datetime
 import time
+
+from aiohttp.client import ClientSession
+
+from heliotrope.database.query import get_index, put_galleryinfo, put_index
+from heliotrope.utils.requester import HitomiRequester
 
 
 class Mirroring(HitomiRequester):
