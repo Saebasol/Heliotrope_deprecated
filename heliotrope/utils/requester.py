@@ -1,11 +1,11 @@
 import json
+from dataclasses import dataclass
 from struct import unpack
 from typing import Any, Literal
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from aiohttp.typedefs import StrOrURL
-from dataclasses import dataclass
 from bs4 import BeautifulSoup
 from multidict import CIMultiDictProxy
 from yarl import URL
