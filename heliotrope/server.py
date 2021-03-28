@@ -9,14 +9,14 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import heliotrope
-from heliotrope.api import heliotrope_endpoint
+from heliotrope.routes import heliotrope_routes
 from heliotrope.utils.requester import HitomiRequester
-from heliotrope.utils.typed import Heliotrope
 from heliotrope.utils.tasks.mirroring import Mirroring
+from heliotrope.utils.typed import Heliotrope
 
 heliotrope_app = Sanic("heliotrope")
 CORS(heliotrope_app, origins=["https://doujinshiman.ga"])
-heliotrope_app.blueprint(heliotrope_endpoint)
+heliotrope_app.blueprint(heliotrope_routes)
 
 if not os.environ.get("BYPASS"):
     heliotrope_app.config.DB_URL = os.environ["DB_URL"]
