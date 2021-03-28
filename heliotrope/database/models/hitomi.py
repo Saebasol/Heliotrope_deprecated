@@ -37,4 +37,5 @@ class Tag(Model):
     index_id = CharField(255)
     male = CharField(1, null=True)
     female = CharField(1, null=True)
+    tag = CharField(255, null=True)
     url = CharField(255, null=True)
