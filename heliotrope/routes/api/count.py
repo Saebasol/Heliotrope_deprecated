@@ -7,10 +7,10 @@ from heliotrope.utils.decorators import hiyobot_only
 from heliotrope.utils.response import bad_request, not_found
 from heliotrope.utils.typed import HeliotropeRequest
 
-request_count = Blueprint("request_count", url_prefix="/count")
+heliotrope_request_count = Blueprint("request_count", url_prefix="/count")
 
 
-class RequestCountView(HTTPMethodView):
+class HeliotropeRequestCountView(HTTPMethodView):
     @hiyobot_only
     async def get(self, request):
         if ranking := await get_all_request_count():
@@ -26,4 +26,4 @@ class RequestCountView(HTTPMethodView):
         return bad_request
 
 
-request_count.add_route(RequestCountView.as_view(), "")
+heliotrope_request_count.add_route(HeliotropeRequestCountView.as_view(), "")
