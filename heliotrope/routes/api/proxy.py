@@ -25,7 +25,6 @@ class HeliotropeImageProxyView(HTTPMethodView):
             url, headers=headers
         ) as r:
             if r.status != 200:
-                print(url)
                 return bad_request
 
             response = await request.respond(content_type=r.content_type)
