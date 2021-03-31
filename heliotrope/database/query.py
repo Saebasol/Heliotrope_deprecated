@@ -38,16 +38,10 @@ async def get_galleryinfo(index: int):
         return response_dict_list
 
     if galleryinfo := await GalleryInfo.get_or_none(id=index):
-        galleryinfo_dict: GalleryInfoJSON = {
-            "id": galleryinfo.id,
-            "language": galleryinfo.language,
-            "language_localname": galleryinfo.language_localname,
-            "date": galleryinfo.date,
+        galleryinfo_dict = {
+            **(await galleryinfo.first().values())[0],
             "files": remove_id_and_index_id(await galleryinfo.files.all().values()),
             "tags": remove_id_and_index_id(await galleryinfo.tags.all().values()),
-            "japanese_title": galleryinfo.japanese_title,
-            "title": galleryinfo.title,
-            "type": galleryinfo.type,
         }
         return galleryinfo_dict
 
