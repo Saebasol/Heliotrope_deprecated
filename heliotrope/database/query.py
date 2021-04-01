@@ -94,8 +94,10 @@ async def search_galleryinfo(query: str):
         return [
             {
                 **(await search_result.first().values())[0],
-                "tags": remove_id_and_index_id(search_result.tags.all().values()),
-                "files": remove_id_and_index_id(search_result.files.all().values()),
+                "tags": remove_id_and_index_id(await search_result.tags.all().values()),
+                "files": remove_id_and_index_id(
+                    await search_result.files.all().values()
+                ),
             }
             for search_result in search_result_list
         ]
