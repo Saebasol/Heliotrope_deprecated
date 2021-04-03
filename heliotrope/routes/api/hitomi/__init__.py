@@ -6,7 +6,6 @@ from heliotrope.routes.api.hitomi.info import hitomi_info
 from heliotrope.routes.api.hitomi.list import hitomi_list
 from heliotrope.routes.api.hitomi.search import hitomi_search
 
-
 hitomi_endpoint = Blueprint.group(
     hitomi_galleyinfo,
     hitomi_images,
