@@ -36,7 +36,7 @@ class HeliotropeAboutView(HTTPMethodView):
     <div>
         <p>Last checked time: {manager.last_checked_time}</p>
         <p>Last mirrored time: {manager.mirroring_time}</p>
-        <p>New item: {manager.new_item}</p>
+        <p>New item: {manager.new_item} item was added</p>
         <p>Server status: {manager.status}</p>
     </div>
     <footer>

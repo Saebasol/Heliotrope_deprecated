@@ -5,8 +5,8 @@ from sanic.app import Sanic
 from sanic.request import Request
 
 if TYPE_CHECKING:
+    from heliotrope.mirroring import Mirroring
     from heliotrope.utils.requester import HitomiRequester
-    from heliotrope.utils.tasks.mirroring import Mirroring
 
 
 class Files(TypedDict):

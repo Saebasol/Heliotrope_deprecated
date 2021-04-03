@@ -30,7 +30,7 @@ class Mirroring(HitomiRequester):
 
             await put_index(index)
         self.mirroring_time = f"({time.tzname[0]}) {datetime.datetime.now()}"
-        self.new_item = f"{len(index_list)} item was added"
+        self.new_item = f"{len(index_list)}"
 
     async def mirroring_task(self, delay: float):
         while True:
