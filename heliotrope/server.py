@@ -9,9 +9,9 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise.contrib.sanic import register_tortoise
 
 import heliotrope
+from heliotrope.mirroring import Mirroring
 from heliotrope.routes import heliotrope_routes
 from heliotrope.utils.requester import HitomiRequester
-from heliotrope.utils.tasks.mirroring import Mirroring
 from heliotrope.utils.typed import Heliotrope
 
 heliotrope_app = Sanic("heliotrope")
