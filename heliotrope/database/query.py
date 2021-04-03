@@ -1,7 +1,7 @@
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.database.models.requestcount import RequestCount
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
-from heliotrope.utils.typed import GalleryInfoJSON
+from heliotrope.utils.useful import remove_id_and_index_id
 
 
 async def get_all_request_count():
@@ -29,25 +29,11 @@ async def add_request_count(index: int):
 
 
 async def get_galleryinfo(index: int):
-    def remove_id_and_index_id(tag_or_file_list):
-        response_dict_list = []
-        for value in tag_or_file_list:
-            del value["id"]
-            del value["index_id"]
-            response_dict_list.append(value)
-        return response_dict_list
-
     if galleryinfo := await GalleryInfo.get_or_none(id=index):
-        galleryinfo_dict: GalleryInfoJSON = {
-            "id": galleryinfo.id,
-            "language": galleryinfo.language,
-            "language_localname": galleryinfo.language_localname,
-            "date": galleryinfo.date,
+        galleryinfo_dict = {
+            **(await galleryinfo.first().values())[0],
             "files": remove_id_and_index_id(await galleryinfo.files.all().values()),
             "tags": remove_id_and_index_id(await galleryinfo.tags.all().values()),
-            "japanese_title": galleryinfo.japanese_title,
-            "title": galleryinfo.title,
-            "type": galleryinfo.type,
         }
         return galleryinfo_dict
 
@@ -101,3 +87,17 @@ async def get_index():
     return list(
         map(lambda x: int(x["index_id"]), await Index.all().values("index_id")),
     )
+
+
+async def search_galleryinfo(query: str):
+    if search_result_list := await GalleryInfo.filter(title__icontains=query):
+        return [
+            {
+                **(await search_result.first().values())[0],
+                "tags": remove_id_and_index_id(await search_result.tags.all().values()),
+                "files": remove_id_and_index_id(
+                    await search_result.files.all().values()
+                ),
+            }
+            for search_result in search_result_list
+        ]
