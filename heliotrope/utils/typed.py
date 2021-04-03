@@ -6,7 +6,7 @@ from sanic.request import Request
 
 if TYPE_CHECKING:
     from heliotrope.utils.requester import HitomiRequester
-    from heliotrope.utils.tasks.mirroring import Mirroring
+    from heliotrope.mirroring import Mirroring
 
 
 class Files(TypedDict):
