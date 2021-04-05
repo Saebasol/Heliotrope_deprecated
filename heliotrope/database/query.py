@@ -71,6 +71,7 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
                 index_id=galleryinfo.galleryid,
                 male=tag_info.get("male"),
                 female=tag_info.get("female"),
+                tag=tag_info.get("tag"),
                 url=tag_info.get("url"),
             )
             await tag_orm_object.save()
