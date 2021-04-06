@@ -49,7 +49,7 @@ class HitomiGalleryInfoModel:
         self.hitomi_type = hitomi_type
 
     @classmethod
-    def parse_galleryinfo(cls, galleryinfo_json: GalleryInfoJSON):
+    def parse_galleryinfo(cls, galleryinfo_json):
         if not galleryinfo_json["tags"]:
             parsed_tags = []
         else:
