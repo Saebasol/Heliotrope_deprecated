@@ -85,7 +85,7 @@ async def put_index(index: int):
 
 async def get_index():
     return list(
-        map(lambda x: int(x["index_id"]), await Index.all().values("index_id")),
+        map(lambda x: int(x), await Index.all().values_list("index_id",flat=True)),
     )
 
 
