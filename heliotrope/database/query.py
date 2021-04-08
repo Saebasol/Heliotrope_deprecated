@@ -31,7 +31,7 @@ async def add_request_count(index: int):
 async def get_galleryinfo(index: int):
     if galleryinfo := await GalleryInfo.get_or_none(id=index):
         galleryinfo_dict = {
-            **(await galleryinfo.first().values())[0],
+            **(await galleryinfo.filter(id=galleryinfo.id).values())[0],
             "files": remove_id_and_index_id(await galleryinfo.files.all().values()),
             "tags": remove_id_and_index_id(await galleryinfo.tags.all().values()),
         }
@@ -71,6 +71,7 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
                 index_id=galleryinfo.galleryid,
                 male=tag_info.get("male"),
                 female=tag_info.get("female"),
+                tag=tag_info.get("tag"),
                 url=tag_info.get("url"),
             )
             await tag_orm_object.save()
@@ -85,7 +86,7 @@ async def put_index(index: int):
 
 async def get_index():
     return list(
-        map(lambda x: int(x), await Index.all().values_list("index_id",flat=True)),
+        map(lambda x: int(x), await Index.all().values_list("index_id", flat=True)),
     )
 
 
@@ -93,7 +94,7 @@ async def search_galleryinfo(query: str):
     if search_result_list := await GalleryInfo.filter(title__icontains=query):
         return [
             {
-                **(await search_result.first().values())[0],
+                **(await search_result.filter(id=search_result.id).values())[0],
                 "tags": remove_id_and_index_id(await search_result.tags.all().values()),
                 "files": remove_id_and_index_id(
                     await search_result.files.all().values()
