@@ -49,7 +49,7 @@ class HitomiGalleryInfoModel:
         self.hitomi_type = hitomi_type
 
     @classmethod
-    def parse_galleryinfo(cls, galleryinfo_json):
+    def parse_galleryinfo(cls, galleryinfo_json, parse: bool = False):
         if not galleryinfo_json["tags"]:
             parsed_tags = []
         else:
@@ -77,7 +77,7 @@ class HitomiGalleryInfoModel:
             galleryinfo_json["language"],
             galleryinfo_json["date"],
             HitomiImageModel.image_model_generator(galleryinfo_json["files"]),
-            parsed_tags,
+            galleryinfo_json["tags"] if parse else parsed_tags,
             galleryinfo_json.get("japanese_title"),
             galleryinfo_json["title"],
             galleryinfo_json["id"],
