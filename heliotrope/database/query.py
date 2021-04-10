@@ -54,11 +54,11 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
         for file_info in galleryinfo.files:
             file_orm_object = File(
                 index_id=galleryinfo.galleryid,
-                width=file_info.width,
-                hash=file_info.hash,
-                haswebp=file_info.haswebp,
-                name=file_info.name,
-                height=file_info.height,
+                width=file_info.get("width"),
+                hash=file_info.get("hash"),
+                haswebp=file_info.get("haswebp"),
+                name=file_info.get("name"),
+                height=file_info.get("height"),
             )
             await file_orm_object.save()
             file_orm_object_list.append(file_orm_object)
