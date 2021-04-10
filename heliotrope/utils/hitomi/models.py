@@ -76,7 +76,7 @@ class HitomiGalleryInfoModel:
             galleryinfo_json["language_localname"],
             galleryinfo_json["language"],
             galleryinfo_json["date"],
-            HitomiImageModel.image_model_generator(galleryinfo_json["files"]) if parse else galleryinfo_json["files"],
+            galleryinfo_json["files"],
             parsed_tags if parse else galleryinfo_json["tags"],
             galleryinfo_json.get("japanese_title"),
             galleryinfo_json["title"],
