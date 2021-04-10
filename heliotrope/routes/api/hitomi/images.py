@@ -20,7 +20,9 @@ class HitomiImagesInfoView(HTTPMethodView):
             if not galleryinfo:
                 return not_found
         else:
-            galleryinfo = HitomiGalleryInfoModel.parse_galleryinfo(galleryinfo_json)
+            galleryinfo = HitomiGalleryInfoModel.parse_galleryinfo(
+                galleryinfo_json, parse=True
+            )
         return json(
             {
                 "files": [
