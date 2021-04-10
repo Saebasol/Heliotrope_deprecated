@@ -25,7 +25,7 @@ class HitomiGalleryInfoView(HTTPMethodView):
                     "language_localname": parsed_galleryinfo_model.language_localname,
                     "language": parsed_galleryinfo_model.language,
                     "date": parsed_galleryinfo_model.date,
-                    "files": list(parsed_galleryinfo_model.files),
+                    "files": parsed_galleryinfo_model.files,
                     "tags": list(parsed_galleryinfo_model.tags),
                     "japanese_title": parsed_galleryinfo_model.japanese_title,
                     "title": parsed_galleryinfo_model.title,
