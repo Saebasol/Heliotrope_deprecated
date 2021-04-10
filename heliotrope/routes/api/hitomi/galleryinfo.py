@@ -17,7 +17,7 @@ class HitomiGalleryInfoView(HTTPMethodView):
                 return json({"status": 200, **galleryinfo})
 
             parsed_galleryinfo_model = HitomiGalleryInfoModel.parse_galleryinfo(
-                galleryinfo
+                galleryinfo, True
             )
             return json(
                 {

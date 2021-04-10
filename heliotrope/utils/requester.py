@@ -130,7 +130,7 @@ class HitomiRequester(SessionRequester):
         # index = re.search(r"\-([0-9]*)\.html", "url")[1]
         return url, hitomi_type
 
-    async def get_galleryinfo(self, index: int):
+    async def get_galleryinfo(self, index: int, parse: bool = False):
         response = await self.get(
             f"https://ltn.{self.domain}/galleries/{index}.js",
             "text",
@@ -139,7 +139,7 @@ class HitomiRequester(SessionRequester):
         if response.status != 200:
             return
         js_to_json = str(response.body).replace("var galleryinfo = ", "")
-        return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json))
+        return HitomiGalleryInfoModel.parse_galleryinfo(json.loads(js_to_json), parse)
 
     async def fetch_index(
         self, page: int = 1, item: int = 25, index_file: str = "index-korean.nozomi"
