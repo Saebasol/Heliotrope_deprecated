@@ -4,7 +4,7 @@ from sanic.views import HTTPMethodView
 
 from heliotrope.database.query import get_galleryinfo
 from heliotrope.utils.hitomi.common import image_url_from_image
-from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel, HitomiImageModel
 from heliotrope.utils.response import not_found
 from heliotrope.utils.shuffle import shuffle_image_url
 from heliotrope.utils.typed import HeliotropeRequest
@@ -14,23 +14,24 @@ hitomi_images = Blueprint("hitomi_images", url_prefix="/images")
 
 class HitomiImagesInfoView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index):
-        galleryinfo_json = await get_galleryinfo(index)
-        if not galleryinfo_json:
-            galleryinfo = await request.app.ctx.hitomi_requester.get_galleryinfo(index)
-            if not galleryinfo:
-                return not_found
+        if query_galleryinfo := await get_galleryinfo(index):
+            files = HitomiImageModel.image_model_generator(query_galleryinfo["files"])
+        elif requested_galleryinfo := await request.app.ctx.hitomi_requester.get_galleryinfo(
+            index
+        ):
+            files = HitomiImageModel.image_model_generator(requested_galleryinfo.files)
         else:
-            galleryinfo = HitomiGalleryInfoModel.parse_galleryinfo(galleryinfo_json)
+            return not_found
         return json(
             {
                 "files": [
                     {
                         "name": file.name,
                         "image": shuffle_image_url(
-                            image_url_from_image(int(galleryinfo.galleryid), file, True)
+                            image_url_from_image(int(index), file, True)
                         ),
                     }
-                    for file in galleryinfo.files
+                    for file in files
                 ]
             }
         )
