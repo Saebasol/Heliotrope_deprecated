@@ -13,8 +13,7 @@ class HitomiInfoView(HTTPMethodView):
         if tags_dict := await request.app.ctx.hitomi_requester.get_info_using_index(
             index
         ):
-            tags_dict.update({"status": 200})
-            return json(tags_dict)
+            return json({"status": 200, **tags_dict})
 
         return not_found
 

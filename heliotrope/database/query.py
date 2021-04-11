@@ -31,7 +31,7 @@ async def add_request_count(index: int):
 async def get_galleryinfo(index: int):
     if galleryinfo := await GalleryInfo.get_or_none(id=index):
         galleryinfo_dict = {
-            **(await galleryinfo.first().values())[0],
+            **(await galleryinfo.filter(id=galleryinfo.id).values())[0],
             "files": remove_id_and_index_id(await galleryinfo.files.all().values()),
             "tags": remove_id_and_index_id(await galleryinfo.tags.all().values()),
         }
@@ -54,11 +54,11 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
         for file_info in galleryinfo.files:
             file_orm_object = File(
                 index_id=galleryinfo.galleryid,
-                width=file_info.width,
-                hash=file_info.hash,
-                haswebp=file_info.haswebp,
-                name=file_info.name,
-                height=file_info.height,
+                width=file_info.get("width"),
+                hash=file_info.get("hash"),
+                haswebp=file_info.get("haswebp"),
+                name=file_info.get("name"),
+                height=file_info.get("height"),
             )
             await file_orm_object.save()
             file_orm_object_list.append(file_orm_object)
@@ -86,7 +86,7 @@ async def put_index(index: int):
 
 async def get_index():
     return list(
-        map(lambda x: int(x["index_id"]), await Index.all().values("index_id")),
+        map(lambda x: int(x), await Index.all().values_list("index_id", flat=True)),
     )
 
 
@@ -94,7 +94,7 @@ async def search_galleryinfo(query: str):
     if search_result_list := await GalleryInfo.filter(title__icontains=query):
         return [
             {
-                **(await search_result.first().values())[0],
+                **(await search_result.filter(id=search_result.id).values())[0],
                 "tags": remove_id_and_index_id(await search_result.tags.all().values()),
                 "files": remove_id_and_index_id(
                     await search_result.files.all().values()
