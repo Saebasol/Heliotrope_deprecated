@@ -31,7 +31,7 @@ class HitomiGalleryInfoModel:
         language_localname: str,
         language: str,
         date: str,
-        files: Iterator[HitomiImageModel],
+        files: list[Files],
         tags: list[Tags],
         japanese_title: Optional[str],
         title: Optional[str],

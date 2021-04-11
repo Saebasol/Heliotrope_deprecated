@@ -14,24 +14,21 @@ hitomi_images = Blueprint("hitomi_images", url_prefix="/images")
 
 class HitomiImagesInfoView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index):
-        galleryinfo_json = await get_galleryinfo(index)
-        if not galleryinfo_json:
-            files = (
-                await request.app.ctx.hitomi_requester.get_galleryinfo(index)
-            ).files
-            if not files:
-                return not_found
+        if query_galleryinfo := await get_galleryinfo(index):
+            files = HitomiImageModel.image_model_generator(query_galleryinfo["files"])
+        elif requested_galleryinfo := await request.app.ctx.hitomi_requester.get_galleryinfo(
+            index
+        ):
+            files = HitomiImageModel.image_model_generator(requested_galleryinfo.files)
         else:
-            files = HitomiImageModel.image_model_generator(galleryinfo_json["files"])
+            return not_found
         return json(
             {
                 "files": [
                     {
-                        "name": file["name"],
+                        "name": file.name,
                         "image": shuffle_image_url(
-                            image_url_from_image(
-                                int(index), HitomiImageModel(file), True
-                            )
+                            image_url_from_image(int(index), file, True)
                         ),
                     }
                     for file in files
