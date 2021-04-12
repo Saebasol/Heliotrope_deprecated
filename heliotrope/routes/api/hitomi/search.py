@@ -11,9 +11,10 @@ hitomi_search = Blueprint("hitomi_search", url_prefix="/search")
 
 class HitomiSearchView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest):
-        if query := request.args.get("q"):
-            if result := await search_galleryinfo(query):
-                return json({"status": 200, "result": result})
+        if (query := request.args.get("q")) and (
+            result := await search_galleryinfo(query)
+        ):
+            return json({"status": 200, "result": result})
 
         return not_found
 

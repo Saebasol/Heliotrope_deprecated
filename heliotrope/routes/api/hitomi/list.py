@@ -13,10 +13,12 @@ hitomi_list = Blueprint("hitomi_list", url_prefix="/list")
 class HitomiListView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index: int):
         hitomi_index_list = await request.app.ctx.hitomi_requester.fetch_index()
-        split_hitomi_index_list = [
-            hitomi_index_list[i * 15 : (i + 1) * 15]
-            for i in range((len(hitomi_index_list) + 15 - 1) // 15)
-        ]
+        split_hitomi_index_list = list(
+            map(
+                lambda i: hitomi_index_list[i * 15 : (i + 1) * 15],
+                range((len(hitomi_index_list) + 15 - 1) // 15),
+            )
+        )
 
         start_at_zero = index - 1
 

@@ -10,16 +10,15 @@ heliotrope_about = Blueprint("heliotrope_about", url_prefix="/about")
 class HeliotropeAboutView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest):
         manager = request.app.ctx.mirroring_manager
-        if is_json := request.args.get("json"):
-            if is_json in ["True", "true"]:
-                return json(
-                    {
-                        "last_checked_time": manager.last_checked_time,
-                        "last_mirrored_time": manager.mirroring_time,
-                        "new_item": manager.new_item,
-                        "server_status": manager.status,
-                    }
-                )
+        if (is_json := request.args.get("json")) and (is_json.lower() == "true"):
+            return json(
+                {
+                    "last_checked_time": manager.last_checked_time,
+                    "last_mirrored_time": manager.mirroring_time,
+                    "new_item": manager.new_item,
+                    "server_status": manager.status,
+                }
+            )
 
         return html(
             f"""

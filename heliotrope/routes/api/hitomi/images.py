@@ -24,15 +24,17 @@ class HitomiImagesInfoView(HTTPMethodView):
             return not_found
         return json(
             {
-                "files": [
-                    {
-                        "name": file.name,
-                        "image": shuffle_image_url(
-                            image_url_from_image(int(index), file, True)
-                        ),
-                    }
-                    for file in files
-                ]
+                "files": list(
+                    map(
+                        lambda file: {
+                            "name": file.name,
+                            "image": shuffle_image_url(
+                                image_url_from_image(int(index), file, True)
+                            ),
+                        },
+                        files,
+                    )
+                )
             }
         )
 
