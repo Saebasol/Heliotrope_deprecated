@@ -1,3 +1,4 @@
+import asyncio
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.database.models.requestcount import RequestCount
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
@@ -61,10 +62,17 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
                 galleryinfo.files,
             )
         )
+        await asyncio.gather(
+            *list(
+                map(
+                    lambda file_orm_object: file_orm_object.save(), file_orm_object_list
+                )
+            )
+        )
         await galleyinfo_orm_object.files.add(*file_orm_object_list)
 
     if galleryinfo.tags:
-        tag_orm_object_list = tag_orm_object_list = list(
+        tag_orm_object_list = list(
             map(
                 lambda tag_info: Tag(
                     index_id=galleryinfo.galleryid,
@@ -76,7 +84,11 @@ async def put_galleryinfo(galleryinfo: HitomiGalleryInfoModel):
                 galleryinfo.tags,
             )
         )
-
+        await asyncio.gather(
+            *list(
+                map(lambda tag_orm_object: tag_orm_object.save(), tag_orm_object_list)
+            )
+        )
         await galleyinfo_orm_object.tags.add(*tag_orm_object_list)
 
 
