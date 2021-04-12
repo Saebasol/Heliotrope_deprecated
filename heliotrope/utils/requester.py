@@ -170,7 +170,7 @@ class HitomiRequester(SessionRequester):
             response = await self.get(url, "text")
 
             if tags_model := HitomiTagsModel.parse_tags(response.body, hitomi_type):
-                tags_dict = {
+                return {
                     "title": tags_model.title,
                     "thumbnail": tags_model.thumbnail,
                     "artist": tags_model.artist,
@@ -181,4 +181,3 @@ class HitomiRequester(SessionRequester):
                     "characters": tags_model.characters,
                     "tags": tags_model.tags,
                 }
-                return tags_dict

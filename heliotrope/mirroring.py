@@ -20,8 +20,7 @@ class Mirroring(HitomiRequester):
         remote_index_list = await self.fetch_index()
         local_index_list = await get_index()
 
-        to_be_loaded_list = list(set(remote_index_list) - set(local_index_list))
-        return to_be_loaded_list
+        return list(set(remote_index_list) - set(local_index_list))
 
     async def start_mirroring_with_index_list(self, index_list):
         for index in index_list:
@@ -30,7 +29,7 @@ class Mirroring(HitomiRequester):
 
             await put_index(index)
         self.mirroring_time = f"({time.tzname[0]}) {datetime.datetime.now()}"
-        self.new_item = f"{len(index_list)}"
+        self.new_item = str(len(index_list))
 
     async def mirroring_task(self, delay: float):
         while True:
