@@ -92,17 +92,13 @@ async def get_index():
 
 async def search_galleryinfo(query: str):
     if search_result_list := await GalleryInfo.filter(title__icontains=query):
-        return list(
-            map(
-                lambda search_result: {
-                    **(await search_result.filter(id=search_result.id).values())[0],
-                    "tags": remove_id_and_index_id(
-                        await search_result.tags.all().values()
-                    ),
-                    "files": remove_id_and_index_id(
-                        await search_result.files.all().values()
-                    ),
-                },
-                search_result_list,
-            )
-        )
+        return [
+            {
+                **(await search_result.filter(id=search_result.id).values())[0],
+                "tags": remove_id_and_index_id(await search_result.tags.all().values()),
+                "files": remove_id_and_index_id(
+                    await search_result.files.all().values()
+                ),
+            }
+            for search_result in search_result_list
+        ]
