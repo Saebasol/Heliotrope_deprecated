@@ -50,27 +50,31 @@ class HitomiGalleryInfoModel:
 
     @classmethod
     def parse_galleryinfo(cls, galleryinfo_json, parse: bool = False):
-        if not galleryinfo_json["tags"]:
-            parsed_tags = []
-        else:
-            parsed_tags = []
+        parsed_tags = []
+        if galleryinfo_json["tags"]:
+
             for tag in galleryinfo_json["tags"]:
-                if not tag.get("male") and tag.get("female"):
-                    parsed_tags.append(
-                        {"value": f"female:{tag['tag']}", "url": tag["url"]}
+                if (
+                    len(
+                        value := list(
+                            filter(
+                                None,
+                                [
+                                    "male" if tag.get("male") else None,
+                                    "female" if tag.get("female") else None,
+                                ],
+                            )
+                        )
                     )
-                elif tag.get("male") and not tag.get("female"):
-                    parsed_tags.append(
-                        {"value": f"male:{tag['tag']}", "url": tag["url"]}
-                    )
-                elif not tag.get("male") and not tag.get("female"):
-                    parsed_tags.append(
-                        {"value": f"tag:{tag['tag']}", "url": tag["url"]}
-                    )
-                elif tag.get("male") and tag.get("female"):
+                    > 1
+                ):
                     raise Exception
-                else:
-                    raise Exception
+                parsed_tags.append(
+                    {
+                        "value": f"{value[0] if value else 'tag'}:{tag['tag']}",
+                        "url": tag["url"],
+                    }
+                )
 
         return cls(
             galleryinfo_json["language_localname"],
