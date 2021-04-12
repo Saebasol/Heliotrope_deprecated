@@ -1,7 +1,6 @@
 import re
-from typing import Optional
-
 from contextlib import suppress
+from typing import Optional
 
 
 def shuffle_image_url(url: str) -> Optional[str]:
