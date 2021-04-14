@@ -18,6 +18,8 @@ heliotrope_app = Sanic("heliotrope")
 CORS(heliotrope_app, origins=["https://doujinshiman.ga"])
 heliotrope_app.blueprint(heliotrope_routes)
 
+heliotrope_app.config.FALLBACK_ERROR_FORMAT = "json"
+
 if not os.environ.get("BYPASS"):
     heliotrope_app.config.DB_URL = os.environ["DB_URL"]
     heliotrope_app.config.HIYOBOT_SECRET = os.environ["HIYOBOT_SECRET"]
