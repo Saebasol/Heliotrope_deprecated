@@ -4,4 +4,6 @@ __version__ = "4.0.0-RC"
 
 VersionInfo = namedtuple("VersionInfo", "major minor micro releaselevel serial")
 
-version_info = VersionInfo(major=4, minor=0, micro=0, releaselevel="candidate", serial=0)
+version_info = VersionInfo(
+    major=4, minor=0, micro=0, releaselevel="candidate", serial=0
+)
