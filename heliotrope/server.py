@@ -15,8 +15,10 @@ from heliotrope.utils.requester import HitomiRequester
 from heliotrope.utils.typed import Heliotrope
 
 heliotrope_app = Sanic("heliotrope")
-CORS(heliotrope_app, origins=["https://doujinshiman.ga"])
+CORS(heliotrope_app, origins=["https://beta.doujinshiman.ga"])
 heliotrope_app.blueprint(heliotrope_routes)
+
+heliotrope_app.config.FALLBACK_ERROR_FORMAT = "json"
 
 if not os.environ.get("BYPASS"):
     heliotrope_app.config.DB_URL = os.environ["DB_URL"]
