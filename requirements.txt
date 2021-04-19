@@ -3,7 +3,6 @@ sanic==21.3.2
 sentry-sdk==1.0.0
 beautifulsoup4==4.9.3
 tortoise-orm==0.17.2
-PyNaCl==1.4.0
 lxml==4.6.3
 aiomysql==0.0.21
 sanic-cors==1.0.0
