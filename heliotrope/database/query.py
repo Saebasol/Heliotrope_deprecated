@@ -103,8 +103,13 @@ async def get_index():
     )
 
 
-async def search_galleryinfo(query: str):
-    if search_result_list := await GalleryInfo.filter(title__icontains=query):
+async def search_galleryinfo(query: str, offset: int = 0, limit: int = 15):
+    if (count := await GalleryInfo.filter(title__icontains=query).count()) and (
+        not 0 == count
+    ):
+        search_result_list = (
+            await GalleryInfo.filter(title__icontains=query).limit(limit).offset(offset)
+        )
         return [
             {
                 **(await search_result.filter(id=search_result.id).values())[0],
@@ -114,4 +119,4 @@ async def search_galleryinfo(query: str):
                 ),
             }
             for search_result in search_result_list
-        ]
+        ], count
