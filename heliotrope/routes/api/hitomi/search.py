@@ -12,12 +12,20 @@ hitomi_search = Blueprint("hitomi_search", url_prefix="/search")
 
 class HitomiSearchView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest):
-        if (query := request.args.get("q")) and (
-            result := await search_galleryinfo(query)
-        ):
-            if (is_true := request.args.get("raw")) and (is_true.lower() == "true"):
-                return json({"status": 200, "result": result})
+        offset = (
+            int(offset) - 1
+            if (offset := request.args.get("offset"))
+            and (offset.isdigit())
+            and not (int(offset) - 1 < 0)
+            else 0
+        )
 
+        if (query := request.args.get("q")) and (
+            search_result := await search_galleryinfo(query, offset)
+        ):
+            result, count = search_result
+            if (is_true := request.args.get("raw")) and (is_true.lower() == "true"):
+                return json({"status": 200, "result": result, "count": count})
             return json(
                 {
                     "status": 200,
@@ -42,8 +50,10 @@ class HitomiSearchView(HTTPMethodView):
                             ),
                         )
                     ),
+                    "count": count,
                 }
             )
+
         return not_found
 
 
