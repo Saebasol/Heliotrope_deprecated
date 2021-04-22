@@ -1,3 +1,4 @@
+from heliotrope.utils.useful import is_raw, parse_raw_galleryinfo_list
 from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -24,32 +25,12 @@ class HitomiSearchView(HTTPMethodView):
             search_result := await search_galleryinfo(query, offset)
         ):
             result, count = search_result
-            if (is_true := request.args.get("raw")) and (is_true.lower() == "true"):
+            if is_raw(request.args):
                 return json({"status": 200, "result": result, "count": count})
             return json(
                 {
                     "status": 200,
-                    "result": list(
-                        map(
-                            lambda parsed_galleryinfo_model: {
-                                "language_localname": parsed_galleryinfo_model.language_localname,
-                                "language": parsed_galleryinfo_model.language,
-                                "date": parsed_galleryinfo_model.date,
-                                "files": parsed_galleryinfo_model.files,
-                                "tags": parsed_galleryinfo_model.tags,
-                                "japanese_title": parsed_galleryinfo_model.japanese_title,
-                                "title": parsed_galleryinfo_model.title,
-                                "id": parsed_galleryinfo_model.galleryid,
-                                "type": parsed_galleryinfo_model.hitomi_type,
-                            },
-                            map(
-                                lambda raw_result: HitomiGalleryInfoModel.parse_galleryinfo(
-                                    raw_result, True
-                                ),
-                                result,
-                            ),
-                        )
-                    ),
+                    "result": parse_raw_galleryinfo_list(result, include_files=False),
                     "count": count,
                 }
             )
