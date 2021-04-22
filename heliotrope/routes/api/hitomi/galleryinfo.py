@@ -1,3 +1,4 @@
+from heliotrope.utils.useful import is_raw
 from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -13,7 +14,7 @@ hitomi_galleyinfo = Blueprint("hitomi_galleyinfo", url_prefix="/galleryinfo")
 class HitomiGalleryInfoView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index: int):
         if galleryinfo := await get_galleryinfo(index):
-            if (is_true := request.args.get("raw")) and (is_true.lower() == "true"):
+            if is_raw(request.args):
                 return json({"status": 200, **galleryinfo})
 
             parsed_galleryinfo_model = HitomiGalleryInfoModel.parse_galleryinfo(
