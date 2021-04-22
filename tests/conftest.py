@@ -6,7 +6,7 @@ import pytest
 from sanic_testing import TestManager
 from tortoise import Tortoise, run_async
 
-from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
+from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.server import heliotrope_app
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 
@@ -72,6 +72,8 @@ def pytest_configure(config):
                 tag_orm_object_list.append(tag_orm_object)
 
             await galleyinfo_orm_object.tags.add(*tag_orm_object_list)
+
+        await Index.create(index_id="1536576")
 
     run_async(query_db())
 
