@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-__version__ = "4.0.0-RC"
+__version__ = "4.0.0-rc"
 
 VersionInfo = namedtuple("VersionInfo", "major minor micro releaselevel serial")
 
