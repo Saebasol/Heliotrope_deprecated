@@ -31,7 +31,7 @@ class HitomiListView(HTTPMethodView):
         info_list = await gather(
             *[
                 get_galleryinfo(index, include_files=False)
-                for index in split_hitomi_index_list[index]
+                for index in split_hitomi_index_list[start_at_zero]
             ]
         )
 
