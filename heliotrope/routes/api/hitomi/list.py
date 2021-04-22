@@ -1,4 +1,7 @@
 from asyncio.tasks import gather
+from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
+from heliotrope.utils.useful import is_raw, parse_raw_galleryinfo_list
+from heliotrope.database.query import get_galleryinfo, get_sorted_index
 
 from sanic import Blueprint
 from sanic.response import json
@@ -12,7 +15,7 @@ hitomi_list = Blueprint("hitomi_list", url_prefix="/list")
 
 class HitomiListView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index: int):
-        hitomi_index_list = await request.app.ctx.hitomi_requester.fetch_index()
+        hitomi_index_list = await get_sorted_index()
         split_hitomi_index_list = list(
             map(
                 lambda i: hitomi_index_list[i * 15 : (i + 1) * 15],
@@ -27,12 +30,20 @@ class HitomiListView(HTTPMethodView):
 
         info_list = await gather(
             *[
-                request.app.ctx.hitomi_requester.get_info_using_index(index)
+                get_galleryinfo(index, include_files=False)
                 for index in split_hitomi_index_list[index]
             ]
         )
 
-        return json({"status": 200, "list": info_list})
+        if is_raw(request.args):
+            return json({"status": 200, "list": info_list})
+
+        return json(
+            {
+                "status": 200,
+                "list": parse_raw_galleryinfo_list(info_list, include_files=False),
+            }
+        )
 
 
 hitomi_list.add_route(HitomiListView.as_view(), "/<index:int>")
