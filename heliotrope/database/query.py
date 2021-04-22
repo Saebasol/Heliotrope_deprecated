@@ -28,13 +28,20 @@ async def add_request_count(index: int):
         return True
 
 
-async def get_galleryinfo(index: int):
+async def get_galleryinfo(index: int, include_files: bool = True):
     if galleryinfo := await GalleryInfo.get_or_none(id=index):
         galleryinfo_dict = {
             **(await galleryinfo.filter(id=galleryinfo.id).values())[0],
-            "files": remove_id_and_index_id(await galleryinfo.files.all().values()),
             "tags": remove_id_and_index_id(await galleryinfo.tags.all().values()),
         }
+        if include_files:
+            galleryinfo_dict.update(
+                {
+                    "files": remove_id_and_index_id(
+                        await galleryinfo.files.all().values()
+                    )
+                }
+            )
         return galleryinfo_dict
 
 
@@ -103,20 +110,34 @@ async def get_index():
     )
 
 
-async def search_galleryinfo(query: str, offset: int = 0, limit: int = 15):
+async def get_sorted_index():
+    return sorted(await get_index(), reverse=True)
+
+
+async def search_galleryinfo(
+    query: str, offset: int = 0, limit: int = 15, include_files: bool = False
+):
     if (count := await GalleryInfo.filter(title__icontains=query).count()) and (
         not 0 == count
     ):
         search_result_list = (
             await GalleryInfo.filter(title__icontains=query).limit(limit).offset(offset)
         )
-        return [
-            {
+
+        parsed_result_list = []
+        for search_result in search_result_list:
+            parsed_result = {
                 **(await search_result.filter(id=search_result.id).values())[0],
                 "tags": remove_id_and_index_id(await search_result.tags.all().values()),
-                "files": remove_id_and_index_id(
-                    await search_result.files.all().values()
-                ),
             }
-            for search_result in search_result_list
-        ], count
+            if include_files:
+                parsed_result.update(
+                    {
+                        "files": remove_id_and_index_id(
+                            await search_result.files.all().values()
+                        )
+                    }
+                )
+            parsed_result_list.append(parsed_result)
+
+        return parsed_result_list, count
