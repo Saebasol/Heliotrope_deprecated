@@ -45,7 +45,7 @@ stages:
 
       - script: |
           printf 'Waiting for MySQL database to accept connections'
-          until mysql --host db --user=root --password=test --execute "SHOW DATABASES"; do
+          until mysql --host 127.0.0.1 --user=root --password=test --execute "SHOW DATABASES"; do
             printf '.'
             sleep 1;
           done;
