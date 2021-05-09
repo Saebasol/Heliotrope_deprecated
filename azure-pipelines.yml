@@ -12,6 +12,14 @@ variables:
 trigger:
 - master
 
+resources:
+  containers:
+    - container: mariadb
+      image: mariadb:latest
+      env:
+        MYSQL_DATABASE: test_heliotrope
+        MYSQL_ROOT_PASSWORD: test
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -29,23 +37,19 @@ stages:
         inputs:
           versionSpec: '$(python.version)'
         displayName: 'Use Python $(python.version)'
-      
-      - script: |
-          sudo apt-get -y purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
-          sudo rm -rf /etc/mysql /var/lib/mysql
-          sudo apt-get install -y software-properties-common
-          sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-          sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.5/ubuntu focal main'
-          sudo apt-get -y update
-          sudo apt-get install -y mariadb-server
-          sudo mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('test')"
-          sudo mysql -uroot -ptest -e 'create database test_heliotrope;'
-        displayName: 'Install mariadb and setup'
 
       - script: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         displayName: 'Install dependencies'
+
+      - script: |
+          printf 'Waiting for MySQL database to accept connections'
+          until mysql --host db --user=root --password=test --execute "SHOW DATABASES"; do
+            printf '.'
+            sleep 1;
+          done;
+        displayName: Wait for database to initialise
 
       - script: |
           pip install pytest pytest-azurepipelines sanic-testing pytest-cov
