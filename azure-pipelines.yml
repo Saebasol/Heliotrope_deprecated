@@ -16,8 +16,7 @@ resources:
   containers:
     - container: mariadb
       image: mariadb:latest
-      ports:
-        - 3306
+      options: -p 127.0.0.1:3306:3306
       env:
         MYSQL_DATABASE: test_heliotrope
         MYSQL_ROOT_PASSWORD: test
@@ -48,14 +47,6 @@ stages:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         displayName: 'Install dependencies'
-
-      - script: |
-          printf 'Waiting for MySQL database to accept connections'
-          until mysql --host 127.0.0.1 --user=root --password=test --execute "SHOW DATABASES"; do
-            printf '.'
-            sleep 1;
-          done;
-        displayName: Wait for database to initialise
 
       - script: |
           pip install pytest pytest-azurepipelines sanic-testing pytest-cov
