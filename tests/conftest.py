@@ -1,16 +1,15 @@
-from aiohttp.client import ClientSession
-from motor.motor_asyncio import AsyncIOMotorClient
-from heliotrope.utils.requester import HitomiRequester
-
 import os
 
 import aiohttp
 import pytest
+from aiohttp.client import ClientSession
+from motor.motor_asyncio import AsyncIOMotorClient
 from sanic_testing import TestManager
 from tortoise import Tortoise, run_async
 
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.server import heliotrope_app
+from heliotrope.utils.requester import HitomiRequester
 
 
 def pytest_configure(config):
