@@ -13,7 +13,7 @@ class HitomiListView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index: int):
         start_at_zero = index - 1
 
-        if start_at_zero + 1 or start_at_zero < 0:
+        if start_at_zero < 0:
             return not_found
 
         info_list = await get_info_list(request.app.ctx.mongo, start_at_zero)
