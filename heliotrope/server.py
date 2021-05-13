@@ -3,6 +3,7 @@ from asyncio.events import AbstractEventLoop
 
 import sentry_sdk
 from aiohttp.client import ClientSession
+from motor.motor_asyncio import AsyncIOMotorClient
 from sanic import Sanic
 from sanic_cors import CORS
 from sentry_sdk.integrations.sanic import SanicIntegration
@@ -13,9 +14,6 @@ from heliotrope.mirroring import Mirroring
 from heliotrope.routes import heliotrope_routes
 from heliotrope.utils.requester import HitomiRequester
 from heliotrope.utils.typed import Heliotrope
-
-from motor.motor_asyncio import AsyncIOMotorClient
-
 
 heliotrope_app = Sanic("heliotrope")
 CORS(heliotrope_app, origins=["https://beta.doujinshiman.ga"])

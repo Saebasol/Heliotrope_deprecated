@@ -1,10 +1,9 @@
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Literal, Optional, TypedDict
 
-
+from motor.core import AgnosticCollection
 from sanic.app import Sanic
 from sanic.request import Request
-from motor.core import AgnosticCollection
 
 if TYPE_CHECKING:
     from heliotrope.mirroring import Mirroring
