@@ -1,4 +1,7 @@
-import json
+from aiohttp.client import ClientSession
+from motor.motor_asyncio import AsyncIOMotorClient
+from heliotrope.utils.requester import HitomiRequester
+
 import os
 
 import aiohttp
@@ -8,7 +11,6 @@ from tortoise import Tortoise, run_async
 
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.server import heliotrope_app
-from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 
 
 def pytest_configure(config):
@@ -24,15 +26,8 @@ def pytest_configure(config):
         )
         await Tortoise.generate_schemas()
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"https://ltn.hitomi.la/galleries/1536576.js",
-                headers={"referer": "http://hitomi.la"},
-            ) as r:
-                js_to_json = (await r.text()).replace("var galleryinfo = ", "")
-                galleryinfo = HitomiGalleryInfoModel.parse_galleryinfo(
-                    json.loads(js_to_json)
-                )
+        hitomi = HitomiRequester(ClientSession())
+        galleryinfo = await hitomi.get_galleryinfo(1536576)
 
         galleyinfo_orm_object = await GalleryInfo.create(
             language_localname=galleryinfo.language_localname,
@@ -74,6 +69,10 @@ def pytest_configure(config):
             await galleyinfo_orm_object.tags.add(*tag_orm_object_list)
 
         await Index.create(index_id="1536576")
+        info = hitomi.get_info_using_index(1536576)
+        mongo = AsyncIOMotorClient(os.environ["MONGO_DB_URL"]).hitomi.info
+        mongo.insert_one(info)
+        await hitomi.session.close()
 
     run_async(query_db())
 
