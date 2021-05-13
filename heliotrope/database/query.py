@@ -157,7 +157,7 @@ async def search_info_list(collection, query: str, offset: int = 0, limit: int =
     search_query = {"$search": {"text": {"query": query, "path": "title"}}}
 
     count = (
-        await collection.aggregate([search_query, {"$count": "count"}]).to_dict(1)
+        await collection.aggregate([search_query, {"$count": "count"}]).to_list(1)
     )[0]
 
     result = await collection.aggregate(
