@@ -2,7 +2,7 @@ from sanic import Blueprint
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
-from heliotrope.database.query import search_galleryinfo
+from heliotrope.database.query import search_galleryinfo, search_info_list
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 from heliotrope.utils.response import not_found
 from heliotrope.utils.typed import HeliotropeRequest
@@ -22,15 +22,15 @@ class HitomiSearchView(HTTPMethodView):
         )
 
         if (query := request.args.get("q")) and (
-            search_result := await search_galleryinfo(query, offset)
+            search_result := await search_info_list(
+                request.app.ctx.mongo, query, offset
+            )
         ):
             result, count = search_result
-            if is_raw(request.args):
-                return json({"status": 200, "result": result, "count": count})
             return json(
                 {
                     "status": 200,
-                    "result": parse_raw_galleryinfo_list(result, include_files=False),
+                    "result": result,
                     "count": count,
                 }
             )

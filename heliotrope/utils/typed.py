@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Literal, Optional, TypedDict
 
+from motor.core import AgnosticCollection
 from sanic.app import Sanic
 from sanic.request import Request
 
@@ -39,6 +40,7 @@ class GalleryInfoJSON(TypedDict):
 class HeliotropeContext(SimpleNamespace):
     hitomi_requester: "HitomiRequester"
     mirroring_manager: "Mirroring"
+    mongo: Optional[AgnosticCollection]
 
 
 class Heliotrope(Sanic):
