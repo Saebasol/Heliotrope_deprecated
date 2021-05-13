@@ -43,6 +43,7 @@ stages:
 
       services:
         mariadb: mariadb
+        mongo: mongo
 
       steps:
       - task: UsePythonVersion@0
