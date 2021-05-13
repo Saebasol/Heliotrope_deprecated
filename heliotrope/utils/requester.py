@@ -171,6 +171,7 @@ class HitomiRequester(SessionRequester):
 
             if tags_model := HitomiTagsModel.parse_tags(response.body, hitomi_type):
                 return {
+                    "index": index
                     "title": tags_model.title,
                     "thumbnail": tags_model.thumbnail,
                     "artist": tags_model.artist,
