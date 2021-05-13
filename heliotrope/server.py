@@ -53,7 +53,11 @@ if not os.environ.get("BYPASS"):
 
 @heliotrope_app.before_server_start
 async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
-    heliotrope.ctx.mongo = mongo(heliotrope_app.config.MONGO_DB_URL, io_loop=loop).hitomi.info if mongo else None
+    heliotrope.ctx.mongo = (
+        mongo(heliotrope_app.config.MONGO_DB_URL, io_loop=loop).hitomi.info
+        if mongo
+        else None
+    )
     heliotrope.ctx.hitomi_requester = HitomiRequester(ClientSession(loop=loop))
     heliotrope.ctx.mirroring_manager = Mirroring(ClientSession(loop=loop))
     heliotrope.add_task(heliotrope.ctx.mirroring_manager.mirroring_task(3600))
