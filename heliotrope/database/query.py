@@ -141,3 +141,32 @@ async def search_galleryinfo(
             parsed_result_list.append(parsed_result)
 
         return parsed_result_list, count
+
+
+async def get_info_list(collection, offset: int = 0, limit: int = 15):
+    return (
+        await collection.find({}, {"_id": 0})
+        .sort("index", -1)
+        .skip(offset)
+        .limit(limit)
+        .to_list(15)
+    )
+
+
+async def search_info_list(collection, query: str, offset: int = 0, limit: int = 15):
+    search_query = {"$search": {"text": {"query": query, "path": "title"}}}
+
+    count = (
+        await collection.aggregate([search_query, {"$count": "count"}]).to_dict(1)
+    )[0]
+
+    result = await collection.aggregate(
+        [
+            search_query,
+            {"$skip": offset},
+            {"$limit": limit},
+            {"$project": {"_id": 0}},
+        ]
+    ).to_list(15)
+
+    return result, count
