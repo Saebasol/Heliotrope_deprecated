@@ -52,7 +52,7 @@ stages:
         displayName: 'Use Python $(python.version)'
 
       - script: |
-          mongo -u root -p test --eval "db.getSiblingDB('test').createCollection('test_collection')"
+          mongo -u root -p test --eval "db.getSiblingDB('hitomi').createCollection('info')"
         displayName: 'make mongodb collection'
 
       - script: |
