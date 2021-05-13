@@ -23,6 +23,8 @@ heliotrope_app.blueprint(heliotrope_routes)
 
 heliotrope_app.config.FALLBACK_ERROR_FORMAT = "json"
 
+mongo = None
+
 if not os.environ.get("BYPASS"):
     heliotrope_app.config.DB_URL = os.environ["DB_URL"]
     heliotrope_app.config.MONGO_DB_URL = os.environ["MONGO_DB_URL"]
@@ -38,7 +40,7 @@ if not os.environ.get("BYPASS"):
         },
         generate_schemas=True,
     )
-    mongo = AsyncIOMotorClient(heliotrope_app.config.MONGO_DB_URL).hitomi.info
+    mongo = AsyncIOMotorClient
     if not os.environ.get("IS_TEST"):
         heliotrope_app.config.SENTRY_DSN = os.environ["SENTRY_DSN"]
         heliotrope_app.config.FORWARDED_SECRET = os.environ["FORWARDED_SECRET"]
@@ -51,7 +53,7 @@ if not os.environ.get("BYPASS"):
 
 @heliotrope_app.before_server_start
 async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
-    heliotrope.ctx.mongo = mongo or None
+    heliotrope.ctx.mongo = mongo(heliotrope_app.config.MONGO_DB_URL, io_loop=loop).hitomi.info if mongo else None
     heliotrope.ctx.hitomi_requester = HitomiRequester(ClientSession(loop=loop))
     heliotrope.ctx.mirroring_manager = Mirroring(ClientSession(loop=loop))
     heliotrope.add_task(heliotrope.ctx.mirroring_manager.mirroring_task(3600))
