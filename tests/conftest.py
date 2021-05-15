@@ -68,9 +68,9 @@ def pytest_configure(config):
             await galleyinfo_orm_object.tags.add(*tag_orm_object_list)
 
         await Index.create(index_id="1536576")
-        info = hitomi.get_info_using_index(1536576)
+        info = await hitomi.get_info_using_index(1536576)
         mongo = AsyncIOMotorClient(os.environ["MONGO_DB_URL"]).hitomi.info
-        mongo.insert_one(info)
+        await mongo.insert_one(info)
         await hitomi.session.close()
 
     run_async(query_db())
