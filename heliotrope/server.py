@@ -57,7 +57,9 @@ async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
         else None
     )
     heliotrope.ctx.hitomi_requester = HitomiRequester(ClientSession(loop=loop))
-    heliotrope.ctx.mirroring_manager = Mirroring(ClientSession(loop=loop))
+    heliotrope.ctx.mirroring_manager = Mirroring(
+        ClientSession(loop=loop), heliotrope.ctx.mongo
+    )
     heliotrope.add_task(heliotrope.ctx.mirroring_manager.mirroring_task(3600))
 
 
