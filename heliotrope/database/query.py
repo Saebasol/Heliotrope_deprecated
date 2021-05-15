@@ -156,17 +156,16 @@ async def get_info_list(collection, offset: int = 0, limit: int = 15):
 async def search_info_list(collection, query: str, offset: int = 0, limit: int = 15):
     search_query = {"$search": {"text": {"query": query, "path": "title"}}}
 
-    count = (
+    if count := (
         await collection.aggregate([search_query, {"$count": "count"}]).to_list(1)
-    )[0]
+    ):
+        result = await collection.aggregate(
+            [
+                search_query,
+                {"$skip": offset},
+                {"$limit": limit},
+                {"$project": {"_id": 0}},
+            ]
+        ).to_list(15)
 
-    result = await collection.aggregate(
-        [
-            search_query,
-            {"$skip": offset},
-            {"$limit": limit},
-            {"$project": {"_id": 0}},
-        ]
-    ).to_list(15)
-
-    return result, count
+        return result, count[0]["count"]
