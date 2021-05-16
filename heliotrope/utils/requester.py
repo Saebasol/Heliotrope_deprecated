@@ -181,4 +181,5 @@ class HitomiRequester(SessionRequester):
                     "series": tags_model.series,
                     "characters": tags_model.characters,
                     "tags": tags_model.tags,
+                    "date": tags_model.date,
                 }
