@@ -101,6 +101,7 @@ class HitomiTagsModel:
         series: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         characters: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
         tags: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
+        date,
     ):
         self.title = title
         self.thumbnail = img_link
@@ -111,6 +112,7 @@ class HitomiTagsModel:
         self.series = series
         self.characters = characters
         self.tags = tags
+        self.date = date
 
     @staticmethod
     def check_element(elements):
@@ -160,6 +162,7 @@ class HitomiTagsModel:
                 series_elements = infos[3].find_all("a")
                 characters_elements = infos[4].find_all("a")
                 tags_elements = infos[5].find_all("a")
+                date = soup.find("span", class_="date").text
 
                 return cls(
                     title,
@@ -171,4 +174,5 @@ class HitomiTagsModel:
                     cls.check_element(series_elements),
                     cls.check_element(characters_elements),
                     cls.check_element(tags_elements),
+                    date,
                 )
