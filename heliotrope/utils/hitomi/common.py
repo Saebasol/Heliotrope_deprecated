@@ -50,20 +50,6 @@ def full_path_from_hash(hash_: str) -> str:
 
 
 def url_from_hash(
-    galleryid: int, image: HitomiImageModel, dir_: str = None, ext: str = None
-) -> str:
-    e = image.name.split(".")[-1]
-    if ext:
-        e = ext
-
-    d = "images"
-
-    if dir_:
-        e = dir_
-        d = dir_
-
-
-def url_from_hash(
     galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
 ) -> str:
     ext = ext or dir or image.name.split(".")[-1]
@@ -75,6 +61,6 @@ def url_from_hash(
 
 
 def url_from_url_from_hash(
-    galleryid: int, image: HitomiImageModel, dir_: str = None, ext: str = None
+    galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
 ) -> str:
-    return url_from_url(url_from_hash(galleryid, image, dir_, ext))
+    return url_from_url(url_from_hash(galleryid, image, dir, ext))
