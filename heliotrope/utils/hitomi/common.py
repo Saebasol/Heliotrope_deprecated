@@ -62,6 +62,7 @@ def url_from_hash(
         e = dir_
         d = dir_
 
+
 def url_from_hash(
     galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
 ) -> str:
