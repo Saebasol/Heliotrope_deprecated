@@ -1,6 +1,6 @@
 def test_get_proxy_hitomi_response(app):
     _, response = app.test_client.get(
-        "/v4/api/proxy/ab_images_hitomi_la_d_2c_85663460c1789a1c9dcd79f8e3f00cdfcf50c5c8248135457006f54a74fdc2cd.jpg"
+        "/v4/api/proxy/bb_images_hitomi_la_5_58_68d18296183259e5f53047be3196e2fe0c2bc55f4c57b929e9ec129f40d5b585.jpg"
     )
     assert response.status == 200
 
