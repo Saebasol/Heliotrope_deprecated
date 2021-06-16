@@ -62,22 +62,18 @@ def url_from_hash(
         e = dir_
         d = dir_
 
-    r = full_path_from_hash(image.hash)
+def url_from_hash(
+    galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
+) -> str:
+    ext = ext or dir or image.name.split(".")[-1]
+    dir = dir or "images"
 
-    return "https://a.hitomi.la/" + d + "/" + r + "." + e
+    return (
+        "https://a.hitomi.la/" + dir + "/" + full_path_from_hash(image.hash) + "." + ext
+    )
 
 
 def url_from_url_from_hash(
     galleryid: int, image: HitomiImageModel, dir_: str = None, ext: str = None
 ) -> str:
-    a = url_from_hash(galleryid, image, dir_, ext)
-    b = url_from_url(a)
-    return b
-
-
-def image_url_from_image(galleryid: int, image: HitomiImageModel, no_webp: bool) -> str:
-    webp = None
-    if image.hash and image.haswebp and not no_webp:
-        webp = "webp"
-
-    return url_from_url_from_hash(galleryid, image, webp)
+    return url_from_url(url_from_hash(galleryid, image, dir_, ext))
