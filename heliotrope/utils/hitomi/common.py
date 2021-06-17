@@ -78,3 +78,10 @@ def url_from_url_from_hash(
     base: Optional[str] = None,
 ) -> str:
     return url_from_url(url_from_hash(galleryid, image, dir, ext), base)
+
+def image_url_from_image(galleryid: int, image: HitomiImageModel, no_webp: bool) -> str:
+    webp = None
+    if image.hash and image.haswebp and not no_webp:
+        webp = "webp"
+
+    return url_from_url_from_hash(galleryid, image, webp)
