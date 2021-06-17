@@ -1,31 +1,39 @@
 # https://ltn.hitomi.la/common.js
 
 import re
+from typing import Optional
+from math import isnan
 
 from heliotrope.utils.hitomi.models import HitomiImageModel
 
 
 def subdomain_from_galleryid(g: int, number_of_frontends: int) -> str:
     o = g % number_of_frontends
-    r = chr(97 + o)
-    return r
+    return chr(97 + o)
 
 
-def subdomain_from_url(url: str) -> str:
+def subdomain_from_url(url: str, base: Optional[str] = None) -> str:
     retval = "b"
+
+    if base:
+        retval = base
 
     number_of_frontends = 3
     b = 16
 
     r = re.compile(r"\/[0-9a-f]\/([0-9a-f]{2})\/")
+    m = r.search(url)
 
-    if m := r.search(url):
-        g = int(m[1], b)
+    if not m:
+        return "a"
 
-        if g < 0x30:
+    g = int(m[1], b)
+
+    if not isnan(g):
+        if g < 0x80:
             number_of_frontends = 2
 
-        if g < 0x09:
+        if g < 0x59:
             g = 1
 
         retval = subdomain_from_galleryid(g, number_of_frontends) + retval
@@ -33,20 +41,19 @@ def subdomain_from_url(url: str) -> str:
     return retval
 
 
-def url_from_url(url: str) -> str:
-    r = re.compile(r"\/\/..?\.hitomi\.la\/")
-    s = subdomain_from_url(url)
-    return r.sub(f"//{s}.hitomi.la/", url)
+def url_from_url(url: str, base: Optional[str] = None) -> str:
+    return re.sub(
+        r"\/\/..?\.hitomi\.la\/",
+        "//" + subdomain_from_url(url, base) + ".hitomi.la/",
+        url,
+    )
 
 
-def full_path_from_hash(hash_: str) -> str:
-    if len(hash_) < 3:
-        return hash_
+def full_path_from_hash(hash: str) -> str:
+    if len(hash) < 3:
+        return hash
 
-    result = hash_[len(hash_) - 3 :]
-    a = result[0:2]
-    b = result[-1]
-    return f"{b}/{a}/" + hash_
+    return re.sub(r"^.*(..)(.)$", r"\2/\1/" + hash, hash)
 
 
 def url_from_hash(
@@ -61,6 +68,10 @@ def url_from_hash(
 
 
 def url_from_url_from_hash(
-    galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
+    galleryid: int,
+    image: HitomiImageModel,
+    dir: Optional[str] = None,
+    ext: Optional[str] = None,
+    base: Optional[str] = None,
 ) -> str:
-    return url_from_url(url_from_hash(galleryid, image, dir, ext))
+    return url_from_url(url_from_hash(galleryid, image, dir, ext), base)
