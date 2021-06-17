@@ -1,8 +1,8 @@
 # https://ltn.hitomi.la/common.js
 
 import re
-from typing import Optional
 from math import isnan
+from typing import Optional
 
 from heliotrope.utils.hitomi.models import HitomiImageModel
 
