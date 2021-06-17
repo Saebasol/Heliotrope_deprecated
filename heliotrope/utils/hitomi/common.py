@@ -57,7 +57,10 @@ def full_path_from_hash(hash: str) -> str:
 
 
 def url_from_hash(
-    galleryid: int, image: HitomiImageModel, dir: str = None, ext: str = None
+    galleryid: int,
+    image: HitomiImageModel,
+    dir: Optional[str] = None,
+    ext: Optional[str] = None,
 ) -> str:
     ext = ext or dir or image.name.split(".")[-1]
     dir = dir or "images"
