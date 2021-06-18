@@ -1,0 +1,8 @@
+# Coding style formatter
+black==21.6b0
+isort==5.8.0
+
+# Test code
+pytest==6.2.4
+pytest-cov==2.12.1
+sanic-testing==0.6.0

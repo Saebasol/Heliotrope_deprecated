@@ -4,23 +4,46 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
-  TEST_FLAG: "true"
+  IS_TEST: "True"
   DOCKER_BUILDKIT: 1
+  DB_URL: "mysql://root:test@127.0.0.1/test_heliotrope"
+  HIYOBOT_SECRET: "test"
+  MONGO_DB_URL: "mongodb://root:test@127.0.0.1"
 
 trigger:
 - master
 
+resources:
+  containers:
+    - container: mariadb
+      image: mariadb:latest
+      options: -p 127.0.0.1:3306:3306
+      env:
+        MYSQL_DATABASE: test_heliotrope
+        MYSQL_ROOT_PASSWORD: test
+        containers:
+    - container: mongo
+      image: mongo:latest
+      env:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: test
+      ports:
+        - 27017:27017
 pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-  - stage: Testflow
+  - stage: Test
     jobs:
-    - job: Test
+    - job: pytest
       strategy:
         matrix:
           Python39:
             python.version: '3.9'
+
+      services:
+        mariadb: mariadb
+        mongo: mongo
 
       steps:
       - task: UsePythonVersion@0
@@ -29,12 +52,16 @@ stages:
         displayName: 'Use Python $(python.version)'
 
       - script: |
+          mongo -u root -p test --eval "db.getSiblingDB('hitomi').createCollection('info')"
+        displayName: 'make mongodb collection'
+
+      - script: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         displayName: 'Install dependencies'
 
       - script: |
-          pip install pytest pytest-azurepipelines pytest-sanic pytest-cov
+          pip install pytest pytest-azurepipelines sanic-testing pytest-cov
           pytest --cov=./
         displayName: 'Test with pytest and generate coverage report'
 
@@ -43,7 +70,7 @@ stages:
         displayName: 'Upload coverage to Codecov'
   
   - stage: Docker
-    dependsOn: Testflow
+    dependsOn: Test
     jobs:
       - job: Build
         steps:
