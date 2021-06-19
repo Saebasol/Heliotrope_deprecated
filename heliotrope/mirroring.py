@@ -31,12 +31,17 @@ class Mirroring(HitomiRequester):
 
             await put_index(index)
             if info := await self.get_info_using_index(index):
-                await self.mongo.insert_one(info)
+                if not await self.mongo.find_one({"index": info["index"]}):
+                    await self.mongo.insert_one(info)
         self.mirroring_time = f"({time.tzname[0]}) {datetime.datetime.now()}"
         self.new_item = str(len(index_list))
 
     async def mirroring_task(self, delay: float):
         while True:
+            if self.status == "mirroring":
+                await asyncio.sleep(delay)
+                continue
+                
             self.last_checked_time = f"({time.tzname[0]}) {datetime.datetime.now()}"
             if index_list := await self.compare_index():
                 self.status = "mirorring"
