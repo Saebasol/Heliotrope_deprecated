@@ -6,12 +6,8 @@ from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from aiohttp.typedefs import StrOrURL
-from bs4 import BeautifulSoup
 from multidict import CIMultiDictProxy
 from yarl import URL
-
-from heliotrope.utils.decorators import strict_literal
-from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel, HitomiTagsModel
 
 
 @dataclass
@@ -27,7 +23,6 @@ class SessionRequester:
     def __init__(self, session: ClientSession = None) -> None:
         self.session = session
 
-    @strict_literal("return_method")
     async def request(
         self,
         method: str,
@@ -46,7 +41,6 @@ class SessionRequester:
                 r.headers,
             )
 
-    @strict_literal("return_method")
     async def get(
         self,
         url: StrOrURL,
@@ -55,7 +49,6 @@ class SessionRequester:
     ):
         return await self.request("GET", url, return_method, **kwargs)
 
-    @strict_literal("return_method")
     async def post(
         self,
         url: StrOrURL,
@@ -69,7 +62,7 @@ class SessionRequester:
 #     def __init__(self, semaphore: Semaphore = None) -> None:
 #         self.semaphore = semaphore
 
-#     @strict_literal("return_method")
+#
 #     async def request(
 #         self,
 #         method: str,
@@ -89,7 +82,7 @@ class SessionRequester:
 #                     r.headers,
 #                 )
 
-#     @strict_literal("return_method")
+#
 #     async def get(
 #         self,
 #         url: StrOrURL,
@@ -98,7 +91,7 @@ class SessionRequester:
 #     ):
 #         return await self.request("GET", url, return_method, **kwargs)
 
-#     @strict_literal("return_method")
+#
 #     async def post(
 #         self,
 #         url: StrOrURL,
