@@ -1,6 +1,7 @@
 from typing import Any, Iterator, Optional, Union
 
 from bs4 import BeautifulSoup
+from bs4.element import NavigableString, Tag
 
 from heliotrope.utils.typed import Files, GalleryInfoJSON, Tags
 
@@ -24,6 +25,16 @@ class HitomiImageModel:
                 file["height"],
             )
 
+    @classmethod
+    def single(cls, **hitomi_image_dict: Any):
+        return cls(
+            hitomi_image_dict["width"],
+            hitomi_image_dict["hash"],
+            hitomi_image_dict["haswebp"],
+            hitomi_image_dict["name"],
+            hitomi_image_dict["height"],
+        )
+
 
 class HitomiGalleryInfoModel:
     def __init__(
@@ -36,7 +47,7 @@ class HitomiGalleryInfoModel:
         japanese_title: Optional[str],
         title: Optional[str],
         galleryid: str,
-        hitomi_type: str,
+        type: str,
     ):
         self.language_localname = language_localname
         self.language = language
@@ -46,7 +57,7 @@ class HitomiGalleryInfoModel:
         self.japanese_title = japanese_title
         self.title = title
         self.galleryid = galleryid
-        self.hitomi_type = hitomi_type
+        self.type = type
 
     @classmethod
     def parse_galleryinfo(cls, galleryinfo_json, parse: bool = False):
@@ -94,20 +105,20 @@ class HitomiTagsModel:
         self,
         title: str,
         img_link: str,
-        artist: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        group: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        hitomi_type: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        language: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        series: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        characters: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        tags: Optional[Union[list[Any], list[dict[str, str]], dict[str, str]]],
-        date,
+        artist: list[dict[str, str]],
+        group: list[dict[str, str]],
+        type: Optional[dict[str, str]],
+        language: Optional[dict[str, str]],
+        series: list[dict[str, str]],
+        characters: list[dict[str, str]],
+        tags: list[dict[str, str]],
+        date: str,
     ):
         self.title = title
         self.thumbnail = img_link
         self.artist = artist
         self.group = group
-        self.hitomi_type = hitomi_type
+        self.type = type
         self.language = language
         self.series = series
         self.characters = characters
@@ -115,13 +126,13 @@ class HitomiTagsModel:
         self.date = date
 
     @staticmethod
-    def check_element(elements):
-        if isinstance(elements, list):
-            if not elements:
-                return []
-            return [
-                {"value": element.text, "url": element["href"]} for element in elements
-            ]
+    def parse_list_element(elements: list[Tag]):
+        if not elements:
+            return []
+        return [{"value": element.text, "url": element["href"]} for element in elements]
+
+    @staticmethod
+    def parse_single_element(elements: Tag):
         if not elements:
             return None
         return {
@@ -167,12 +178,26 @@ class HitomiTagsModel:
                 return cls(
                     title,
                     img_link,
-                    cls.check_element(artist_elements),
-                    cls.check_element(group_elements),
-                    cls.check_element(type_element),
-                    cls.check_element(language_element),
-                    cls.check_element(series_elements),
-                    cls.check_element(characters_elements),
-                    cls.check_element(tags_elements),
+                    cls.parse_list_element(artist_elements),
+                    cls.parse_list_element(group_elements),
+                    cls.parse_single_element(type_element),
+                    cls.parse_single_element(language_element),
+                    cls.parse_list_element(series_elements),
+                    cls.parse_list_element(characters_elements),
+                    cls.parse_list_element(tags_elements),
                     date,
                 )
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "thumbnail": self.thumbnail,
+            "artist": self.artist,
+            "group": self.group,
+            "type": self.type,
+            "language": self.language,
+            "series": self.series,
+            "characters": self.characters,
+            "tags": self.tags,
+            "date": self.date,
+        }
