@@ -38,10 +38,6 @@ class Mirroring(HitomiRequester):
 
     async def mirroring_task(self, delay: float):
         while True:
-            if self.status == "mirroring":
-                await asyncio.sleep(delay)
-                continue
-                
             self.last_checked_time = f"({time.tzname[0]}) {datetime.datetime.now()}"
             if index_list := await self.compare_index():
                 self.status = "mirorring"
