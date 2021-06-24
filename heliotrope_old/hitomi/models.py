@@ -1,9 +1,9 @@
 from typing import Any, Iterator, Optional, Union
 
 from bs4 import BeautifulSoup
-from bs4.element import NavigableString, Tag
+from bs4.element import Tag
 
-from heliotrope.utils.typed import Files, GalleryInfoJSON, Tags
+from heliotrope.utils.typed import FilesDict, GalleryInfoDict, TagsDict
 
 
 class HitomiImageModel:
@@ -15,7 +15,7 @@ class HitomiImageModel:
         self.height = height
 
     @classmethod
-    def image_model_generator(cls, files: list[Files]):
+    def image_model_generator(cls, files: list[FilesDict]):
         for file in files:
             yield cls(
                 file["width"],
@@ -26,7 +26,7 @@ class HitomiImageModel:
             )
 
     @classmethod
-    def single(cls, **hitomi_image_dict: Any):
+    def single(cls, hitomi_image_dict: FilesDict):
         return cls(
             hitomi_image_dict["width"],
             hitomi_image_dict["hash"],
@@ -36,14 +36,15 @@ class HitomiImageModel:
         )
 
 
+
 class HitomiGalleryInfoModel:
     def __init__(
         self,
         language_localname: str,
         language: str,
         date: str,
-        files: list[Files],
-        tags: list[Tags],
+        files: list[FilesDict],
+        tags: list[TagsDict],
         japanese_title: Optional[str],
         title: Optional[str],
         galleryid: str,
@@ -60,7 +61,7 @@ class HitomiGalleryInfoModel:
         self.type = type
 
     @classmethod
-    def parse_galleryinfo(cls, galleryinfo_json, parse: bool = False):
+    def parse_galleryinfo(cls, galleryinfo_json: GalleryInfoDict, parse: bool = False):
         parsed_tags = []
         if galleryinfo_json["tags"]:
 
@@ -100,7 +101,7 @@ class HitomiGalleryInfoModel:
         )
 
 
-class HitomiTagsModel:
+class HitomiInfoModel:
     def __init__(
         self,
         title: str,
