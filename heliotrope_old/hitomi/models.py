@@ -36,7 +36,6 @@ class HitomiImageModel:
         )
 
 
-
 class HitomiGalleryInfoModel:
     def __init__(
         self,
