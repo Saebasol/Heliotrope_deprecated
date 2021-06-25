@@ -6,8 +6,8 @@ from sanic.app import Sanic
 from sanic.request import Request
 
 if TYPE_CHECKING:
-    from heliotrope.mirroring import Mirroring
-    from heliotrope.utils.requester import HitomiRequester
+    from heliotrope.task.mirroring import Mirroring
+    from heliotrope.hitomi.request import Hitomi
 
 
 class Files(TypedDict):
@@ -38,7 +38,7 @@ class GalleryInfoJSON(TypedDict):
 
 
 class HeliotropeContext(SimpleNamespace):
-    hitomi_requester: "HitomiRequester"
+    hitomi_requester: "Hitomi"
     mirroring_manager: "Mirroring"
     mongo: Optional[AgnosticCollection]
 
