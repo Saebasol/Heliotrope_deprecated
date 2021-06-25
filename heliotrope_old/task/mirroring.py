@@ -3,13 +3,12 @@ import datetime
 import time
 
 from aiohttp.client import ClientSession
-from motor.core import AgnosticCollection
 
 from heliotrope.database.query import get_index, put_galleryinfo, put_index
-from heliotrope.utils.requester import HitomiRequester
+from heliotrope.hitomi.request import Hitomi
 
 
-class Mirroring(HitomiRequester):
+class Mirroring(Hitomi):
     def __init__(self, session: ClientSession, mongo) -> None:
         super().__init__(session)
         self.last_checked_time = None
