@@ -1,9 +1,8 @@
-from sanic import Blueprint
-from sanic.views import HTTPMethodView
-
 from heliotrope.utils.response import bad_request
 from heliotrope.utils.shuffle import solve_shuffle_image_url
 from heliotrope.utils.typed import HeliotropeRequest
+from sanic import Blueprint
+from sanic.views import HTTPMethodView
 
 heliotrope_image_proxy = Blueprint("heliotrope_image_proxy", url_prefix="/proxy")
 

@@ -1,12 +1,11 @@
-from sanic import Blueprint
-from sanic.response import json
-from sanic.views import HTTPMethodView
-
 from heliotrope.database.query import search_galleryinfo, search_info_list
 from heliotrope.utils.hitomi.models import HitomiGalleryInfoModel
 from heliotrope.utils.response import not_found
 from heliotrope.utils.typed import HeliotropeRequest
 from heliotrope.utils.useful import is_raw, parse_raw_galleryinfo_list
+from sanic import Blueprint
+from sanic.response import json
+from sanic.views import HTTPMethodView
 
 hitomi_search = Blueprint("hitomi_search", url_prefix="/search")
 

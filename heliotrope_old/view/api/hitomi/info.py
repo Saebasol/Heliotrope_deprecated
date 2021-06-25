@@ -1,8 +1,7 @@
-from sanic import Blueprint
-from sanic.views import HTTPMethodView
-
 from heliotrope.utils.response import not_found
 from heliotrope.utils.typed import HeliotropeRequest
+from sanic import Blueprint
+from sanic.views import HTTPMethodView
 
 hitomi_info = Blueprint("hitomi_info", url_prefix="/info")
 from sanic.response import json

@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
-
 from heliotrope.hitomi.models import HitomiGalleryInfoModel, HitomiTagsModel
 from heliotrope.utils.requester import SessionRequester
 

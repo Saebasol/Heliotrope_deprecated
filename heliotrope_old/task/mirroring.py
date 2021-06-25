@@ -3,7 +3,6 @@ import datetime
 import time
 
 from aiohttp.client import ClientSession
-
 from heliotrope.database.query import get_index, put_galleryinfo, put_index
 from heliotrope.hitomi.request import Hitomi
 

@@ -1,8 +1,7 @@
+from heliotrope.utils.typed import HeliotropeRequest
 from sanic import Blueprint
 from sanic.response import html, json
 from sanic.views import HTTPMethodView
-
-from heliotrope.utils.typed import HeliotropeRequest
 
 heliotrope_about = Blueprint("heliotrope_about", url_prefix="/about")
 
