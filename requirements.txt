@@ -1,5 +1,5 @@
 aiohttp==3.7.4.post0
-sanic==21.3.4
+sanic==21.6.0
 git+https://github.com/Saebasol/sentry-python
 beautifulsoup4==4.9.3
 tortoise-orm==0.17.4
