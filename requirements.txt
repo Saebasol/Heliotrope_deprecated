@@ -1,6 +1,6 @@
 aiohttp==3.7.4.post0
 sanic==21.3.4
-git+https://github.com/Saebasol/sentry-python
+sentry-sdk==1.3.0
 beautifulsoup4==4.9.3
 tortoise-orm==0.17.4
 lxml==4.6.3
