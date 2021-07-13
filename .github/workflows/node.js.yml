@@ -32,8 +32,8 @@ jobs:
          pip install -r requirements.txt
     - name: Cheking Strict
       run: |
-         mypy . --strict
-         pyright . --lib --ouputjson
+         mypy ./heliotrope --strict
+         pyright ./heliotrope --lib --ouputjson
          
     
     
