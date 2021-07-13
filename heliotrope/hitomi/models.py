@@ -1,4 +1,5 @@
 from typing import Literal, Optional
+
 from heliotrope.typing import HitomiFilesJSON, HitomiGalleryInfoJSON, HitomiTagsJSON
 
 
