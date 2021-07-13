@@ -1,5 +1,4 @@
-from typing import Literal, Optional
-
+from typing import Any, Literal, Optional, Generator, Union
 from heliotrope.typing import HitomiFilesJSON, HitomiGalleryInfoJSON, HitomiTagsJSON
 
 
@@ -28,11 +27,11 @@ class HitomiFiles:
         return self.__response["height"]
 
     @classmethod
-    def to_generator(cls, files: list[HitomiFilesJSON]) -> list["HitomiFiles"]:
+    def to_generator(cls, files: list[HitomiFilesJSON]) -> Generator["HitomiFiles"]:
         for file in files:
             yield cls(file)
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Union[str, int]]:
         return {
             "width": self.width,
             "hash": self.hash,
@@ -77,7 +76,7 @@ class HitomiTags:
             )
         return parsed_tags
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, str]:
         return {
             "male": self.male,
             "female": self.female,
@@ -103,7 +102,7 @@ class HitomiGalleryInfo:
         return self.__response["date"]
 
     @property
-    def files(self) -> list[HitomiFiles]:
+    def files(self) -> Generator[HitomiFiles]:
         return HitomiFiles.to_generator(self.__response["files"])
 
     @property
@@ -126,7 +125,7 @@ class HitomiGalleryInfo:
     def type(self) -> str:
         return self.__response["type"]
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Any]:
         return {
             "id": self.id,
             "title": self.title,
@@ -135,6 +134,6 @@ class HitomiGalleryInfo:
             "language": self.language,
             "language_localname": self.language_localname,
             "date": self.date,
-            "files": self.files,
+            "files": list(self.files),
             "tags": self.tags,
         }
