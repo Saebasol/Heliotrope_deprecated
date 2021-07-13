@@ -27,7 +27,7 @@ class HitomiFiles:
         return self.__response["height"]
 
     @classmethod
-    def to_generator(cls, files: list[HitomiFilesJSON]) -> Generator["HitomiFiles"]:
+    def to_generator(cls, files: list[HitomiFilesJSON]) -> Generator[Any, Any, "HitomiFiles"]:
         for file in files:
             yield cls(file)
 
@@ -102,7 +102,7 @@ class HitomiGalleryInfo:
         return self.__response["date"]
 
     @property
-    def files(self) -> Generator[HitomiFiles]:
+    def files(self) -> Generator[Any, Any, HitomiFiles]:
         return HitomiFiles.to_generator(self.__response["files"])
 
     @property
