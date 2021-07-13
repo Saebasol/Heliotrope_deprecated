@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional, Generator, Union
+from typing import Any, Literal, Optional, Iterator, Union
 from heliotrope.typing import HitomiFilesJSON, HitomiGalleryInfoJSON, HitomiTagsJSON
 
 
@@ -27,7 +27,7 @@ class HitomiFiles:
         return self.__response["height"]
 
     @classmethod
-    def to_generator(cls, files: list[HitomiFilesJSON]) -> Generator[Any, Any, "HitomiFiles"]:
+    def to_generator(cls, files: list[HitomiFilesJSON]) -> Iterator["HitomiFiles"]:
         for file in files:
             yield cls(file)
 
