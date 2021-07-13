@@ -10,7 +10,7 @@ on:
     branches: [ v5 ]
 
 jobs:
-  cheking:
+  type_cheking:
 
     runs-on: ubuntu-latest
 
@@ -30,10 +30,10 @@ jobs:
       run: |
          pip install mypy
          pip install -r requirements.txt
-    - name: Cheking Strict
-      run: |
-         mypy ./heliotrope --strict
-         pyright ./heliotrope --lib --ouputjson
+    - name: Mypy cheking
+      run: mypy ./heliotrope --strict
+    - name: pyright checking
+      run: pyright ./heliotrope --lib --outputjson
          
     
     
