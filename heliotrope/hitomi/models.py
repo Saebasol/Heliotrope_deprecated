@@ -102,7 +102,7 @@ class HitomiGalleryInfo:
         return self.__response["date"]
 
     @property
-    def files(self) -> Generator[Any, Any, HitomiFiles]:
+    def files(self) -> Iterator[HitomiFiles]:
         return HitomiFiles.to_generator(self.__response["files"])
 
     @property
