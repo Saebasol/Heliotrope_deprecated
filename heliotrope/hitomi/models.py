@@ -31,6 +31,15 @@ class HitomiFiles:
         for file in files:
             yield cls(file)
 
+    def to_dict(self):
+        return {
+            "width": self.width,
+            "hash": self.hash,
+            "haswebp": self.haswebp,
+            "name": self.name,
+            "height": self.height,
+        }
+
 
 class HitomiTags:
     def __init__(self, response: HitomiTagsJSON) -> None:
@@ -66,6 +75,14 @@ class HitomiTags:
                 }
             )
         return parsed_tags
+
+    def to_dict(self):
+        return {
+            "male": self.male,
+            "female": self.female,
+            "url": self.url,
+            "tag": self.tag,
+        }
 
 
 class HitomiGalleryInfo:
@@ -107,3 +124,16 @@ class HitomiGalleryInfo:
     @property
     def type(self) -> str:
         return self.__response["type"]
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "japanese_title": self.japanese_title,
+            "type": self.type,
+            "language": self.language,
+            "language_localname": self.language_localname,
+            "date": self.date,
+            "files": self.files,
+            "tags": self.tags,
+        }
