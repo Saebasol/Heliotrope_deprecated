@@ -1,5 +1,4 @@
-
-from heliotrope.hitomi.models import  HitomiGalleryInfo,
+from heliotrope.hitomi.models import HitomiGalleryInfo
 
 from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
 
