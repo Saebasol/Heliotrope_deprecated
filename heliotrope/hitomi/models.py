@@ -31,7 +31,7 @@ class HitomiFiles:
         for file in files:
             yield cls(file)
 
-    def to_dict(self) -> dict[str, Union[str, int]]:
+    def to_dict(self) -> HitomiFilesJSON:
         return {
             "width": self.width,
             "hash": self.hash,
@@ -62,21 +62,21 @@ class HitomiTags:
         return self.__response["tag"]
 
     @classmethod
-    def parse_tags(cls, tags: list[HitomiTagsJSON]) -> list[dict[str, str]]:
-        if not tags:
-            return []
-
-        parsed_tags: list[dict[str, str]] = []
+    def to_generator(cls, tags: list[HitomiTagsJSON]) -> Iterator["HitomiTags"]:
         for tag in tags:
-            parsed_tags.append(
-                {
-                    "value": f"{'female' if tag['female'] else 'male' if tag['male'] else 'tag'}: {tag['tag']}",
-                    "url": tag["url"],
-                }
-            )
-        return parsed_tags
+            yield HitomiTags(tag)
 
-    def to_dict(self) -> dict[str, str]:
+    @classmethod
+    def parse_tags(cls, tag: HitomiTagsJSON) -> dict[str, str]:
+        return {
+            "value": f"{'female' if tag['female'] else 'male' if tag['male'] else 'tag'}: {tag['tag']}",
+            "url": tag["url"],
+        }
+
+    def to_parse_dict(self) -> dict[str, str]:
+        return self.parse_tags(self.to_dict())
+
+    def to_dict(self) -> HitomiTagsJSON:
         return {
             "male": self.male,
             "female": self.female,
@@ -106,15 +106,15 @@ class HitomiGalleryInfo:
         return HitomiFiles.to_generator(self.__response["files"])
 
     @property
-    def tags(self) -> list[dict[str, str]]:
-        return HitomiTags.parse_tags(self.__response["tags"])
+    def tags(self) -> Iterator[HitomiTags]:
+        return HitomiTags.to_generator(self.__response["tags"])
 
     @property
     def japanese_title(self) -> Optional[str]:
         return self.__response.get("japanese_title")
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str:
         return self.__response["title"]
 
     @property
@@ -125,15 +125,15 @@ class HitomiGalleryInfo:
     def type(self) -> str:
         return self.__response["type"]
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> HitomiGalleryInfoJSON:
         return {
-            "id": self.id,
-            "title": self.title,
-            "japanese_title": self.japanese_title,
-            "type": self.type,
-            "language": self.language,
             "language_localname": self.language_localname,
+            "language": self.language,
             "date": self.date,
-            "files": list(self.files),
-            "tags": self.tags,
+            "files": [file.to_dict() for file in self.files],
+            "tags": [tag.to_dict() for tag in self.tags],
+            "japanese_title": self.japanese_title,
+            "title": self.title,
+            "id": self.id,
+            "type": self.type,
         }
