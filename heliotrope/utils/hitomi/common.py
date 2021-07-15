@@ -18,7 +18,7 @@ def subdomain_from_url(url: str, base: Optional[str] = None) -> str:
     if base:
         retval = base
 
-    number_of_frontends = 3
+    # number_of_frontends = 3
     b = 16
 
     r = re.compile(r"\/[0-9a-f]\/([0-9a-f]{2})\/")
@@ -30,13 +30,15 @@ def subdomain_from_url(url: str, base: Optional[str] = None) -> str:
     g = int(m[1], b)
 
     if not isnan(g):
-        if g < 0x70:
-            number_of_frontends = 2
+        o = 0
+        if g < 0x80:
+            o = 1
 
-        if g < 0x49:
-            g = 1
+        if g < 0x40:
+            o = 2
 
-        retval = subdomain_from_galleryid(g, number_of_frontends) + retval
+        # retval = subdomain_from_galleryid(g, number_of_frontends) + retval
+        retval = chr(97 + o) + retval
 
     return retval
 
