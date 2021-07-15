@@ -1,3 +1,5 @@
+from asyncio.tasks import gather
+
 from heliotrope.hitomi.models import HitomiGalleryInfo
 
 from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
@@ -11,15 +13,23 @@ class ORMQuery:
         galleryinfo_orm_object = await GalleryInfo.create(**hitomi_galleryinfo_dict)
 
         if files:
-            for file in files:
-                file_orm_object = File(**{"index_id": hitomi_galleryinfo.id, **file})
-                await file_orm_object.save()
-                await galleryinfo_orm_object.files.add(file_orm_object)
+            file_orm_object_list = [
+                File(**{"index_id": hitomi_galleryinfo.id, **file}) for file in files
+            ]
+            await gather(
+                *[file_orm_object.save() for file_orm_object in file_orm_object_list]
+            )
+
+            await galleryinfo_orm_object.files.add(*file_orm_object_list)
 
         if tags:
-            for tag in tags:
-                tag_orm_object = Tag(**{"index_id": hitomi_galleryinfo.id, **tag})
-                await tag_orm_object.save()
-                await galleryinfo_orm_object.tags.add(tag_orm_object)
+            tag_orm_object_list = [
+                Tag(**{"index_id": hitomi_galleryinfo.id, **tag}) for tag in tags
+            ]
+            await gather(
+                *[tag_orm_object.save() for tag_orm_object in tag_orm_object_list]
+            )
+
+            await galleryinfo_orm_object.tags.add(*tag_orm_object_list)
 
         await galleryinfo_orm_object.save()
