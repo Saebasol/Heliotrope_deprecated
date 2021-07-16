@@ -1,4 +1,5 @@
 from asyncio.tasks import gather
+from typing import Any, cast
 
 from heliotrope.hitomi.models import HitomiGalleryInfo
 
@@ -7,7 +8,8 @@ from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
 
 class ORMQuery:
     async def add_galleryinfo(self, hitomi_galleryinfo: HitomiGalleryInfo) -> None:
-        hitomi_galleryinfo_dict = hitomi_galleryinfo.to_dict()
+        hitomi_galleryinfo_dict = cast(dict[str, Any], hitomi_galleryinfo.to_dict())
+
         files = hitomi_galleryinfo_dict.pop("files")
         tags = hitomi_galleryinfo_dict.pop("tags")
         galleryinfo_orm_object = await GalleryInfo.create(**hitomi_galleryinfo_dict)
