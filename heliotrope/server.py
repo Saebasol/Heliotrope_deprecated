@@ -1,4 +1,5 @@
 from asyncio.events import AbstractEventLoop
+from heliotrope.response import Response
 
 from sanic.app import Sanic
 from sanic.request import Request
@@ -11,6 +12,7 @@ heliotrope = Sanic("heliotrope")
 
 class HeliotropeContext(SimpleNamespace):
     orm_query = ORMQuery()
+    response = Response()
 
 
 class Heliotrope(Sanic):
@@ -23,5 +25,5 @@ class HeliotropeRequest(Request):
 
 # TODO: Type hint
 @heliotrope.main_process_start  # type: ignore
-async def start(heliotrope: Heliotrope, loop: AbstractEventLoop):
+async def start(heliotrope: Heliotrope, loop: AbstractEventLoop) -> None:
     heliotrope.ctx = HeliotropeContext()
