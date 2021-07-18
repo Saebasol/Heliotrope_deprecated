@@ -29,7 +29,6 @@ def subdomain_from_url(url: str, base: Optional[str] = None) -> str:
 
     g = int(m[1], b)
 
-
     if not isnan(g):
         o = 0
         if g < 0x80:
