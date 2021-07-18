@@ -3,7 +3,7 @@ from typing import Any, cast
 
 from heliotrope.hitomi.models import HitomiGalleryInfo
 
-from heliotrope.database.models.hitomi import File, GalleryInfo, Tag
+from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 
 
 class ORMQuery:
@@ -35,3 +35,22 @@ class ORMQuery:
             await galleryinfo_orm_object.tags.add(*tag_orm_object_list)
 
         await galleryinfo_orm_object.save()
+
+    async def get_galleryinfo(self, index_id: int) -> HitomiGalleryInfo:
+        ...
+
+    async def add_index(self, index: int) -> None:
+        await Index.create(index_id=index)
+
+    async def get_index(self) -> list[int]:
+        return list(
+            map(int, await Index.all().values_list("index_id", flat=True)),
+        )
+
+    async def get_sorted_index(self) -> list[int]:
+        return sorted(await self.get_index(), reverse=True)
+
+    async def search_galleryinfo(
+        self, query: str, offset: int = 0, limit: int = 15, include_files: bool = False
+    ) -> None:
+        ...
