@@ -16,7 +16,7 @@ class HitomiTagsJSON(TypedDict):
     tag: str
 
 
-class HitomiGalleryInfoJSON(TypedDict):
+class HitomiGalleryinfoJSON(TypedDict):
     language_localname: str
     language: str
     date: str
