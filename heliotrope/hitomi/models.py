@@ -1,8 +1,12 @@
-from typing import Any, Literal, Optional, Iterator, Union
-from heliotrope.typing import HitomiFilesJSON, HitomiGalleryInfoJSON, HitomiTagsJSON
+from typing import Literal, Optional, Iterator
+from heliotrope.typing import HitomiFilesJSON, HitomiGalleryinfoJSON, HitomiTagsJSON
 
 
 class HitomiFiles:
+    """
+    Make hitomi files object from json response
+    """
+
     def __init__(self, response: HitomiFilesJSON) -> None:
         self.__response = response
 
@@ -42,6 +46,10 @@ class HitomiFiles:
 
 
 class HitomiTags:
+    """
+    Make hitomi tags object from json response
+    """
+
     def __init__(self, response: HitomiTagsJSON) -> None:
         self.__response = response
 
@@ -85,8 +93,12 @@ class HitomiTags:
         }
 
 
-class HitomiGalleryInfo:
-    def __init__(self, response: HitomiGalleryInfoJSON) -> None:
+class HitomiGalleryinfo:
+    """
+    Make hitomi galleryinfo object from json response
+    """
+
+    def __init__(self, response: HitomiGalleryinfoJSON) -> None:
         self.__response = response
 
     @property
@@ -125,7 +137,7 @@ class HitomiGalleryInfo:
     def type(self) -> str:
         return self.__response["type"]
 
-    def to_dict(self) -> HitomiGalleryInfoJSON:
+    def to_dict(self) -> HitomiGalleryinfoJSON:
         return {
             "language_localname": self.language_localname,
             "language": self.language,
