@@ -1,9 +1,8 @@
 from asyncio.tasks import gather
 from typing import Any, cast
 
-from heliotrope.hitomi.models import HitomiGalleryinfo
-
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
+from heliotrope.hitomi.models import HitomiGalleryinfo
 
 
 class ORMQuery:
