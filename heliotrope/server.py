@@ -1,26 +1,14 @@
 from asyncio.events import AbstractEventLoop
-from heliotrope.response import Response
 
 from sanic.app import Sanic
-from sanic.request import Request
 
-from types import SimpleNamespace
-from heliotrope.database.query import ORMQuery
+from heliotrope.sanic import Heliotrope, HeliotropeContext
+from heliotrope.view import view
 
 heliotrope = Sanic("heliotrope")
 
-
-class HeliotropeContext(SimpleNamespace):
-    orm_query = ORMQuery()
-    response = Response()
-
-
-class Heliotrope(Sanic):
-    ctx: HeliotropeContext
-
-
-class HeliotropeRequest(Request):
-    app: Heliotrope
+# NOTE: Will fixed
+heliotrope.blueprint(view)  # type: ignore
 
 
 # TODO: Type hint
