@@ -22,4 +22,4 @@ parser.add_argument(
 args = parser.parse_args()
 
 # NOTE: Will fixed
-heliotrope.run(args.host, args.port)  # type: ignore
+heliotrope.run(args.host, args.port)
