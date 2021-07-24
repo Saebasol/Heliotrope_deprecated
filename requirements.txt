@@ -6,5 +6,5 @@ tortoise-orm==0.17.5
 lxml==4.6.3
 aiomysql==0.0.21
 sanic-cors==1.0.0
-motor==2.4.0
+motor==2.5.0
 dnspython==2.1.0
