@@ -24,6 +24,7 @@ class HitomiImagesInfoView(HTTPMethodView):
             return not_found
         return json(
             {
+                "status": 200,
                 "files": list(
                     map(
                         lambda file: {
