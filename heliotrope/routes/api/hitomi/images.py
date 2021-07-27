@@ -35,7 +35,7 @@ class HitomiImagesInfoView(HTTPMethodView):
                         },
                         files,
                     )
-                )
+                ),
             }
         )
 
