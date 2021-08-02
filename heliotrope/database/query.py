@@ -1,9 +1,11 @@
 from asyncio.tasks import gather
-from heliotrope.typing import HitomiGalleryinfoJSON
 from typing import Any, Optional, cast
+
 from tortoise.contrib.pydantic.creator import pydantic_model_creator
+
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.hitomi.models import HitomiGalleryinfo
+from heliotrope.typing import HitomiGalleryinfoJSON
 
 
 class ORMQuery:

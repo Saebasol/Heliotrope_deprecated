@@ -1,4 +1,3 @@
-
 from typing import Literal, Optional, TypedDict
 
 
@@ -27,5 +26,3 @@ class HitomiGalleryinfoJSON(TypedDict):
     title: str
     id: str
     type: str
-
-
