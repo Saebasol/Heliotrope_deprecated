@@ -8,8 +8,8 @@ from heliotrope.response import Response
 
 
 class HeliotropeContext(SimpleNamespace):
-    orm_query = ORMQuery()
-    response = Response()
+    orm_query: ORMQuery
+    response: Response
 
 
 class Heliotrope(Sanic):
