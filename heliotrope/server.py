@@ -1,13 +1,16 @@
 from asyncio.events import AbstractEventLoop
+from heliotrope.response import Response
+from heliotrope.database.query import ORMQuery
 
 from sanic.app import Sanic
 
-from tortoise.contrib.sanic import register_tortoise
+from tortoise import Tortoise
+
 
 from heliotrope import __version__
-from heliotrope.sanic import Heliotrope, HeliotropeContext
+from heliotrope.sanic import Heliotrope
 from heliotrope.view import view
-from os import environ
+from os import environ, getenv
 from sentry_sdk import init
 from sentry_sdk.integrations.sanic import SanicIntegration
 
@@ -17,22 +20,18 @@ heliotrope = Sanic("heliotrope")
 heliotrope.blueprint(view)  # type: ignore
 
 
-def setup_heliotrope(heliotrope: Heliotrope) -> None:
+async def setup_heliotrope(heliotrope: Heliotrope) -> None:
     heliotrope.config.FALLBACK_ERROR_FORMAT = "json"
-    heliotrope.config.MONGO_DB_URL = environ["MONGO_DB_URL"]
+    # heliotrope.config.MONGO_DB_URL = environ["MONGO_DB_URL"]
     heliotrope.config.HIYOBOT_SECRET = environ["HIYOBOT_SECRET"]
-    register_tortoise(
-        heliotrope,
+    await Tortoise.init(
         db_url=environ["DB_URL"],
-        modules={
-            "models": [
-                "heliotrope.database.models.hitomi",
-                "heliotrope.database.models.requestcount",
-            ]
-        },
-        generate_schemas=True,
+        modules={"models": ["heliotrope.database.models.hitomi"]},
     )
-    if not environ["IS_TEST"]:
+    await Tortoise.generate_schemas()
+    heliotrope.ctx.orm_query = ORMQuery()
+    heliotrope.ctx.response = Response()
+    if getenv("IS_TEST"):
         init(
             dsn=environ["SENTRY_DSN"],
             integrations=[SanicIntegration()],
@@ -44,10 +43,10 @@ def setup_heliotrope(heliotrope: Heliotrope) -> None:
 # TODO: Type hint
 @heliotrope.main_process_start  # type: ignore
 async def start(heliotrope: Heliotrope, loop: AbstractEventLoop) -> None:
-    heliotrope.ctx = HeliotropeContext()
+    await setup_heliotrope(heliotrope)
 
 
 # TODO: Type hint
 @heliotrope.main_process_stop  # type: ignore
 async def stop(heliotrope: Heliotrope, loop: AbstractEventLoop) -> None:
-    pass
+    await Tortoise.close_connections()
