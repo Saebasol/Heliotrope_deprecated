@@ -1,9 +1,11 @@
 from typing import Optional
-from heliotrope.shuffle import solve_shuffle_image_url
-from sanic.response import HTTPResponse
-from heliotrope.sanic import HeliotropeRequest
+
 from sanic.blueprints import Blueprint
+from sanic.response import HTTPResponse
 from sanic.views import HTTPMethodView
+
+from heliotrope.sanic import HeliotropeRequest
+from heliotrope.shuffle import solve_shuffle_image_url
 
 proxy = Blueprint("proxy", url_prefix="/proxy")
 
@@ -17,8 +19,6 @@ class HeliotropeImageProxyView(HTTPMethodView):
 
             if "pximg" in url:
                 headers.update({"referer": "https://pixiv.net"})
-
-            assert request.app.ctx.base_request.session
 
             async with request.app.ctx.base_request.session.get(
                 url, headers=headers
