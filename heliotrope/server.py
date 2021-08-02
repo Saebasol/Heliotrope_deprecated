@@ -1,18 +1,19 @@
 from asyncio.events import AbstractEventLoop
-from heliotrope.response import Response
-from heliotrope.database.query import ORMQuery
-
-from sanic.app import Sanic
-
-from tortoise import Tortoise
-
-
-from heliotrope import __version__
-from heliotrope.sanic import Heliotrope
-from heliotrope.view import view
 from os import environ, getenv
+
+from aiohttp.client import ClientSession
+from sanic.app import Sanic
 from sentry_sdk import init
 from sentry_sdk.integrations.sanic import SanicIntegration
+from tortoise import Tortoise
+
+from heliotrope import __version__
+from heliotrope.database.query import ORMQuery
+from heliotrope.request.base import BaseRequest
+from heliotrope.request.hitomi import HitomiRequest
+from heliotrope.response import Response
+from heliotrope.sanic import Heliotrope
+from heliotrope.view import view
 
 heliotrope = Sanic("heliotrope")
 
@@ -30,8 +31,7 @@ async def setup_heliotrope(heliotrope: Heliotrope) -> None:
     )
     await Tortoise.generate_schemas()
     heliotrope.ctx.orm_query = ORMQuery()
-    heliotrope.ctx.response = Response()
-    if getenv("IS_TEST"):
+    if not getenv("IS_TEST"):
         init(
             dsn=environ["SENTRY_DSN"],
             integrations=[SanicIntegration()],
@@ -44,6 +44,9 @@ async def setup_heliotrope(heliotrope: Heliotrope) -> None:
 @heliotrope.main_process_start  # type: ignore
 async def start(heliotrope: Heliotrope, loop: AbstractEventLoop) -> None:
     await setup_heliotrope(heliotrope)
+    heliotrope.ctx.response = Response()
+    heliotrope.ctx.hitomi_request = await HitomiRequest.setup()
+    heliotrope.ctx.base_request = BaseRequest(ClientSession())
 
 
 # TODO: Type hint
