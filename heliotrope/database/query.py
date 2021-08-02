@@ -1,11 +1,15 @@
 from asyncio.tasks import gather
-from typing import Any, cast
-
+from heliotrope.typing import HitomiGalleryinfoJSON
+from typing import Any, Optional, cast
+from tortoise.contrib.pydantic.creator import pydantic_model_creator
 from heliotrope.database.models.hitomi import File, GalleryInfo, Index, Tag
 from heliotrope.hitomi.models import HitomiGalleryinfo
 
 
 class ORMQuery:
+    def __init__(self) -> None:
+        self.pydantic_galleryinfo = pydantic_model_creator(GalleryInfo)
+
     async def add_galleryinfo(self, hitomi_galleryinfo: HitomiGalleryinfo) -> None:
         """
         Add a new galleryinfo to the database.
@@ -44,8 +48,20 @@ class ORMQuery:
         # Save galleryinfo ORM object
         await galleryinfo_orm_object.save()
 
-    async def get_galleryinfo(self, index_id: int) -> HitomiGalleryinfo:
-        ...
+    async def get_galleryinfo(self, index_id: int) -> Optional[HitomiGalleryinfoJSON]:
+        if galleryinfo := await GalleryInfo.get_or_none(id=index_id):
+            galleyinfo_pydantic_model = (
+                await self.pydantic_galleryinfo.from_tortoise_orm(galleryinfo)
+            )
+            galleryinfo_json = galleyinfo_pydantic_model.dict(
+                exclude={
+                    "files": {"__all__": {"index_id", "id"}},
+                    "tags": {"__all__": {"index_id", "id"}},
+                }
+            )
+            return cast(HitomiGalleryinfoJSON, galleryinfo_json)
+
+        return None
 
     async def add_index(self, index: int) -> None:
         await Index.create(index_id=index)
