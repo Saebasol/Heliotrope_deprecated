@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import Any, Literal, Optional
-from aiohttp.client import ClientSession
-from types import TracebackType
+from typing import Any, Literal
 
+from aiohttp.client import ClientSession
 from multidict import CIMultiDictProxy
 from yarl import URL
 
@@ -16,23 +15,16 @@ class Response:
 
 
 class BaseRequest:
-    def __init__(self, session: Optional[ClientSession] = None) -> None:
+    def __init__(self, session: ClientSession) -> None:
         self.session = session
+
+    @property
+    def user_agent(self) -> str:
+        return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"
 
     async def close(self) -> None:
         if self.session:
             await self.session.close()
-
-    async def __aenter__(self) -> "BaseRequest":
-        return self
-
-    async def __aexit__(
-        self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
-    ) -> None:
-        await self.close()
 
     async def request(
         self,
@@ -41,8 +33,6 @@ class BaseRequest:
         return_method: Literal["json", "text", "read"] = "json",
         **kwargs: Any
     ) -> Response:
-        if not self.session:
-            self.session = ClientSession()
 
         async with self.session.request(method, url, **kwargs) as r:
             return Response(
