@@ -80,7 +80,7 @@ class HitomiRequest(BaseRequest):
         total_items = len(response.returned) // 4
         return unpack(f">{total_items}i", bytes(response.returned))
 
-    async def get_info(self, index_id: int):
+    async def get_info(self, index_id: int) -> Optional[HitomiInfo]:
         if url_hitomi_type_tuple := await self.get_redirect_url(index_id):
             url, hitomi_type = url_hitomi_type_tuple
             response = await self.get(url, "text")
@@ -92,3 +92,5 @@ class HitomiRequest(BaseRequest):
                 response.returned = response.returned.decode("utf-8")
 
             return HitomiInfo(response.returned, hitomi_type)
+
+        return None
