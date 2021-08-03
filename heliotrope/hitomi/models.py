@@ -1,5 +1,10 @@
+from __future__ import annotations
+
 from typing import Iterator, Literal, Optional
 
+from bs4.element import Tag
+
+from heliotrope.hitomi.parser import HitomiTagParser
 from heliotrope.typing import HitomiFilesJSON, HitomiGalleryinfoJSON, HitomiTagsJSON
 
 
@@ -149,4 +154,74 @@ class HitomiGalleryinfo:
             "title": self.title,
             "id": self.id,
             "type": self.type,
+        }
+
+
+class HitomiInfo:
+    def __init__(self, html: str, hitomi_type: str) -> None:
+        self.__parser = HitomiTagParser(html, hitomi_type)
+
+    def __parse_list_element(self, elements: list[Tag]):
+        return [{"value": element.text, "url": element["href"]} for element in elements]
+
+    def __parse_single_element(self, elements: Tag):
+        if not elements:
+            return None
+        return {
+            "value": elements.text.replace(" ", "").replace("\n", ""),
+            "url": elements["href"],
+        }
+
+    @property
+    def title(self) -> str:
+        return self.__parser.title_element.text
+
+    @property
+    def thumbnail(self):
+        return self.__parser.thumbnail_element["src"]
+
+    @property
+    def artist(self):
+        return self.__parse_list_element(self.__parser.artist_element)
+
+    @property
+    def group(self):
+        return self.__parse_list_element(self.__parser.group_element)
+
+    @property
+    def type(self):
+        return self.__parse_single_element(self.__parser.type_element)
+
+    @property
+    def language(self):
+        return self.__parse_single_element(self.__parser.language_element)
+
+    @property
+    def series(self):
+        return self.__parse_list_element(self.__parser.series_element)
+
+    @property
+    def character(self):
+        return self.__parse_list_element(self.__parser.character_element)
+
+    @property
+    def tags(self):
+        return self.__parse_list_element(self.__parser.tags_element)
+
+    @property
+    def date(self):
+        return self.__parser.date_element.text
+
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "thumbnail": self.thumbnail,
+            "artist": self.artist,
+            "group": self.group,
+            "type": self.type,
+            "language": self.language,
+            "series": self.series,
+            "character": self.character,
+            "tags": self.tags,
+            "date": self.date,
         }
