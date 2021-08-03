@@ -24,7 +24,6 @@ heliotrope.blueprint(view)  # type: ignore
 async def setup_heliotrope(heliotrope: Heliotrope) -> None:
     heliotrope.config.FALLBACK_ERROR_FORMAT = "json"
     # heliotrope.config.MONGO_DB_URL = environ["MONGO_DB_URL"]
-    heliotrope.config.HIYOBOT_SECRET = environ["HIYOBOT_SECRET"]
     await Tortoise.init(
         db_url=environ["DB_URL"],
         modules={"models": ["heliotrope.database.models.hitomi"]},
