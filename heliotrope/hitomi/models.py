@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Iterator, Literal, Optional
+from typing import Any, Iterator, Literal, Optional
 
-from bs4.element import Tag
+from bs4.element import Tag  # type: ignore
 
 from heliotrope.hitomi.parser import HitomiTagParser
 from heliotrope.typing import HitomiFilesJSON, HitomiGalleryinfoJSON, HitomiTagsJSON
@@ -157,62 +157,67 @@ class HitomiGalleryinfo:
         }
 
 
+# NOTE: value, url 객체로 나누는것도 한번 생각해볼만함
 class HitomiInfo:
     def __init__(self, html: str, hitomi_type: str) -> None:
+        # 상속해서 쓰니까 지저분했음
         self.__parser = HitomiTagParser(html, hitomi_type)
 
-    def __parse_list_element(self, elements: list[Tag]):
-        return [{"value": element.text, "url": element["href"]} for element in elements]
+    def __parse_list_element(self, elements: list[Tag]) -> list[dict[str, str]]:
+        return [
+            {"value": element.text, "url": str(element.attrs["href"])}
+            for element in elements
+        ]
 
-    def __parse_single_element(self, elements: Tag):
+    def __parse_single_element(self, elements: Tag) -> Optional[dict[str, str]]:
         if not elements:
             return None
         return {
             "value": elements.text.replace(" ", "").replace("\n", ""),
-            "url": elements["href"],
+            "url": str(elements.attrs["href"]),
         }
 
     @property
     def title(self) -> str:
-        return self.__parser.title_element.text
+        return str(self.__parser.title_element.text)
 
     @property
-    def thumbnail(self):
+    def thumbnail(self) -> str:
         return self.__parser.thumbnail_element["src"]
 
     @property
-    def artist(self):
+    def artist(self) -> list[dict[str, str]]:
         return self.__parse_list_element(self.__parser.artist_element)
 
     @property
-    def group(self):
+    def group(self) -> list[dict[str, str]]:
         return self.__parse_list_element(self.__parser.group_element)
 
     @property
-    def type(self):
+    def type(self) -> Optional[dict[str, str]]:
         return self.__parse_single_element(self.__parser.type_element)
 
     @property
-    def language(self):
+    def language(self) -> Optional[dict[str, str]]:
         return self.__parse_single_element(self.__parser.language_element)
 
     @property
-    def series(self):
+    def series(self) -> list[dict[str, str]]:
         return self.__parse_list_element(self.__parser.series_element)
 
     @property
-    def character(self):
+    def character(self) -> list[dict[str, str]]:
         return self.__parse_list_element(self.__parser.character_element)
 
     @property
-    def tags(self):
+    def tags(self) -> list[dict[str, str]]:
         return self.__parse_list_element(self.__parser.tags_element)
 
     @property
-    def date(self):
-        return self.__parser.date_element.text
+    def date(self) -> str:
+        return str(self.__parser.date_element.text)
 
-    def to_dict(self):
+    def to_dict(self) -> Any:
         return {
             "title": self.title,
             "thumbnail": self.thumbnail,
