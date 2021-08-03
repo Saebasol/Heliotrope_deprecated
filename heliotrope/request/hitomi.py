@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 from aiohttp.client import ClientSession
 from bs4 import BeautifulSoup  # type: ignore
 
-from heliotrope.hitomi.models import HitomiGalleryinfo
+from heliotrope.hitomi.models import HitomiGalleryinfo, HitomiInfo
 from heliotrope.request.base import BaseRequest
 from heliotrope.typing import HitomiGalleryinfoJSON
 
@@ -80,5 +80,15 @@ class HitomiRequest(BaseRequest):
         total_items = len(response.returned) // 4
         return unpack(f">{total_items}i", bytes(response.returned))
 
-    async def get_info_using_index(self, index_id: int):
-        ...
+    async def get_info(self, index_id: int):
+        if url_hitomi_type_tuple := await self.get_redirect_url(index_id):
+            url, hitomi_type = url_hitomi_type_tuple
+            response = await self.get(url, "text")
+
+            if response.status != 200:
+                return None
+
+            if isinstance(response.returned, bytes):
+                response.returned = response.returned.decode("utf-8")
+
+            return HitomiInfo(response.returned, hitomi_type)
