@@ -1,8 +1,9 @@
 from __future__ import annotations
-from typing import cast
 
-from bs4 import BeautifulSoup
-from bs4.element import Tag
+from typing import Mapping, cast
+
+from bs4 import BeautifulSoup  # type: ignore
+from bs4.element import Tag  # type: ignore
 
 
 class HitomiBaseParser:
@@ -19,7 +20,7 @@ class HitomiBaseParser:
         self.__hitomi_type = hitomi_type
 
     @property
-    def soup_type(self):
+    def soup_type(self) -> str:
         return self.HITOMI_TYPE_MAPPING[self.__hitomi_type]
 
     @property
@@ -27,7 +28,7 @@ class HitomiBaseParser:
         return BeautifulSoup(self.__html, "lxml")
 
     @property
-    def gallery_element(self):
+    def gallery_element(self) -> Tag:
         gallery_element = self.soup.find(
             "div", {"class": f"gallery {self.soup_type}-gallery"}
         )
@@ -35,7 +36,7 @@ class HitomiBaseParser:
         return gallery_element
 
     @property
-    def infos(self):
+    def infos(self) -> list[Tag]:
         galleryinfo = self.gallery_element.find("div", {"class": "gallery-info"})
         assert isinstance(galleryinfo, Tag)
         return cast(list[Tag], galleryinfo.find_all("tr"))
@@ -46,7 +47,7 @@ class HitomiTagParser(HitomiBaseParser):
         super().__init__(html, hitomi_type)
 
     @property
-    def title_element(self):
+    def title_element(self) -> Tag:
         title_element = self.gallery_element.find("h1")
         assert isinstance(title_element, Tag)
         title = title_element.find("a")
@@ -54,49 +55,49 @@ class HitomiTagParser(HitomiBaseParser):
         return title
 
     @property
-    def thumbnail_element(self):
+    def thumbnail_element(self) -> Mapping[str, str]:
         picture_element = self.soup.find("picture")
         assert isinstance(picture_element, Tag)
         img_element = picture_element.find("img")
         assert isinstance(img_element, Tag)
-        return img_element.attrs
+        return cast(Mapping[str, str], img_element.attrs)
 
     @property
-    def artist_element(self):
+    def artist_element(self) -> list[Tag]:
         artist_element = self.soup.find("h2")
         assert isinstance(artist_element, Tag)
         return cast(list[Tag], artist_element.find_all("a"))
 
     @property
-    def group_element(self):
+    def group_element(self) -> list[Tag]:
         return cast(list[Tag], self.infos[0].find_all("a"))
 
     @property
-    def type_element(self):
+    def type_element(self) -> Tag:
         type_element = self.infos[1].find("a")
         assert isinstance(type_element, Tag)
         return type_element
 
     @property
-    def language_element(self):
+    def language_element(self) -> Tag:
         language_element = self.infos[2].find("a")
         assert isinstance(language_element, Tag)
         return language_element
 
     @property
-    def series_element(self):
+    def series_element(self) -> list[Tag]:
         return cast(list[Tag], self.infos[3].find_all("a"))
 
     @property
-    def character_element(self):
+    def character_element(self) -> list[Tag]:
         return cast(list[Tag], self.infos[4].find_all("a"))
 
     @property
-    def tags_element(self):
+    def tags_element(self) -> list[Tag]:
         return cast(list[Tag], self.infos[5].find_all("a"))
 
     @property
-    def date_element(self):
+    def date_element(self) -> Tag:
         date_elemment = self.soup.find("span", class_="date")
         assert isinstance(date_elemment, Tag)
         return date_elemment
