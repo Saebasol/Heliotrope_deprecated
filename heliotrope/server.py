@@ -1,3 +1,9 @@
+# Static type checker result
+# pyright: failed
+# mypy: passed
+
+# pyright: reportUnknownMemberType=false
+
 from asyncio.events import AbstractEventLoop
 from os import environ, getenv
 
@@ -8,11 +14,13 @@ from sentry_sdk.integrations.sanic import SanicIntegration
 from tortoise import Tortoise
 
 from heliotrope import __version__
-from heliotrope.database.query import ORMQuery
+from heliotrope.database.mongo import NoSQLQuery
+from heliotrope.database.query import SQLQuery
 from heliotrope.request.base import BaseRequest
 from heliotrope.request.hitomi import HitomiRequest
 from heliotrope.response import Response
 from heliotrope.sanic import Heliotrope
+from heliotrope.tasks.mirroring import Mirroring
 from heliotrope.view import view
 
 heliotrope = Sanic("heliotrope")
@@ -22,14 +30,6 @@ heliotrope.blueprint(view)  # type: ignore
 
 
 async def setup_heliotrope(heliotrope: Heliotrope) -> None:
-    heliotrope.config.FALLBACK_ERROR_FORMAT = "json"
-    # heliotrope.config.MONGO_DB_URL = environ["MONGO_DB_URL"]
-    await Tortoise.init(
-        db_url=environ["DB_URL"],
-        modules={"models": ["heliotrope.database.models.hitomi"]},
-    )
-    await Tortoise.generate_schemas()
-    heliotrope.ctx.orm_query = ORMQuery()
     if not getenv("IS_TEST"):
         init(
             dsn=environ["SENTRY_DSN"],
@@ -37,6 +37,15 @@ async def setup_heliotrope(heliotrope: Heliotrope) -> None:
             release=f"heliotrope@{__version__}",
         )
         heliotrope.config.FORWARDED_SECRET = environ["FORWARDED_SECRET"]
+
+    heliotrope.config.FALLBACK_ERROR_FORMAT = "json"
+    heliotrope.ctx.nosql_query = NoSQLQuery(environ["MONGO_DB_URL"])
+    await Tortoise.init(
+        db_url=environ["DB_URL"],
+        modules={"models": ["heliotrope.database.models.hitomi"]},
+    )
+    await Tortoise.generate_schemas()
+    heliotrope.ctx.sql_query = SQLQuery()
 
 
 # TODO: Type hint
@@ -46,6 +55,7 @@ async def start(heliotrope: Heliotrope, loop: AbstractEventLoop) -> None:
     heliotrope.ctx.response = Response()
     heliotrope.ctx.hitomi_request = await HitomiRequest.setup()
     heliotrope.ctx.base_request = BaseRequest(ClientSession())
+    heliotrope.add_task(Mirroring.setup(heliotrope=heliotrope))
 
 
 # TODO: Type hint
