@@ -37,7 +37,7 @@ class HitomiRequest(BaseRequest):
     async def setup(cls, **kwargs: Any) -> "HitomiRequest":
         session = ClientSession(**kwargs)
         hitomi_request = cls(session)
-        session.headers.update(hitomi_request.headers)
+        hitomi_request.session.headers.update(hitomi_request.headers)
         return hitomi_request
 
     async def get_redirect_url(self, index_id: int) -> Optional[tuple[str, str]]:
