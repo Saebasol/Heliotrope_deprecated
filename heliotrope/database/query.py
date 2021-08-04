@@ -8,7 +8,7 @@ from heliotrope.hitomi.models import HitomiGalleryinfo
 from heliotrope.typing import HitomiGalleryinfoJSON
 
 
-class ORMQuery:
+class SQLQuery:
     def __init__(self) -> None:
         self.pydantic_galleryinfo = pydantic_model_creator(GalleryInfo)
 
