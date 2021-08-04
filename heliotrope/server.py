@@ -1,9 +1,3 @@
-# Static type checker result
-# pyright: failed
-# mypy: passed
-
-# pyright: reportUnknownMemberType=false
-
 from asyncio.events import AbstractEventLoop
 from os import environ, getenv
 

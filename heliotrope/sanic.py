@@ -1,6 +1,3 @@
-# Static type checker result
-# pyright: passed
-# mypy: passed
 from types import SimpleNamespace
 
 from sanic.app import Sanic
