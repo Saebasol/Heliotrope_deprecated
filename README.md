@@ -1,5 +1,8 @@
 # Heliotrope
 
+**WARNING** 
+As of 5.0.0, this repository is deprecated.
+
 > Hitomi.la mirror api
 
 | Project name                                         | Badge                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
