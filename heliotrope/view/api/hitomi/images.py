@@ -12,7 +12,7 @@ hitomi_images = Blueprint("hitomi_images", url_prefix="/images")
 
 class HitomiImagesView(HTTPMethodView):
     async def get(self, request: HeliotropeRequest, index_id: int) -> HTTPResponse:
-        if galleryinfo := await request.app.ctx.orm_query.get_galleryinfo(index_id):
+        if galleryinfo := await request.app.ctx.sql_query.get_galleryinfo(index_id):
             return json(
                 {
                     "status": 200,
