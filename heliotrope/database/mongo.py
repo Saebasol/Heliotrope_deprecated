@@ -23,7 +23,7 @@ class NoSQLQuery:
 
     async def search_info_list(
         self, query: str, offset: int = 0, limit: int = 15
-    ) -> Optional[tuple[int, dict[str, Any]]]:
+    ) -> Optional[tuple[dict[str, Any], int]]:
         search_query = {"$search": {"text": {"query": query, "path": "title"}}}
 
         if count := (
@@ -44,8 +44,10 @@ class NoSQLQuery:
 
         return None
 
-    async def find_info(self, index: int) -> dict[str, Any]:
-        return cast(dict[str, Any], await self.__collection.find_one({"index": index}))
+    async def find_info(self, index_id: int) -> dict[str, Any]:
+        return cast(
+            dict[str, Any], await self.__collection.find_one({"index": index_id})
+        )
 
     async def insert_info(self, info: dict[str, Any]) -> None:
         return cast(None, await self.__collection.insert_one(info))

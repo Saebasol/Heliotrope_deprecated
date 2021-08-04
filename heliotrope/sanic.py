@@ -26,3 +26,4 @@ class Heliotrope(Sanic):
 
 class HeliotropeRequest(Request):
     app: Heliotrope
+    args: property
