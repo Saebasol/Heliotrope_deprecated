@@ -3,7 +3,7 @@
 **WARNING** 
 As of 5.0.0, this repository is deprecated.
 
-Go to: github.com/saebasol/heliotrope
+Go to: https://github.com/saebasol/heliotrope
 
 > Hitomi.la mirror api
 
