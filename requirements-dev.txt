@@ -4,5 +4,5 @@ isort==5.9.3
 
 # Test code
 pytest==6.2.4
-pytest-cov==2.12.1
+pytest-cov==3.0.0
 sanic-testing==0.6.0
