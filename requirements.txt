@@ -7,4 +7,4 @@ lxml==4.6.3
 aiomysql==0.0.21
 sanic-cors==1.0.0
 motor==2.5.0
-dnspython==2.1.0
+dnspython==2.2.1
